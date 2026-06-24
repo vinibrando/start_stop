@@ -62,6 +62,17 @@
   .unit-card:hover{border-color:var(--accent);box-shadow:0 4px 14px -4px rgba(10,16,32,.12);}
   .unit-card .label-xs{font-size:10px;font-weight:700;color:var(--text-muted);}
   .unit-card .val{font-size:12px;font-weight:600;color:var(--text);}
+  .carousel-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;}
+  .carousel-title{font-size:13px;font-weight:800;color:var(--text);}
+  .carousel-subtitle{font-size:11px;color:var(--text-muted);}
+  .carousel-controls{display:flex;align-items:center;gap:8px;}
+  .carousel-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;background:var(--main-card);border:1px solid rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);font-size:18px;font-weight:800;transition:.12s;}
+  .carousel-btn:hover:not(:disabled){background:var(--blue-bg);border-color:var(--accent);}
+  .carousel-btn:disabled{opacity:.35;cursor:not-allowed;color:var(--text-muted);}
+  .carousel-page-pill{min-width:62px;height:32px;border-radius:12px;border:1px solid rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--accent);}
+  .carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin:-8px 0 18px;}
+  .carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.2);}
+  .carousel-dot.active{background:var(--accent);}
 
   .view-panel{display:none;}
   .view-panel.active{display:block;}
@@ -191,7 +202,7 @@
     <div class="pl-4 flex flex-col justify-center gap-1.5 shrink-0">
       <span class="text-[12px] font-normal whitespace-nowrap" style="color:rgba(0,0,0,.6);">Status Control</span>
       <div class="flex items-center gap-2">
-        <button class="hdr-action-btn primary" title="Run">
+        <button class="hdr-action-btn primary" title="Assign &amp; Run a Work Order" onclick="openWorkOrderAssignment()">
           <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg>
         </button>
         <button class="gear-btn" title="Open Work Order Control Panel" onclick="openControlPanel()">
@@ -205,9 +216,11 @@
     </div>
   </div>
 
-  <!-- horizontal flag-category picker — floats over the tabs below, doesn't push layout -->
-  <div id="flagCategoryRow" style="position:absolute;top:100%;left:0;right:0;z-index:40;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 12px 24px -8px rgba(10,16,32,.15);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s ease, transform .18s ease, visibility .18s;">
-    <div class="flex gap-2 overflow-x-auto px-5 py-3" id="flagCategoryList"></div>
+  <!-- right-aligned flag-category picker -->
+  <div id="flagCategoryRow" style="position:absolute;top:100%;left:0;right:0;z-index:80;background:#fff;border-bottom:1px solid var(--border);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
+    <div class="flag-category-scroll">
+      <div class="flag-category-panel" id="flagCategoryList" onmouseleave="clearFlagSubcategories()"></div>
+    </div>
   </div>
 </div>
 
@@ -244,8 +257,21 @@
     <span class="text-[11px] font-semibold rounded-full px-3 py-2 border flex items-center gap-1.5" style="border-color:var(--border-strong);color:var(--text-soft);">🕐 Mar 02/25/26 11:00 AM - 13:00 AM</span>
   </div>
 
+  <div class="carousel-toolbar">
+    <div>
+      <div class="carousel-title">Production work orders</div>
+      <div class="carousel-subtitle" id="unitCarouselRange">Showing 1-4 of 12 resources</div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="unitCarouselPrev" onclick="moveUnitCarousel(-1)" aria-label="Previous production work orders">‹</button>
+      <span class="carousel-page-pill" id="unitCarouselPage">1 / 3</span>
+      <button class="carousel-btn" id="unitCarouselNext" onclick="moveUnitCarousel(1)" aria-label="Next production work orders">›</button>
+    </div>
+  </div>
+
   <!-- unit cards -->
   <div class="grid mb-5" style="grid-template-columns:repeat(4,1fr);gap:20px;" id="unitCards"></div>
+  <div class="carousel-dots" id="unitCarouselDots"></div>
 
   <!-- secondary filters -->
   <div class="flex items-end gap-4 flex-wrap mb-3">
@@ -274,7 +300,6 @@
       <span class="flex items-center gap-1.5"><span class="legend-swatch bar-stop"></span> Programed Stop</span>
     </div>
   </div>
-
   <!-- gantt -->
   <div class="border overflow-hidden" style="border-color:var(--border);border-radius:12px;background:var(--main-card);">
     <div id="ganttHead"></div>
@@ -464,11 +489,19 @@
   .demo-chip{font-size:10px;font-weight:700;padding:4px 9px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);}
   .demo-chip:hover{border-color:var(--cyan);color:var(--text-soft);}
 
-  .flag-cat-btn{flex-shrink:0;width:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:.12s;}
-  .flag-cat-btn .ic{width:18px;height:18px;}
-  .flag-cat-btn .flag-cat-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;text-align:center;line-height:1.2;color:var(--text-soft);}
-  .flag-cat-btn:hover{border-color:var(--border-strong);box-shadow:0 2px 8px -2px rgba(10,16,32,.12);}
-  .flag-cat-btn.active{border-width:1.5px;}
+  .flag-category-scroll{overflow:visible;background:#fff;}
+  .flag-category-panel{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;padding:10px 16px;background:#fff;overflow:visible;min-height:100px;position:relative;z-index:80;min-width:max-content;}
+  .flag-cat-wrap{position:relative;width:80px;flex:0 0 80px;}
+  .flag-cat-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:7px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;}
+  .flag-cat-btn .ic{width:20px;height:20px;flex-shrink:0;}
+  .flag-cat-label{font-size:9.5px;font-weight:800;line-height:1.12;color:var(--text-soft);text-align:center;max-width:68px;text-transform:uppercase;}
+  .flag-cat-wrap.hovered .flag-cat-btn,.flag-cat-wrap.selected .flag-cat-btn{border-color:var(--flag-color);background:var(--flag-soft);box-shadow:0 4px 12px -8px var(--flag-color);}
+  .flag-cat-wrap.hovered .flag-cat-label,.flag-cat-wrap.selected .flag-cat-label{color:var(--flag-color);}
+  .flag-submenu{display:none;position:absolute;top:88px;left:0;grid-template-columns:1fr;gap:6px;width:80px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;z-index:120;}
+  .flag-cat-wrap.hovered .flag-submenu{display:grid;}
+  .flag-sub-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-soft);font-size:9.5px;font-weight:800;line-height:1.12;text-align:center;text-transform:uppercase;cursor:pointer;transition:.12s;}
+  .flag-sub-btn .ic{width:19px;height:19px;flex-shrink:0;}
+  .flag-sub-btn:hover,.flag-sub-btn.selected{border-color:var(--flag-color);background:var(--flag-soft);color:var(--flag-color);}
 </style>
 
 <script>
@@ -858,7 +891,7 @@ function cpSlidePanels(endOnly){
   <div id="reasonPanel" class="slide" style="max-height:0;opacity:0;">
     <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
       <div class="font-bold text-[13px] mb-1">Why are you pausing?</div>
-      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Select a reason so this time is recorded correctly.</div>
+      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Select a waterfall category so this time is recorded correctly.</div>
       <div class="grid grid-cols-3 gap-2">
         ${['Changeover / Setup','Break / Crew','Material Missing','Quality Check','Planned Maintenance','Other'].map(r=>`
           <div class="reason-btn" onclick="cpConfirmPause('${r}')">${cpIcons.check}${r}</div>
@@ -880,13 +913,14 @@ function cpSlidePanels(endOnly){
         <button onclick="cpCancelSlide('flagPanel')" class="btn btn-outline" style="flex:1;">Cancel</button>
       </div>
     </div>
-  </div>` : ''}
+  </div>
+  ` : ''}
   <div id="endPanel" class="slide" style="max-height:0;opacity:0;">
     <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
       <div class="font-bold text-[13px] mb-1">How did this order end?</div>
-      <div class="text-[11px] mb-3" style="color:var(--text-muted);">This closes the Work Order.</div>
+      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Completing the Work Order starts the changeover process.</div>
       <div class="grid grid-cols-2 gap-2">
-        <div class="reason-btn" onclick="cpEndOrder('COMPLETE')">${cpIcons.check} Completed — target reached</div>
+        <div class="reason-btn" onclick="cpEndOrder('COMPLETE')">${cpIcons.check} Completed - target reached</div>
         <div class="reason-btn" onclick="cpEndOrder('STOPPED')">${cpIcons.end} Stopped early / cancelled</div>
       </div>
       <button onclick="cpCancelSlide('endPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
@@ -1119,7 +1153,15 @@ const UNITS = [
   { name:'AFA12', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
   { name:'AFA12', status:'MACHINE FAILURES - MECHANICAL', pillClass:'pill-red', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
   { name:'AFA10', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
-  { name:'AFA111', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' }
+  { name:'AFA111', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
+  { name:'AFA13', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503290', sku:'80-APX-60100', pps:15, stability:97, planned:1200000, scrap:1.21, actual:28440, eta:'05/23/2026 - Shift B' },
+  { name:'AFA14', status:'CHANGEOVER', pillClass:'pill-amber', wo:'WO-4503291', sku:'80-APX-50000', pps:0, stability:92, planned:900000, scrap:0.82, actual:0, eta:'05/23/2026 - Shift C' },
+  { name:'PKG20-A', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503305', sku:'80-BLD-22010', pps:24, stability:98, planned:450000, scrap:0.64, actual:74420, eta:'05/24/2026 - Shift A' },
+  { name:'PKG20-B', status:'WAITING MATERIAL', pillClass:'pill-amber', wo:'WO-4503312', sku:'80-BLD-22011', pps:0, stability:94, planned:380000, scrap:0.31, actual:12000, eta:'05/24/2026 - Shift A' },
+  { name:'AFA15', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503320', sku:'80-APX-50000', pps:18, stability:96, planned:600000, scrap:1.04, actual:90120, eta:'05/24/2026 - Shift B' },
+  { name:'AFA16', status:'QUALITY HOLD', pillClass:'pill-red', wo:'WO-4503324', sku:'80-APX-60200', pps:0, stability:88, planned:720000, scrap:2.15, actual:33100, eta:'05/24/2026 - Shift C' },
+  { name:'PKG21-A', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503331', sku:'80-BLD-22012', pps:21, stability:99, planned:510000, scrap:0.43, actual:155320, eta:'05/25/2026 - Shift A' },
+  { name:'PKG21-B', status:'SCHEDULED STOP', pillClass:'pill-amber', wo:'WO-4503338', sku:'80-BLD-22013', pps:0, stability:95, planned:410000, scrap:0.58, actual:208000, eta:'05/25/2026 - Shift B' }
 ];
 
 const MONTHS = [
@@ -1156,6 +1198,8 @@ let resFilter = 'all';
 let woSearch = '';
 let resSearch = '';
 let lastAssigned = null;
+let unitCarouselPage = 0;
+const UNIT_CARDS_PER_PAGE = 4;
 
 /* segments per row, in % of total gantt width (0-100) */
 const SEGMENTS = {
@@ -1184,7 +1228,12 @@ const SEGMENTS = {
 };
 
 function renderUnitCards(){
-  document.getElementById('unitCards').innerHTML = UNITS.map(u => `
+  const totalPages = Math.ceil(UNITS.length / UNIT_CARDS_PER_PAGE);
+  unitCarouselPage = Math.min(Math.max(unitCarouselPage, 0), totalPages - 1);
+  const start = unitCarouselPage * UNIT_CARDS_PER_PAGE;
+  const pageUnits = UNITS.slice(start, start + UNIT_CARDS_PER_PAGE);
+
+  document.getElementById('unitCards').innerHTML = pageUnits.map(u => `
     <div class="unit-card" onclick="openControlPanel()">
       <div class="flex items-center justify-between mb-2">
         <span class="font-extrabold text-[14px]">${u.name}</span>
@@ -1205,6 +1254,20 @@ function renderUnitCards(){
       <div class="text-[10.5px]" style="color:var(--text-muted);">Estimated Finish Date/Shift: <b style="color:var(--text-soft);">${u.eta}</b></div>
     </div>
   `).join('');
+
+  document.getElementById('unitCarouselRange').textContent = `Showing ${start + 1}-${Math.min(start + UNIT_CARDS_PER_PAGE, UNITS.length)} of ${UNITS.length} resources`;
+  document.getElementById('unitCarouselPage').textContent = `${unitCarouselPage + 1} / ${totalPages}`;
+  document.getElementById('unitCarouselPrev').disabled = unitCarouselPage === 0;
+  document.getElementById('unitCarouselNext').disabled = unitCarouselPage === totalPages - 1;
+  document.getElementById('unitCarouselDots').innerHTML = Array.from({length: totalPages}, (_, index) => `
+    <span class="carousel-dot ${index === unitCarouselPage ? 'active' : ''}"></span>
+  `).join('');
+}
+
+function moveUnitCarousel(direction){
+  const totalPages = Math.ceil(UNITS.length / UNIT_CARDS_PER_PAGE);
+  unitCarouselPage = Math.min(Math.max(unitCarouselPage + direction, 0), totalPages - 1);
+  renderUnitCards();
 }
 
 function renderGanttHead(){
@@ -1248,31 +1311,80 @@ function renderGanttBody(){
 /* =====================================================================
    FLAG NEXT EVENTS — category picker
 ===================================================================== */
-const FLAG_ICON = `<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h13l-2.5 3.5L18 11H5"/></svg>`;
 const FLAG_CATEGORIES = [
-  { label:'Operational',            color:'var(--orange)',  bg:'var(--orange-bg)' },
-  { label:'CILT Routine',           color:'var(--green)',   bg:'var(--green-bg)' },
-  { label:'No Order',               color:'var(--purple)',  bg:'var(--purple-bg)' },
-  { label:'Legal Holidays',         color:'var(--red)',     bg:'var(--red-bg)' },
-  { label:'Planned Maint.',         color:'var(--blue)',    bg:'var(--blue-bg)' },
-  { label:'Start and Stop',         color:'var(--green)',   bg:'var(--green-bg)' },
-  { label:'Changeover',             color:'var(--cyan)',    bg:'#e3fafc' },
-  { label:'Ramp-Up',                color:'var(--red)',     bg:'var(--red-bg)' },
-  { label:'Consumable Replacement', color:'var(--amber)',   bg:'var(--amber-bg)' },
-  { label:'Quality Losses',         color:'#8a8a2e',        bg:'#f6f5e3' },
-  { label:'Breakdown',              color:'var(--blue)',    bg:'var(--blue-bg)' },
-  { label:'Operational Losses',     color:'var(--orange)',  bg:'var(--orange-bg)' }
+  { label:'Running', icon:'play', color:'var(--green)', soft:'rgba(22,163,74,.10)', subs:[['At Speed','trend'],['Reduced Speed','chart'],['Stable Run','checklist']] },
+  { label:'CILT Routine', icon:'checklist', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['Clean','spark'],['Inspect','eye'],['Lubricate','drop']] },
+  { label:'No Order', icon:'ban', color:'var(--text-muted)', soft:'rgba(0,0,0,.06)', subs:[['Queue Empty','ban'],['SAP Delay','clock']] },
+  { label:'Legal Holidays', icon:'calendar', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Plant Holiday','calendar'],['Site Closed','lock']] },
+  { label:'Planned Maintenance', icon:'tool', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['PM Service','tool'],['Calibration','gauge'],['Inspection','eye']] },
+  { label:'Start And Stop', icon:'switch', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Start-up','play'],['Shutdown','stop'],['Restart','refresh']] },
+  { label:'Changeover', icon:'refresh', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Line Clearance','checklist'],['Tooling Swap','tool'],['Recipe Load','file']] },
+  { label:'Ramp-up', icon:'trend', color:'var(--purple)', soft:'rgba(126,58,242,.10)', subs:[['Speed Ramp','trend'],['First Pieces','box'],['Stabilizing','gauge']] },
+  { label:'Consumable Replacement', icon:'box', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Material Roll','box'],['Label Stock','tag'],['Blade Change','tool']] },
+  { label:'Breakdown', icon:'alert', color:'var(--red)', soft:'rgba(220,38,38,.10)', subs:[['Mechanical','gear'],['Electrical','bolt'],['Controls','cpu']] },
+  { label:'Operational Losses', icon:'chart', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Waiting Labor','user'],['Material Search','search'],['Documentation','file']] }
 ];
 let flagCategoryOpen = false;
 let activeFlagCategory = null;
+let activeFlagSubcategory = null;
+let hoveredFlagCategory = null;
+
+function flagCategoryIcon(type){
+  const icons = {
+    play:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 5v14l11-7-11-7z"/></svg>`,
+    checklist:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 11l2 2 4-5M7 5h10M7 19h10M5 9h.01M5 15h.01"/></svg>`,
+    ban:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="8"/><path stroke-linecap="round" d="M7 7l10 10"/></svg>`,
+    calendar:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="4" y="5" width="16" height="15" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M4 10h16"/></svg>`,
+    tool:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 015 5L11 20l-5-5 8.7-8.7z"/></svg>`,
+    switch:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10l-3-3M17 17H7l3 3"/></svg>`,
+    refresh:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 00-14-5l-2 2M4 4v4h4M4 13a8 8 0 0014 5l2-2M20 20v-4h-4"/></svg>`,
+    trend:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 17l5-5 4 4 7-9M15 7h5v5"/></svg>`,
+    box:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4 8-4V7M12 11v10"/></svg>`,
+    alert:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3l10 18H2L12 3z"/><path stroke-linecap="round" d="M12 9v5M12 17h.01"/></svg>`,
+    chart:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" d="M5 19V9M12 19V5M19 19v-7"/></svg>`,
+    spark:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3z"/></svg>`,
+    eye:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2"/></svg>`,
+    drop:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3s6 6.5 6 11a6 6 0 11-12 0c0-4.5 6-11 6-11z"/></svg>`,
+    clock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="8"/><path stroke-linecap="round" d="M12 8v5l3 2"/></svg>`,
+    lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>`,
+    gauge:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" d="M5 16a7 7 0 1114 0M12 16l4-5"/><path d="M9 20h6"/></svg>`,
+    stop:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>`,
+    file:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M7 3h7l4 4v14H7V3zM14 3v5h5"/></svg>`,
+    tag:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M4 11V5h6l10 10-6 6L4 11z"/><circle cx="8" cy="8" r="1"/></svg>`,
+    gear:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>`,
+    bolt:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M13 2L5 14h6l-1 8 9-13h-6l0-7z"/></svg>`,
+    cpu:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>`,
+    user:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 20a7 7 0 0114 0"/></svg>`,
+    search:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="6"/><path stroke-linecap="round" d="M16 16l4 4"/></svg>`
+  };
+  return icons[type] || icons.chart;
+}
 
 function renderFlagCategories(){
   document.getElementById('flagCategoryList').innerHTML = FLAG_CATEGORIES.map((c,i)=>`
-    <div class="flag-cat-btn${activeFlagCategory===i?' active':''}" style="${activeFlagCategory===i?`border-color:${c.color};background:${c.bg};`:''}" onclick="selectFlagCategory(${i})">
-      <span style="color:${c.color};">${FLAG_ICON}</span>
-      <span class="flag-cat-label" style="${activeFlagCategory===i?`color:${c.color};`:''}">${c.label}</span>
+    <div class="flag-cat-wrap ${hoveredFlagCategory===i?'hovered':''} ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" onmouseenter="showFlagSubcategories(${i})">
+      <button class="flag-cat-btn" type="button">
+        <span style="color:${c.color};">${flagCategoryIcon(c.icon)}</span>
+        <span class="flag-cat-label">${c.label}</span>
+      </button>
+      <div class="flag-submenu">
+        ${c.subs.map(([subLabel, subIcon])=>`
+          <button class="flag-sub-btn ${activeFlagCategory===i && activeFlagSubcategory===subLabel ? 'selected' : ''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" type="button" onclick="selectFlagSubcategory(${i}, '${subLabel}')">
+            ${flagCategoryIcon(subIcon)}
+            <span>${subLabel}</span>
+          </button>
+        `).join('')}
+      </div>
     </div>
   `).join('');
+}
+function showFlagSubcategories(i){
+  hoveredFlagCategory = i;
+  renderFlagCategories();
+}
+function clearFlagSubcategories(){
+  hoveredFlagCategory = null;
+  renderFlagCategories();
 }
 function toggleFlagCategories(){
   flagCategoryOpen = !flagCategoryOpen;
@@ -1281,10 +1393,14 @@ function toggleFlagCategories(){
   row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
   row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-6px)';
   document.getElementById('flagCategoryBtn').classList.toggle('active', flagCategoryOpen);
-}
-function selectFlagCategory(i){
-  activeFlagCategory = i;
+  if(!flagCategoryOpen) hoveredFlagCategory = null;
   renderFlagCategories();
+}
+function selectFlagSubcategory(i, subcategory){
+  activeFlagCategory = i;
+  activeFlagSubcategory = subcategory;
+  renderFlagCategories();
+  showToast(`${FLAG_CATEGORIES[i].label} - ${subcategory}`);
 }
 
 function switchMainTab(tab){
@@ -1649,6 +1765,7 @@ function assignAnotherWorkOrder(){
 function goToControlPanelFromSuccess(){
   openControlPanel();
 }
+
 
 renderFlagCategories();
 renderUnitCards();
