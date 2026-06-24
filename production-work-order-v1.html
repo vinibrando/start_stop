@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital OEE — Work Order Production</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0c1430;
+    --cyan:#13c4d6;
+    --accent:#2563eb;
+    --bg:#ffffff;
+    --main-card:#FBFCFC;
+    --card:#FBFCFC;
+    --border:rgba(0,0,0,.12);
+    --border-strong:rgba(0,0,0,.18);
+    --text:#1a2332;
+    --text-soft:rgba(0,0,0,.72);
+    --text-muted:rgba(0,0,0,.6);
+    --green:#16a34a; --green-bg:#e9f8ef; --green-bd:#bfe6cd;
+    --red:#dc2626;   --red-bg:#fdecec;   --red-bd:#f6c4c4;
+    --amber:#d97706; --amber-bg:#fef3e0; --amber-bd:#f6dba9;
+    --blue:#2563eb;  --blue-bg:#e9f0fe;  --blue-bd:#bcd1fb;
+    --orange:#ea580c; --orange-bg:#fef0e6; --orange-bd:#fbd2b0;
+    --gray-bg:#FBFCFC;
+    --ix-font:'Roboto','Segoe UI',system-ui,sans-serif;
+  }
+  *{font-family:var(--ix-font);}
+  html,body{background:#fff;color:var(--text);}
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-thumb{background:#c3cdda;border-radius:4px;}
+
+  .topbar{height:64px;background:#020043;color:#fff;}
+  .topbar input{background:#fff;color:var(--text);border-color:#fff;}
+  .topbar input::placeholder{color:rgba(0,0,0,.45);}
+  .topbar .topbar-icon{color:#fff;}
+  .topbar .topbar-location{color:#fff;}
+  .topbar .topbar-line-pill{border-color:rgba(255,255,255,.42);color:#fff;}
+  .topbar .topbar-line-pill span{color:#fff;}
+  .main-card-shell{flex:1;min-height:0;margin:12px;background:var(--main-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;padding:16px;}
+  .hdr-action-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;}
+  .hdr-action-btn.primary{background:var(--accent);color:#fff;}
+  .hdr-action-btn.primary:hover{filter:brightness(.94);}
+  .gear-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;background:#fff;border:1px solid rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);transition:.12s;}
+  .gear-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .gear-btn.active{background:var(--blue-bg);border-color:var(--accent);}
+  .gear-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--blue-bg);}
+
+  .tab{font-size:14px;font-weight:700;color:rgba(0,0,0,.6);padding:0 4px 10px;cursor:pointer;border-bottom:2px solid transparent;}
+  .tab:hover{color:rgba(0,0,0,.78);}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+  .pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:3px 10px;border-radius:999px;white-space:nowrap;}
+  .pill-green{background:var(--green-bg);color:var(--green);}
+  .pill-red{background:var(--red-bg);color:var(--red);}
+  .pill-amber{background:var(--amber-bg);color:var(--amber);}
+
+  .unit-card{background:var(--main-card);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:.12s;}
+  .unit-card:hover{border-color:var(--accent);box-shadow:0 4px 14px -4px rgba(10,16,32,.12);}
+  .unit-card .label-xs{font-size:10px;font-weight:700;color:var(--text-muted);}
+  .unit-card .val{font-size:12px;font-weight:600;color:var(--text);}
+
+  .view-panel{display:none;}
+  .view-panel.active{display:block;}
+
+  .wo-assignment-shell{height:100%;display:flex;flex-direction:column;gap:20px;}
+  .assignment-workbench{display:grid;grid-template-columns:minmax(310px,1fr) minmax(310px,1fr) minmax(300px,.86fr);gap:20px;min-height:0;flex:1;}
+  .assignment-column{display:flex;flex-direction:column;min-height:0;background:var(--main-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .assignment-column.resources{background:var(--gray-bg);}
+  .assignment-column.review{background:var(--main-card);}
+  .assignment-column-head{padding:12px 14px 10px;background:var(--main-card);}
+  .assignment-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+  .step-kicker{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:2px;}
+  .card-title{font-size:15px;font-weight:800;color:var(--text);}
+  .hamburger-wrap{position:relative;}
+  .hamburger-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border-strong);background:var(--main-card);color:var(--text-soft);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;}
+  .hamburger-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--blue-bg);}
+  .hamburger-menu{position:absolute;right:0;top:38px;width:142px;background:var(--main-card);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px -10px rgba(10,16,32,.35);padding:6px;z-index:20;display:none;}
+  .hamburger-menu.open{display:block;}
+  .hamburger-item{width:100%;border:0;background:var(--main-card);border-radius:7px;padding:9px 10px;text-align:left;font-size:12px;font-weight:700;color:var(--text-soft);cursor:pointer;}
+  .hamburger-item:hover{background:var(--blue-bg);color:var(--accent);}
+  .assignment-list{overflow-y:auto;flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+  .wo-card{border:1px solid var(--border);border-radius:12px;padding:11px 12px;cursor:pointer;transition:.12s;background:var(--main-card);}
+  .wo-card:hover{border-color:var(--accent);}
+  .wo-card.selected{border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;}
+  .wo-card.suggested,.res-card.suggested{border-color:var(--green);box-shadow:0 0 0 1px rgba(22,163,74,.25) inset;}
+  .wo-card.eligible{border-color:var(--green-bd);}
+  .wo-card.dimmed{opacity:.4;}
+  .res-card{border:1px solid var(--border);border-radius:12px;padding:11px 12px;cursor:pointer;transition:.12s;background:var(--main-card);}
+  .res-card:hover{border-color:var(--accent);}
+  .res-card.eligible{border-color:var(--green-bd);}
+  .res-card.dimmed{opacity:.4;pointer-events:none;}
+  .res-card.locked{border-color:var(--border-strong);background:var(--gray-bg);}
+  .filter-chip{font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border-strong);color:var(--text-soft);cursor:pointer;white-space:nowrap;transition:.12s;}
+  .filter-chip:hover{border-color:var(--accent);color:var(--accent);}
+  .filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .search-input{font-size:12.5px;border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px 8px 32px;width:100%;background:var(--main-card);color:var(--text);}
+  .search-input:focus{outline:none;border-color:var(--accent);}
+  .col-header{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);}
+  .review-body{padding:0 14px 14px;margin-top:-10px;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden;flex:1;}
+  .review-content{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;flex:1;}
+  .review-empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.45;padding:28px;}
+  .review-section{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--main-card);}
+  .review-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:8px;}
+  .review-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+  .review-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;font-size:12px;}
+  .review-row span:first-child{color:var(--text-muted);}
+  .review-row b{color:var(--text);text-align:right;}
+  .validation-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-soft);padding:5px 0;}
+  .validation-dot{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:800;margin-top:1px;}
+  .validation-row.ok .validation-dot{background:var(--green-bg);color:var(--green);}
+  .validation-row.bad .validation-dot{background:var(--red-bg);color:var(--red);}
+  .review-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:12px;flex-shrink:0;}
+  .review-primary-btn{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:8px 22px;font-size:15px;font-weight:700;line-height:1.2;cursor:pointer;transition:filter .15s, transform .1s;}
+  .review-primary-btn:hover{filter:brightness(.94);}
+  .review-primary-btn:active{transform:scale(.98);}
+  .review-clear-btn{background:transparent;border:0;color:var(--accent);border-radius:12px;padding:8px 11px;font-size:15px;font-weight:700;line-height:1.2;cursor:pointer;transition:background .15s;}
+  .review-clear-btn:hover{background:var(--blue-bg);}
+  .success-panel{border:1px solid var(--green-bd);background:var(--green-bg);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;}
+  .success-title{font-size:13px;font-weight:800;color:var(--green);}
+  .helper-note{font-size:11px;color:var(--text-muted);line-height:1.35;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:12.5px;font-weight:600;padding:10px 18px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:100;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px);}
+
+  .progress-track{height:6px;border-radius:99px;background:#e6eaf0;overflow:hidden;flex:1;}
+  .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
+
+  .select-box{font-size:12.5px;border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--main-card);color:var(--text);cursor:pointer;}
+  .select-box:focus{outline:none;border-color:var(--accent);}
+
+  .legend-swatch{width:14px;height:8px;border-radius:2px;display:inline-block;}
+
+  .gantt-row{height:34px;position:relative;border-bottom:1px solid var(--border);}
+  .gantt-bar{position:absolute;top:8px;height:18px;border-radius:4px;}
+  .bar-annual{background:#2563eb;}
+  .bar-scheduled{background:#ea580c;}
+  .bar-stop{background:repeating-linear-gradient(45deg,#bcd1fb,#bcd1fb 4px,#e9f0fe 4px,#e9f0fe 8px);}
+
+  .gantt-month{font-size:11px;font-weight:800;color:var(--text-soft);text-align:center;border-bottom:1px solid var(--border);padding:6px 0;}
+  .gantt-day{font-size:10px;color:var(--text-muted);text-align:center;border-bottom:1px solid var(--border);padding:4px 0;}
+  .now-line{position:absolute;top:0;bottom:0;width:2px;background:#f6c4c4;z-index:5;}
+  .week-line{position:absolute;top:0;bottom:0;width:1px;background:var(--blue-bd);z-index:4;}
+</style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+<div id="toast" class="toast"></div>
+
+<!-- ============ TOP BAR ============ -->
+<div class="topbar flex items-center px-5 gap-4 shrink-0">
+  <div class="topbar-icon w-8 h-8 rounded-md flex items-center justify-center grid grid-cols-3 gap-0.5 cursor-pointer">⠿</div>
+  <div class="flex items-center gap-2">
+    <div class="w-7 h-7 rounded-full flex items-center justify-center font-extrabold text-[11px]" style="background:rgba(255,255,255,.18);color:#fff;">BD</div>
+    <span class="font-bold text-[14px]">Smart Factory</span>
+  </div>
+  <div class="flex-1 max-w-md relative ml-4">
+    <input class="w-full text-[12.5px] border rounded-full pl-3 pr-9 py-2" placeholder="Search ...">
+    <span class="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center text-white text-[12px]" style="background:var(--accent);">🔍</span>
+  </div>
+  <div class="flex-1"></div>
+  <span class="topbar-location text-[12px]">📍 Tijuana / Assembly Room / Unit A /</span>
+  <span class="topbar-line-pill text-[11px] font-bold rounded-full px-3 py-1.5 border">Line 1 <span>+2</span></span>
+  <button class="text-[11px] font-bold rounded-md px-3 py-2 text-white" style="background:var(--accent);">SHIFT ENTRY ▾</button>
+  <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+</div>
+
+<!-- ============ HEADER — the full top bar of the screen, 90px tall, 72px usable (9px margin top/bottom) ============ -->
+<div class="shrink-0" style="height:90px;background:#fff;position:relative;z-index:30;">
+  <div class="flex items-stretch px-5 min-w-0" style="height:72px;margin-top:9px;">
+    <div class="flex flex-col justify-center shrink-0">
+      <div class="text-[20px] font-bold whitespace-nowrap">Digital OEE</div>
+    </div>
+    <div class="flex flex-col justify-center shrink-0" style="margin-left:100px;">
+      <div class="font-normal text-[14px] whitespace-nowrap">NEXIVA 20 GA X 1 IN SINGLE PORT</div>
+      <div class="text-[12px] whitespace-nowrap" style="color:rgba(0,0,0,.6);">SKU: 80-APX-50000 | Lot: L2075-0245</div>
+    </div>
+    <div class="w-px shrink-0 ml-3" style="height:46px;align-self:center;background:var(--border);"></div>
+    <div class="flex flex-col justify-center gap-0.5 shrink-0 ml-3">
+      <div class="text-[12px] font-normal" style="color:rgba(0,0,0,.6);">Bottleneck</div>
+      <div class="text-[12px] font-normal whitespace-nowrap" style="color:rgba(0,0,0,.6);">Autoguard 13 Zone #5</div>
+    </div>
+    <div class="w-px shrink-0 ml-3" style="height:46px;align-self:center;background:var(--border);"></div>
+    <!-- status card grows to absorb all remaining space, full height of the row -->
+    <div id="outerCategoryBadge" class="flex-1 rounded-lg px-4 ml-3 flex flex-col justify-center min-w-0 relative overflow-hidden" style="background:var(--green-bg);">
+      <div class="absolute left-0 top-0 bottom-0" style="width:6px;background:var(--green);"></div>
+      <div id="outerCategoryLabel" class="font-normal text-[20px]" style="color:var(--green);">Production</div>
+      <div class="text-[10px]" style="color:var(--text-soft);">Active Category</div>
+    </div>
+    <div class="pl-4 flex flex-col justify-center gap-1.5 shrink-0">
+      <span class="text-[12px] font-normal whitespace-nowrap" style="color:rgba(0,0,0,.6);">Status Control</span>
+      <div class="flex items-center gap-2">
+        <button class="hdr-action-btn primary" title="Run">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg>
+        </button>
+        <button class="gear-btn" title="Open Work Order Control Panel" onclick="openControlPanel()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+        <div class="w-px h-8 shrink-0" style="background:var(--border);"></div>
+        <button id="flagCategoryBtn" class="gear-btn" title="Flag Category" onclick="toggleFlagCategories()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h13l-2.5 3.5L18 11H5"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- horizontal flag-category picker — floats over the tabs below, doesn't push layout -->
+  <div id="flagCategoryRow" style="position:absolute;top:100%;left:0;right:0;z-index:40;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 12px 24px -8px rgba(10,16,32,.15);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s ease, transform .18s ease, visibility .18s;">
+    <div class="flex gap-2 overflow-x-auto px-5 py-3" id="flagCategoryList"></div>
+  </div>
+</div>
+
+<div class="main-card-shell">
+
+<!-- ============ TABS ============ -->
+<div class="flex items-center gap-6 shrink-0" style="background:var(--main-card);">
+  <span id="tabProductionOverview" class="tab active" onclick="switchMainTab('production')">PRODUCTION OVERVIEW</span>
+  <span id="tabWorkOrderAssignment" class="tab" onclick="switchMainTab('assignment')">WORK ORDER ASSIGNMENT</span>
+</div>
+
+<!-- ============ MAIN SCROLL AREA ============ -->
+<div id="productionOverviewView" class="view-panel active flex-1 overflow-y-auto pt-5">
+
+  <!-- filters row -->
+  <div class="flex items-end gap-4 flex-wrap mb-4">
+    <div>
+      <div class="label-xs mb-1">Location</div>
+      <select class="select-box w-40">
+        <option>AFA10</option>
+        <option>AFA12</option>
+        <option>PKG20</option>
+      </select>
+    </div>
+    <div>
+      <div class="label-xs mb-1">Select date</div>
+      <div class="relative">
+        <input class="select-box w-44" placeholder="MM/DD/YYYY">
+        <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[13px]" style="color:var(--text-muted);">📅</span>
+      </div>
+    </div>
+    <div class="flex-1"></div>
+    <span class="text-[11px] font-semibold rounded-full px-3 py-2 border flex items-center gap-1.5" style="border-color:var(--border-strong);color:var(--text-soft);">📍 L1/Z5</span>
+    <span class="text-[11px] font-semibold rounded-full px-3 py-2 border flex items-center gap-1.5" style="border-color:var(--border-strong);color:var(--text-soft);">🕐 Mar 02/25/26 11:00 AM - 13:00 AM</span>
+  </div>
+
+  <!-- unit cards -->
+  <div class="grid mb-5" style="grid-template-columns:repeat(4,1fr);gap:20px;" id="unitCards"></div>
+
+  <!-- secondary filters -->
+  <div class="flex items-end gap-4 flex-wrap mb-3">
+    <div>
+      <div class="label-xs mb-1">Machines</div>
+      <select class="select-box w-40">
+        <option>All</option>
+      </select>
+    </div>
+    <div>
+      <div class="label-xs mb-1">Category</div>
+      <select class="select-box w-40">
+        <option>All</option>
+      </select>
+    </div>
+    <div>
+      <div class="label-xs mb-1">Time Range</div>
+      <select class="select-box w-36">
+        <option>Live</option>
+      </select>
+    </div>
+    <div class="flex-1"></div>
+    <div class="flex items-center gap-4 text-[11px] font-semibold" style="color:var(--text-soft);">
+      <span class="flex items-center gap-1.5"><span class="legend-swatch bar-annual"></span> Annual Schedule</span>
+      <span class="flex items-center gap-1.5"><span class="legend-swatch bar-scheduled"></span> Scheduled Production</span>
+      <span class="flex items-center gap-1.5"><span class="legend-swatch bar-stop"></span> Programed Stop</span>
+    </div>
+  </div>
+
+  <!-- gantt -->
+  <div class="border overflow-hidden" style="border-color:var(--border);border-radius:12px;background:var(--main-card);">
+    <div id="ganttHead"></div>
+    <div id="ganttBody" class="relative"></div>
+  </div>
+
+</div>
+
+<!-- ============ WORK ORDER ASSIGNMENT VIEW ============ -->
+<div id="workOrderAssignmentView" class="view-panel flex-1 overflow-y-auto pt-5">
+  <div class="wo-assignment-shell">
+    <div class="assignment-workbench">
+      <div class="assignment-column">
+        <div class="assignment-column-head">
+          <div class="assignment-title-row">
+            <div>
+              <div class="card-title">Step 1: Select Work Order</div>
+              <div id="woScopeLabel" class="text-[11px] mt-0.5" style="color:var(--text-muted);">Select an order to filter eligible resources.</div>
+            </div>
+            <div class="hamburger-wrap">
+              <button class="hamburger-btn" onclick="toggleWoMenu(event)" aria-label="Work Orders menu">☰</button>
+              <div id="woActionMenu" class="hamburger-menu">
+                <button class="hamburger-item" onclick="createWOFromMenu()">Create WO</button>
+              </div>
+            </div>
+          </div>
+          <div class="relative mb-2">
+            <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
+            <input class="search-input" placeholder="Search WO, SKU, batch, material..." oninput="filterWOs(this.value)">
+          </div>
+          <div class="flex gap-1.5 overflow-x-auto pb-1" id="woFilterRow">
+            <span class="filter-chip active" data-f="all" onclick="setWoFilter('all',this)">All</span>
+            <span class="filter-chip" data-f="created" onclick="setWoFilter('created',this)">Created</span>
+            <span class="filter-chip" data-f="assigned" onclick="setWoFilter('assigned',this)">Assigned</span>
+            <span class="filter-chip" data-f="auto" onclick="setWoFilter('auto',this)">Auto Assigned</span>
+            <span class="filter-chip" data-f="custom" onclick="setWoFilter('custom',this)">Custom WO</span>
+          </div>
+        </div>
+        <div id="woList" class="assignment-list"></div>
+      </div>
+
+      <div class="assignment-column resources">
+        <div class="assignment-column-head">
+          <div class="assignment-title-row">
+            <div>
+              <div class="card-title">Step 2: Select Resource</div>
+              <div id="resScopeLabel" class="text-[11px] mt-0.5" style="color:var(--text-muted);">All work centers</div>
+            </div>
+          </div>
+          <div class="relative mb-2">
+            <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
+            <input class="search-input" placeholder="Search resource, equipment, work center..." oninput="filterResources(this.value)">
+          </div>
+          <div class="flex gap-1.5 overflow-x-auto pb-1" id="resFilterRow">
+            <span class="filter-chip active" data-f="all" onclick="setResFilter('all',this)">All</span>
+            <span class="filter-chip" data-f="available" onclick="setResFilter('available',this)">Available</span>
+            <span class="filter-chip" data-f="running" onclick="setResFilter('running',this)">Running</span>
+            <span class="filter-chip" data-f="down" onclick="setResFilter('down',this)">Down</span>
+          </div>
+        </div>
+        <div id="resList" class="assignment-list"></div>
+      </div>
+
+      <div class="assignment-column review">
+        <div class="assignment-column-head">
+          <div class="assignment-title-row">
+            <div>
+              <div class="card-title">Step 3: Review &amp; Confirm</div>
+              <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Final actions appear here once the assignment is valid to review.</div>
+            </div>
+          </div>
+        </div>
+        <div id="reviewPanel" class="review-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================================
+     WORK ORDER CONTROL PANEL (rebuilt inline as a modal — Josh's panel)
+==================================================================== -->
+</div>
+
+<div id="controlPanelModal" class="scrim" style="display:none;">
+  <div class="popup">
+
+    <!-- header -->
+    <div class="flex items-center justify-between px-5 py-3 border-b" style="border-color:var(--border);">
+      <div>
+        <div class="text-[15px] font-extrabold">Work Order Control Panel</div>
+        <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="cp-hdrSub">WO-4503287 · Batch 1847 · 80-APX-50000 · AFA10</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="cpJumpTo('RUNNING_NEAR')">Simulate: &lt;5% Remaining</span>
+        <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="cpJumpTo('HELD')">Simulate: Flag Issue</span>
+        <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="cpResetDemo()">Reset</span>
+        <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg" onclick="closeControlPanel()">✕</button>
+      </div>
+    </div>
+
+    <!-- body -->
+    <div class="grid flex-1 min-h-0" style="grid-template-columns:1fr 320px;">
+
+      <!-- LEFT: CONTROL CONTENT -->
+      <div class="overflow-y-auto px-5 py-4 flex flex-col gap-3.5 border-r" style="border-color:var(--border);max-height:calc(92vh - 64px);">
+
+        <div id="cp-statusHero" class="status-hero" style="background:var(--green-bg);">
+          <span id="cp-statusDot" class="status-dot pulse" style="background:var(--green);"></span>
+          <div class="flex-1">
+            <div id="cp-statusTitle" class="font-extrabold text-[15px]" style="color:var(--green);">Running</div>
+            <div id="cp-statusDesc" class="text-[11.5px]" style="color:var(--text-soft);">Production is active — good counts are being recorded normally.</div>
+          </div>
+          <div class="text-right">
+            <div class="label-xs">Since</div>
+            <div id="cp-statusSince" class="text-[13px] font-bold">06:00 AM</div>
+          </div>
+        </div>
+
+        <div id="cp-progressWrap">
+          <div class="flex justify-between text-[12px] font-semibold mb-1.5">
+            <span id="cp-progressLabel">Progress to Planned Quantity (WO-4503287)</span>
+            <span><span id="cp-progActual" style="color:var(--accent);">82,450</span> / <span id="cp-progPlanned">100,000</span> pcs (<span id="cp-progPct">82%</span>)</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="cp-progFill" style="width:82%;"></div></div>
+        </div>
+
+        <div id="cp-dynamicArea" class="flex flex-col gap-3"></div>
+
+        <div class="flex items-center justify-between text-[11px] pt-2 mt-auto border-t" style="border-color:var(--border);color:var(--text-muted);">
+          <span>⏱ Next scheduled break: 12:00 PM (10 min) — will auto-pause this order</span>
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input id="cp-autoResume" type="checkbox" checked class="accent-[var(--accent)]">
+            Auto-resume when production restarts
+          </label>
+        </div>
+      </div>
+
+      <!-- RIGHT: ACTIVITY / STATE LOG -->
+      <div class="flex flex-col min-h-0" style="background:var(--gray-bg);">
+        <div class="px-4 py-3 border-b flex items-center justify-between shrink-0" style="border-color:var(--border);">
+          <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Activity &amp; State Log</div>
+          <button class="text-[11px] font-bold" style="color:var(--accent);">Export</button>
+        </div>
+        <div id="cp-activityList" class="overflow-y-auto flex-1 px-3 py-3 flex flex-col gap-2 text-[12px]"></div>
+        <div class="px-4 py-2 border-t text-[10px] shrink-0" style="border-color:var(--border);color:var(--text-muted);">
+          <span class="isa-tag">mono</span> rows show the ISA-88 / equipment state path for traceability.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ---- control panel modal styles (ported from Josh's prototype) ---- */
+  .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:200;}
+  .popup{background:#fff;border-radius:16px;width:940px;max-height:92vh;overflow:hidden;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;}
+  .status-hero{border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;transition:background .2s;}
+  .status-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;transition:background .2s;}
+  .pulse{animation:cp-pulse 1.6s ease-in-out infinite;}
+  @keyframes cp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.45);}50%{box-shadow:0 0 0 6px rgba(22,163,74,0);}}
+  .spin{animation:cp-spin 1s linear infinite;}
+  @keyframes cp-spin{to{transform:rotate(360deg);}}
+  .ic{width:16px;height:16px;flex-shrink:0;}
+  .action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:12px;border:1px solid transparent;padding:14px 8px;cursor:pointer;font-weight:700;font-size:12.5px;letter-spacing:.01em;transition:filter .15s, transform .1s, opacity .15s;min-height:78px;}
+  .action-btn:hover{filter:brightness(.96);}
+  .action-btn:active{transform:scale(.98);}
+  .action-btn.disabled{opacity:.4;pointer-events:none;}
+  .action-btn .ic{width:24px;height:24px;}
+  .reason-btn{border:1px solid var(--border-strong);border-radius:10px;padding:11px 6px;text-align:center;font-size:11.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.12s;}
+  .reason-btn:hover{border-color:var(--accent);background:var(--blue-bg);color:var(--accent);}
+  .reason-btn .ic{width:20px;height:20px;}
+  .btn-icon-row{display:flex;align-items:center;justify-content:center;gap:7px;}
+  .progress-track{height:7px;border-radius:99px;background:#e6eaf0;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
+  .step{display:flex;flex-direction:column;align-items:center;gap:4px;width:84px;}
+  .step-circle{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+  .step-label{font-size:10px;font-weight:700;text-align:center;color:var(--text-soft);line-height:1.2;}
+  .step-sub{font-size:9px;color:var(--text-muted);}
+  .step-line{flex:1;height:2px;background:var(--border-strong);margin-top:11px;min-width:18px;}
+  .step-line.done{background:var(--green);}
+  .ckbox{width:18px;height:18px;border-radius:5px;border:2px solid var(--border-strong);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
+  .ckbox.done{background:var(--green);border-color:var(--green);}
+  .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+  .task-row:last-child{border-bottom:none;}
+  .slide{transition:max-height .25s ease, opacity .2s ease;overflow:hidden;}
+  .demo-chip{font-size:10px;font-weight:700;padding:4px 9px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);}
+  .demo-chip:hover{border-color:var(--cyan);color:var(--text-soft);}
+
+  .flag-cat-btn{flex-shrink:0;width:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:.12s;}
+  .flag-cat-btn .ic{width:18px;height:18px;}
+  .flag-cat-btn .flag-cat-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;text-align:center;line-height:1.2;color:var(--text-soft);}
+  .flag-cat-btn:hover{border-color:var(--border-strong);box-shadow:0 2px 8px -2px rgba(10,16,32,.12);}
+  .flag-cat-btn.active{border-width:1.5px;}
+</style>
+
+<script>
+/* =====================================================================
+   CONTROL PANEL LOGIC — ported from work-order-control-panel-v1.html
+   (namespaced with cp- prefix / cp function names to avoid clashing
+   with the Work Order Production page it's embedded in)
+===================================================================== */
+const CP_WO_CURRENT = { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', planned:100000 };
+const CP_NEXT_WO_OPTIONS = [
+  { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', planned:120000, sameSku:false },
+  { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', planned:90000, sameSku:true }
+];
+
+let cpNextWoIndex = 0;
+let cpPhase = 'RUNNING';
+let cpPauseReturnPhase = 'RUNNING';
+let cpPauseReason = null;
+let cpLineClearanceRecorded = false;
+
+function cpNextWo(){ return CP_NEXT_WO_OPTIONS[cpNextWoIndex]; }
+
+const CP_PHASES = {
+  IDLE:      { label:'Not Started', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'No active Work Order on this equipment yet.' },
+  RUNNING:   { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
+               desc:'Production is active — good counts are being recorded normally.' },
+  RUNNING_NEAR: { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
+               desc:'Approaching planned quantity — confirm the next Work Order.' },
+  RUNNING_CONFIRMED: { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
+               desc:'Next Work Order confirmed — ready to complete.' },
+  CHG_RAMPDOWN: { label:'Changeover — Ramp Down', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Clearing current material from the line.' },
+  CHG_TOOLING:  { label:'Changeover — Tooling', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Tooling/recipe changeover in progress for the next Work Order.' },
+  CHG_READY:    { label:'Changeover Complete', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Ready for Manufacturing Start.' },
+  CHG_SAME:     { label:'Changeover — Batch Closeout', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'Same SKU as next Work Order — no ramp down or tooling changeover required.' },
+  RAMP_UP:   { label:'Running — Ramp-Up', dot:'var(--purple)', bg:'var(--purple-bg)', text:'var(--purple)', pulse:true,
+               desc:'Manufacturing Start recorded — stabilizing to target speed.' },
+  PAUSED:    { label:'Paused', dot:'var(--amber)', bg:'var(--amber-bg)', text:'var(--amber)', pulse:false,
+               desc:'Production is paused — good counts and OEE clocks are on hold.' },
+  HELD:      { label:'On Hold — Engineering', dot:'var(--red)', bg:'var(--red-bg)', text:'var(--red)', pulse:false,
+               desc:'Production stopped pending engineering review.' },
+  ABORTED:   { label:'Aborted — Emergency Stop', dot:'var(--darkred)', bg:'var(--darkred-bg)', text:'var(--darkred)', pulse:false,
+               desc:'Order was emergency-aborted. Requires supervisor review.' },
+  STOPPED:   { label:'Stopped', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'This Work Order was stopped early and is closed.' },
+  COMPLETE:  { label:'Completed', dot:'var(--blue)', bg:'var(--blue-bg)', text:'var(--blue)', pulse:false,
+               desc:'This Work Order reached its target and is complete.' }
+};
+
+const CP_BUSY_LABEL = {
+  STARTING:'Starting…', PAUSING:'Pausing…', RESUMING:'Resuming…', HOLDING:'Flagging for engineering…',
+  STOPPING:'Closing order…', ABORTING:'Aborting…', RAMPING_DOWN:'Beginning ramp down…',
+  CHANGEOVER:'Switching to tooling changeover…', FINALIZING:'Finalizing changeover…'
+};
+
+const cpIcons = {
+  pause:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`,
+  resume:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 4l14 8-14 8V4z"/></svg>`,
+  end:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`,
+  flag:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h11l-2 3 2 3H5"/></svg>`,
+  clear:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
+  start:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 4l14 8-14 8V4z"/></svg>`,
+  abort:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.86L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.86a2 2 0 00-3.4 0z"/></svg>`,
+  check:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  tool:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 11-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 015.4-5.4z"/></svg>`,
+  lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 018 0v3"/></svg>`
+};
+
+function cpFmtTime(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+function cpFmtNum(n){ return n.toLocaleString('en-US'); }
+
+function cpRenderHero(){
+  const p = CP_PHASES[cpPhase];
+  const hero = document.getElementById('cp-statusHero');
+  hero.style.background = p.bg;
+  const dot = document.getElementById('cp-statusDot');
+  dot.className = 'status-dot' + (p.pulse ? ' pulse' : '');
+  dot.style.background = p.dot;
+  dot.style.border = 'none';
+  document.getElementById('cp-statusTitle').textContent = p.label;
+  document.getElementById('cp-statusTitle').style.color = p.text;
+  document.getElementById('cp-statusDesc').textContent = p.desc;
+}
+
+function cpRenderBusy(key){
+  const hero = document.getElementById('cp-statusHero');
+  hero.style.background = 'var(--gray-bg)';
+  const dot = document.getElementById('cp-statusDot');
+  dot.className = 'status-dot spin';
+  dot.style.background = 'transparent';
+  dot.style.border = '2px solid var(--text-muted)';
+  dot.style.borderTopColor = 'transparent';
+  document.getElementById('cp-statusTitle').textContent = CP_BUSY_LABEL[key];
+  document.getElementById('cp-statusTitle').style.color = 'var(--text-soft)';
+  document.getElementById('cp-statusDesc').textContent = 'Updating work order / equipment status…';
+}
+
+function cpRenderProgress(){
+  const wrap = document.getElementById('cp-progressWrap');
+  const inChangeover = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase);
+  const inRampUp = cpPhase === 'RAMP_UP';
+
+  if(cpPhase === 'IDLE'){
+    wrap.style.visibility = 'hidden'; return;
+  }
+  wrap.style.visibility = 'visible';
+
+  if(inChangeover){
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${cpNextWo().wo} — not yet started)`;
+    document.getElementById('cp-progActual').textContent = '0';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(cpNextWo().planned);
+    document.getElementById('cp-progPct').textContent = '0%';
+    document.getElementById('cp-progFill').style.width = '0%';
+  } else if(inRampUp){
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${cpNextWo().wo})`;
+    document.getElementById('cp-progActual').textContent = '8,950';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(cpNextWo().planned);
+    document.getElementById('cp-progPct').textContent = '7%';
+    document.getElementById('cp-progFill').style.width = '7%';
+  } else if(cpPhase === 'RUNNING_NEAR' || cpPhase === 'RUNNING_CONFIRMED'){
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${CP_WO_CURRENT.wo})`;
+    document.getElementById('cp-progActual').textContent = '99,200';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(CP_WO_CURRENT.planned);
+    document.getElementById('cp-progPct').textContent = '99%';
+    document.getElementById('cp-progFill').style.width = '99%';
+  } else {
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${CP_WO_CURRENT.wo})`;
+    document.getElementById('cp-progActual').textContent = '82,450';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(CP_WO_CURRENT.planned);
+    document.getElementById('cp-progPct').textContent = '82%';
+    document.getElementById('cp-progFill').style.width = '82%';
+  }
+}
+
+function cpRenderHeader(){
+  let sub;
+  if(['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME','RAMP_UP'].includes(cpPhase)){
+    sub = `${cpNextWo().wo} · ${cpNextWo().sku} · AFA10  (was ${CP_WO_CURRENT.wo})`;
+  } else if(cpPhase === 'IDLE'){
+    sub = `Next: ${cpNextWo().wo} · ${cpNextWo().sku} · AFA10`;
+  } else {
+    sub = `${CP_WO_CURRENT.wo} · Batch ${CP_WO_CURRENT.batch} · ${CP_WO_CURRENT.sku} · AFA10`;
+  }
+  document.getElementById('cp-hdrSub').textContent = sub;
+}
+
+function cpActionGrid(items){
+  return `<div class="flex gap-2.5 items-stretch">
+    ${items.map(([label,icon,bg,text,onclick,weight])=>`
+      <div class="action-btn" style="background:${bg};color:${text};flex:${weight||1};" onclick="${onclick}">${icon}<span>${label}</span></div>
+    `).join('')}
+  </div>`;
+}
+
+function cpDhrChecklist(){
+  return `<div class="rounded-xl border p-3" style="border-color:var(--border);">
+    <div class="font-bold text-[12.5px] mb-2">DHR Batch Record Closeout — ${CP_WO_CURRENT.wo}</div>
+    <div class="task-row"><div class="ckbox done" onclick="cpToggleCk(this)">✓</div><div class="text-[12px]">Reconcile good / scrap counts</div></div>
+    <div class="task-row"><div class="ckbox done" onclick="cpToggleCk(this)">✓</div><div class="text-[12px]">Sample collection closed</div></div>
+    <div class="task-row"><div class="ckbox" onclick="cpToggleCk(this)"></div><div class="text-[12px]">Operator sign-off</div></div>
+    <div class="text-[10px] mt-2" style="color:var(--text-muted);">Required for record-keeping — does not block Manufacturing Start.</div>
+  </div>`;
+}
+function cpToggleCk(el){
+  el.classList.toggle('done');
+  el.innerHTML = el.classList.contains('done') ? '✓' : '';
+}
+
+function cpNextWoCard(showSwitcher){
+  const n = cpNextWo();
+  return `<div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:#fff;">
+    <div class="flex items-center justify-between mb-1">
+      <div class="label-xs">Next Work Order</div>
+      ${cpPhase!=='RUNNING_NEAR' ? '<span class="pill pill-blue">Confirmed</span>' : ''}
+    </div>
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="val text-[13px]">${n.wo} · ${n.sku}</div>
+        <div class="text-[11px]" style="color:var(--text-muted);">${n.desc} · Planned ${cpFmtNum(n.planned)} pcs ${n.sameSku?'· <b>Same SKU</b> — no changeover required':'· Different SKU — ramp down + tooling changeover required'}</div>
+      </div>
+      ${showSwitcher ? `<button class="btn btn-outline" onclick="cpSwitchNextWo()">Select Different Work Order</button>` : ''}
+    </div>
+  </div>`;
+}
+
+function cpChangeoverStepper(activeIndex){
+  const steps = [
+    {label:'Ramp Down', sub: activeIndex>0?'Complete':activeIndex===0?'In Progress':'Pending'},
+    {label:'Tooling Changeover', sub: activeIndex>1?'Complete':activeIndex===1?'In Progress':'Pending'},
+    {label:'Manufacturing Start', sub: activeIndex>2?'Complete':activeIndex===2?'Ready':'Pending'}
+  ];
+  const colors = i => i<activeIndex ? 'var(--green)' : (i===activeIndex ? 'var(--orange)' : 'var(--border-strong)');
+  return `<div class="rounded-xl border p-3" style="border-color:var(--border);">
+    <div class="label-xs mb-2">Changeover Progress — ${CP_WO_CURRENT.sku} → ${cpNextWo().sku}</div>
+    <div class="flex items-center">
+      ${steps.map((st,i)=>`
+        ${i>0?`<div class="step-line ${i-1<activeIndex?'done':''}"></div>`:''}
+        <div class="step">
+          <div class="step-circle" style="background:${colors(i)};">${i<activeIndex?'✓':(i+1)}</div>
+          <div class="step-label" style="color:${i===activeIndex?'var(--orange)':'var(--text-soft)'};">${st.label}</div>
+          <div class="step-sub">${st.sub}</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function cpLineClearanceCard(blocking){
+  if(cpLineClearanceRecorded){
+    return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:var(--green-bd);background:var(--green-bg);">
+      <div><div class="font-bold text-[12.5px]" style="color:var(--green);">Line Clearance Recorded</div>
+      <div class="text-[11px]" style="color:var(--text-soft);">Confirmed clear for ${cpNextWo().sku}.</div></div>
+      <span class="pill pill-green">✓ Done</span>
+    </div>`;
+  }
+  return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:${blocking?'var(--amber-bd)':'var(--border)'};background:${blocking?'var(--amber-bg)':'#fff'};">
+    <div>
+      <div class="font-bold text-[12.5px]" style="color:${blocking?'var(--amber)':'var(--text)'};">Line Clearance</div>
+      <div class="text-[11px]" style="color:var(--text-soft);">${blocking ? 'Not yet recorded for this changeover. Manufacturing Start will show a warning but is not blocked.' : 'Will be required before this changeover completes.'}</div>
+    </div>
+    <button class="btn btn-outline" onclick="cpRecordLineClearance()">Record Line Clearance</button>
+  </div>`;
+}
+function cpRecordLineClearance(){
+  cpLineClearanceRecorded = true;
+  cpRenderDynamic();
+  cpLogActivity('Line clearance recorded', `Equipment — line clearance confirmed for ${cpNextWo().sku}`);
+}
+
+function cpRenderDynamic(){
+  const area = document.getElementById('cp-dynamicArea');
+
+  if(cpPhase === 'IDLE'){
+    area.innerHTML = `
+      ${cpNextWoCard(false)}
+      <div class="text-[11px]" style="color:var(--text-muted);">Production has not started on this equipment. Manufacturing Start will run the IDLE → STARTING → RUNNING transition for ${cpNextWo().wo}.</div>
+      ${cpActionGrid([['Manufacturing Start', cpIcons.start, 'var(--green-bg)','var(--green)','cpDoManufacturingStartCold()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'RUNNING'){
+    area.innerHTML = `
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"],
+        ['End Order', cpIcons.end, 'var(--gray-bg)','var(--text-soft)',"cpOpenSlide('endPanel')"]
+      ])}
+      ${cpSlidePanels()}
+      <div class="text-[10.5px]" style="color:var(--text-muted);">"Confirm Next Work Order" becomes available once production approaches its planned quantity.</div>
+    `;
+  }
+
+  else if(cpPhase === 'RUNNING_NEAR'){
+    area.innerHTML = `
+      <div class="rounded-xl border p-3" style="border-color:var(--blue-bd);background:var(--blue-bg);">
+        <div class="font-bold text-[13px] mb-1" style="color:var(--blue);">Confirm Next Work Order</div>
+        <div class="text-[11px] mb-3" style="color:var(--text-soft);">This Work Order is approaching its planned quantity. Confirm what runs next so changeover can be prepared correctly.</div>
+        ${cpNextWoCard(true)}
+        <div class="flex gap-2 mt-3">
+          <button class="btn" style="background:var(--blue);color:#fff;" onclick="cpConfirmNextWo()">Confirm — ${cpNextWo().wo}</button>
+        </div>
+      </div>
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"]
+      ])}
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'RUNNING_CONFIRMED'){
+    area.innerHTML = `
+      ${cpNextWoCard(true)}
+      <div class="text-[11px]" style="color:var(--text-muted);">Next Work Order confirmed. Completing this Work Order will close the DHR batch record and move the equipment into Changeover.</div>
+      ${cpActionGrid([['Complete Work Order', cpIcons.end, 'var(--blue-bg)','var(--blue)','cpDoCompleteWO()',1]])}
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"]
+      ])}
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'CHG_RAMPDOWN'){
+    area.innerHTML = `
+      ${cpChangeoverStepper(0)}
+      <div class="grid grid-cols-2 gap-3">
+        ${cpDhrChecklist()}
+        ${cpNextWoCard(false)}
+      </div>
+      ${cpLineClearanceCard(false)}
+      ${cpActionGrid([['Mark Line Cleared', cpIcons.clear, 'var(--blue-bg)','var(--blue)','cpDoMarkLineCleared()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'CHG_TOOLING'){
+    area.innerHTML = `
+      ${cpChangeoverStepper(1)}
+      <div class="grid grid-cols-2 gap-3">
+        ${cpDhrChecklist()}
+        ${cpNextWoCard(false)}
+      </div>
+      ${cpLineClearanceCard(false)}
+      ${cpActionGrid([['Tooling Changeover Complete', cpIcons.tool, 'var(--blue-bg)','var(--blue)','cpDoToolingComplete()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'CHG_READY'){
+    area.innerHTML = `
+      ${cpChangeoverStepper(2)}
+      <div class="grid grid-cols-2 gap-3">
+        ${cpDhrChecklist()}
+        ${cpNextWoCard(false)}
+      </div>
+      ${cpLineClearanceCard(true)}
+      ${cpActionGrid([['Manufacturing Start', cpIcons.start, 'var(--green-bg)','var(--green)','cpDoManufacturingStartChangeover()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'CHG_SAME'){
+    area.innerHTML = `
+      ${cpDhrChecklist()}
+      ${cpNextWoCard(false)}
+      <div class="text-[11px]" style="color:var(--text-muted);">Same SKU as next Work Order — no ramp down, tooling changeover, or line clearance required.</div>
+      ${cpActionGrid([['Manufacturing Start', cpIcons.start, 'var(--green-bg)','var(--green)','cpDoManufacturingStartChangeover()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'RAMP_UP'){
+    area.innerHTML = `
+      <div class="rounded-xl border p-3" style="border-color:var(--purple-bd);background:var(--purple-bg);">
+        <div class="font-bold text-[12.5px]" style="color:var(--purple);">Ramping to target speed</div>
+        <div class="text-[11px]" style="color:var(--text-soft);">${cpNextWo().wo} is running below target speed while the line stabilizes. This is tracked as a Performance loss, not a separate state.</div>
+      </div>
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"],
+        ['End Order', cpIcons.end, 'var(--gray-bg)','var(--text-soft)',"cpOpenSlide('endPanel')"]
+      ])}
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'PAUSED'){
+    area.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Pause Reason</div><div class="val">${cpPauseReason || '—'}</div></div>
+        <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Auto-Resume</div><div class="val" style="color:var(--green);">Enabled</div></div>
+      </div>
+      ${cpActionGrid([
+        ['Resume Production', cpIcons.resume, 'var(--green-bg)','var(--green)','cpDoResume()',2],
+        ['End Order', cpIcons.end, 'var(--gray-bg)','var(--text-soft)',"cpOpenSlide('endPanel')",1]
+      ])}
+      ${cpSlidePanels(true)}
+    `;
+  }
+
+  else if(cpPhase === 'HELD'){
+    area.innerHTML = `
+      <div class="rounded-xl border p-3" style="border-color:var(--red-bd);background:var(--red-bg);">
+        <div class="font-bold text-[12.5px] mb-1" style="color:var(--red);">Flagged Issue</div>
+        <div class="text-[11.5px]" style="color:var(--text-soft);">"Z5C30 worn drive belt and broken slide for the prestop." — awaiting engineering clearance.</div>
+      </div>
+      ${cpActionGrid([
+        ['Cleared — Resume', cpIcons.clear, 'var(--green-bg)','var(--green)','cpDoResume()',2],
+        ['Escalate — Abort', cpIcons.abort, 'var(--darkred-bg)','var(--darkred)','cpDoAbort()',1]
+      ])}
+    `;
+  }
+
+  else if(['ABORTED','STOPPED','COMPLETE'].includes(cpPhase)){
+    area.innerHTML = `${cpActionGrid([['Order Closed', cpIcons.lock, '#f1f4f8','var(--text-muted)','',1]])}`;
+    area.querySelectorAll('.action-btn').forEach(b=>b.classList.add('disabled'));
+  }
+}
+
+function cpSlidePanels(endOnly){
+  return `
+  ${!endOnly ? `
+  <div id="reasonPanel" class="slide" style="max-height:0;opacity:0;">
+    <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
+      <div class="font-bold text-[13px] mb-1">Why are you pausing?</div>
+      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Select a reason so this time is recorded correctly.</div>
+      <div class="grid grid-cols-3 gap-2">
+        ${['Changeover / Setup','Break / Crew','Material Missing','Quality Check','Planned Maintenance','Other'].map(r=>`
+          <div class="reason-btn" onclick="cpConfirmPause('${r}')">${cpIcons.check}${r}</div>
+        `).join('')}
+      </div>
+      <button onclick="cpCancelSlide('reasonPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
+    </div>
+  </div>
+  <div id="flagPanel" class="slide" style="max-height:0;opacity:0;">
+    <div class="rounded-xl border p-3" style="border-color:var(--amber-bd);background:var(--amber-bg);">
+      <div class="font-bold text-[13px] mb-1" style="color:var(--amber);">Flag for Engineering?</div>
+      <div class="text-[11px] mb-3" style="color:var(--text-soft);">Stops production and notifies maintenance/engineering until cleared.</div>
+      <textarea id="cp-flagComment" maxlength="100" rows="2" class="w-full border rounded-md px-2 py-1.5 text-[12px] mb-2" style="border-color:var(--border-strong);" placeholder="Briefly describe the issue (max 100 chars)…"></textarea>
+      <label class="flex items-center gap-2 text-[11px] font-semibold mb-3" style="color:var(--darkred);">
+        <input id="cp-emergencyCheck" type="checkbox" class="accent-[var(--darkred)]"> This is a safety / emergency issue — abort immediately
+      </label>
+      <div class="flex gap-2">
+        <button onclick="cpConfirmFlag()" class="btn btn-icon-row" style="background:var(--amber);color:#fff;flex:2;padding:11px 14px;">${cpIcons.flag}Flag &amp; Stop Production</button>
+        <button onclick="cpCancelSlide('flagPanel')" class="btn btn-outline" style="flex:1;">Cancel</button>
+      </div>
+    </div>
+  </div>` : ''}
+  <div id="endPanel" class="slide" style="max-height:0;opacity:0;">
+    <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
+      <div class="font-bold text-[13px] mb-1">How did this order end?</div>
+      <div class="text-[11px] mb-3" style="color:var(--text-muted);">This closes the Work Order.</div>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="reason-btn" onclick="cpEndOrder('COMPLETE')">${cpIcons.check} Completed — target reached</div>
+        <div class="reason-btn" onclick="cpEndOrder('STOPPED')">${cpIcons.end} Stopped early / cancelled</div>
+      </div>
+      <button onclick="cpCancelSlide('endPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
+    </div>
+  </div>`;
+}
+function cpOpenSlide(id){
+  ['reasonPanel','flagPanel','endPanel'].forEach(x=>{ const e=document.getElementById(x); if(e && x!==id){ e.style.maxHeight='0'; e.style.opacity='0'; }});
+  const el = document.getElementById(id);
+  el.style.maxHeight = '320px'; el.style.opacity = '1';
+}
+function cpCancelSlide(id){ const e=document.getElementById(id); e.style.maxHeight='0'; e.style.opacity='0'; }
+
+const cpActivity = [
+  {t:'06:00 AM', text:'Order started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`}
+];
+function cpRenderActivity(){
+  document.getElementById('cp-activityList').innerHTML = cpActivity.map(a => `
+    <div class="rounded-md px-2.5 py-2 bg-white border" style="border-color:var(--border);">
+      <div class="flex items-center justify-between mb-1">
+        <span class="font-semibold">${a.text}</span>
+        <span style="color:var(--text-muted);font-size:10.5px;">${a.t}</span>
+      </div>
+      <span class="isa-tag">${a.isa}</span>
+    </div>`).join('');
+}
+function cpLogActivity(text, isa){
+  cpActivity.unshift({t:cpFmtTime(), text, isa});
+  cpRenderActivity();
+}
+
+function cpRender(){
+  cpRenderHeader();
+  cpRenderHero();
+  cpRenderProgress();
+  cpRenderDynamic();
+  cpSyncOuterHeader();
+}
+
+const CP_PILL_CLASS = {
+  RUNNING:'pill-green', RUNNING_NEAR:'pill-green', RUNNING_CONFIRMED:'pill-green',
+  RAMP_UP:'pill-blue',
+  CHG_RAMPDOWN:'pill-orange', CHG_TOOLING:'pill-orange', CHG_READY:'pill-orange', CHG_SAME:'pill-gray',
+  PAUSED:'pill-amber', HELD:'pill-red', ABORTED:'pill-red', STOPPED:'pill-gray', COMPLETE:'pill-blue', IDLE:'pill-gray'
+};
+
+/* "Active Category" reflects the actual OEE/downtime category — the
+   pause reason picked in the waterfall, not just the raw phase name. */
+function cpActiveCategory(){
+  if(cpPhase === 'PAUSED') return { label: cpPauseReason || 'Paused', bg:'var(--amber-bg)', color:'var(--amber)' };
+  if(cpPhase === 'HELD') return { label:'Engineering Hold', bg:'var(--red-bg)', color:'var(--red)' };
+  if(cpPhase === 'ABORTED') return { label:'Emergency Stop', bg:'var(--darkred-bg)', color:'var(--darkred)' };
+  if(['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY'].includes(cpPhase)) return { label:'Changeover', bg:'var(--orange-bg)', color:'var(--orange)' };
+  if(cpPhase === 'CHG_SAME') return { label:'Batch Closeout', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'RAMP_UP') return { label:'Ramp-Up', bg:'var(--purple-bg)', color:'var(--purple)' };
+  if(cpPhase === 'STOPPED') return { label:'Stopped', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'COMPLETE') return { label:'Completed', bg:'var(--blue-bg)', color:'var(--blue)' };
+  return { label:'Production', bg:'var(--green-bg)', color:'var(--green)' }; // RUNNING / RUNNING_NEAR / RUNNING_CONFIRMED / IDLE
+}
+
+function cpSyncOuterHeader(){
+  const p = CP_PHASES[cpPhase];
+  const cat = cpActiveCategory();
+  const badge = document.getElementById('outerCategoryBadge');
+  const label = document.getElementById('outerCategoryLabel');
+  if(badge) badge.style.background = cat.bg;
+  if(label){ label.textContent = cat.label; label.style.color = cat.color; }
+  const afa10 = UNITS.find(u=>u.name==='AFA10');
+  if(afa10){
+    afa10.status = p.label.toUpperCase();
+    afa10.pillClass = CP_PILL_CLASS[cpPhase] || 'pill-gray';
+    renderUnitCards();
+  }
+}
+
+function cpTransition(busyKey, toPhase, delay, after){
+  cpRenderBusy(busyKey);
+  document.getElementById('cp-dynamicArea').querySelectorAll('.action-btn').forEach(b=>b.classList.add('disabled'));
+  setTimeout(()=>{
+    cpPhase = toPhase;
+    cpRender();
+    after && after();
+  }, delay || 550);
+}
+
+function cpDoManufacturingStartCold(){
+  cpTransition('STARTING','RAMP_UP',550, ()=>{
+    cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, `Equipment: IDLE → STARTING → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING`);
+  });
+}
+
+function cpConfirmNextWo(){
+  cpPhase = 'RUNNING_CONFIRMED';
+  cpRender();
+  cpLogActivity(`Next Work Order confirmed — ${cpNextWo().wo}`, `No state change · sequencing checkpoint`);
+}
+function cpSwitchNextWo(){
+  cpNextWoIndex = (cpNextWoIndex + 1) % CP_NEXT_WO_OPTIONS.length;
+  cpLineClearanceRecorded = false;
+  cpRenderDynamic();
+  cpRenderHeader();
+}
+function cpDoCompleteWO(){
+  const sameSku = cpNextWo().sameSku;
+  cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN', 600, ()=>{
+    cpLogActivity(`Order completed — ${CP_WO_CURRENT.wo}`, `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'} — from_sku=${CP_WO_CURRENT.sku}`);
+  });
+}
+
+function cpDoMarkLineCleared(){
+  cpTransition('CHANGEOVER','CHG_TOOLING',550, ()=>{
+    cpLogActivity('Line cleared — ramp down complete', `Equipment: CHANGEOVER (Ramp Down) → CHANGEOVER (Tooling Changeover)`);
+  });
+}
+function cpDoToolingComplete(){
+  cpTransition('FINALIZING','CHG_READY',550, ()=>{
+    cpLogActivity(`Tooling changeover complete — recipe sent to PLC for ${cpNextWo().wo}`, `Equipment: CHANGEOVER (Tooling Changeover) → CHANGEOVER (Ready)  ·  to_sku=${cpNextWo().sku}`);
+  });
+}
+function cpDoManufacturingStartChangeover(){
+  const wasSame = cpPhase === 'CHG_SAME';
+  const warn = !wasSame && !cpLineClearanceRecorded;
+  const proceed = ()=>{
+    cpTransition('STARTING','RAMP_UP',550, ()=>{
+      const co = wasSame
+        ? `Equipment: CHANGEOVER (Batch Closeout) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — no ramp down / tooling required (same SKU)`
+        : `Equipment: CHANGEOVER (Ready) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — changeover record closed (from_sku=${CP_WO_CURRENT.sku}, to_sku=${cpNextWo().sku})${!cpLineClearanceRecorded ? ' · Line clearance NOT recorded' : ''}`;
+      cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, co);
+      cpLineClearanceRecorded = false;
+    });
+  };
+  if(warn){
+    if(confirm('Line Clearance has not been recorded for this changeover.\\n\\nStart production anyway?')){
+      proceed();
+    }
+  } else {
+    proceed();
+  }
+}
+
+function cpConfirmPause(reason){
+  cpPauseReason = reason;
+  cpPauseReturnPhase = cpPhase;
+  cpCancelSlide('reasonPanel');
+  cpTransition('PAUSING','PAUSED',500, ()=>{
+    cpLogActivity(`Paused — ${reason}`, `${CP_WO_CURRENT.wo}: RUNNING → PAUSING → PAUSED  ·  Category: ${reason}`);
+  });
+}
+function cpConfirmFlag(){
+  const note = document.getElementById('cp-flagComment').value.trim();
+  const emergency = document.getElementById('cp-emergencyCheck').checked;
+  cpPauseReturnPhase = cpPhase;
+  cpCancelSlide('flagPanel');
+  if(emergency){
+    cpTransition('ABORTING','ABORTED',600, ()=>{
+      cpLogActivity(`Emergency abort${note?' — '+note:''}`, `${CP_WO_CURRENT.wo}: RUNNING → ABORTING → ABORTED`);
+    });
+  } else {
+    cpTransition('HOLDING','HELD',600, ()=>{
+      cpLogActivity(`Flagged for engineering${note?' — '+note:''}`, `${CP_WO_CURRENT.wo}: RUNNING → HOLDING → HELD`);
+    });
+  }
+}
+function cpDoResume(){
+  const wasHeld = cpPhase === 'HELD';
+  const target = cpPauseReturnPhase || 'RUNNING';
+  cpTransition('RESUMING', target, 550, ()=>{
+    const from = wasHeld ? 'HELD' : 'PAUSED';
+    cpLogActivity(wasHeld ? 'Cleared by engineering — resumed' : 'Resumed production', `${CP_WO_CURRENT.wo}: ${from} → STARTING → RUNNING`);
+    cpPauseReason = null;
+  });
+}
+function cpDoAbort(){
+  cpTransition('ABORTING','ABORTED',600, ()=>{
+    cpLogActivity('Escalated to emergency abort', `${CP_WO_CURRENT.wo}: HELD → ABORTING → ABORTED`);
+  });
+}
+function cpEndOrder(outcome){
+  cpCancelSlide('endPanel');
+  if(outcome === 'COMPLETE'){
+    const sameSku = cpNextWo().sameSku;
+    cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN',600, ()=>{
+      cpLogActivity(`Order completed — ${CP_WO_CURRENT.wo}`, `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'}`);
+    });
+  } else {
+    cpTransition('STOPPING','STOPPED',600, ()=>{
+      cpLogActivity('Order stopped early', `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → STOPPED`);
+    });
+  }
+}
+
+function cpJumpTo(p){
+  cpPauseReturnPhase = 'RUNNING';
+  cpPhase = p;
+  cpRender();
+  cpSyncOuterHeader();
+  cpLogActivity('— jumped to state for demo —', `(manual demo shortcut) → ${p}`);
+}
+function cpResetDemo(){
+  cpPhase = 'RUNNING'; cpNextWoIndex = 0; cpPauseReason = null; cpLineClearanceRecorded = false;
+  cpActivity.length = 0;
+  cpActivity.push({t:'06:00 AM', text:'Order started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`});
+  cpRender(); cpRenderActivity(); cpSyncOuterHeader();
+}
+
+let cpInitialized = false;
+function openControlPanel(){
+  document.getElementById('controlPanelModal').style.display = 'flex';
+  if(!cpInitialized){
+    cpRender();
+    cpRenderActivity();
+    cpSyncOuterHeader();
+    cpInitialized = true;
+  }
+}
+function closeControlPanel(){
+  document.getElementById('controlPanelModal').style.display = 'none';
+}
+function openWorkOrderAssignment(){
+  switchMainTab('assignment');
+}
+window.addEventListener('keydown', e => { if(e.key === 'Escape') closeControlPanel(); });
+</script>
+
+<script>
+/* =====================================================================
+   DATA
+===================================================================== */
+const UNITS = [
+  { name:'AFA12', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
+  { name:'AFA12', status:'MACHINE FAILURES - MECHANICAL', pillClass:'pill-red', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
+  { name:'AFA10', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' },
+  { name:'AFA111', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503288', sku:'80-APX-60000', pps:16, stability:99, planned:1500000, scrap:1.53, actual:1613, eta:'05/23/2026 - Shift B' }
+];
+
+const MONTHS = [
+  { label:'MARCH', days:[3,10,17,24,31] },
+  { label:'APRIL', days:[3,10,17,24,31] },
+  { label:'MAY', days:[3,10,17,24,31] }
+];
+
+const UNIT_ROWS = ['Unit 1','Unit 2','Unit 3','Unit 4'];
+
+const WORK_ORDERS = [
+  { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'started', equipment:'AFA10-Line-1', custom:false, planned:100000, canAddEquipment:true },
+  { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', batch:'1851', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:120000, canAddEquipment:false },
+  { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', batch:'1852', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:90000, canAddEquipment:false },
+  { wo:'WO-4503305', sku:'80-BLD-22010', desc:'Blister Pack Assembly', batch:'2210', material:'PETG Blister Sheet', workCenter:'PKG20', status:'created', equipment:null, custom:false, planned:45000, canAddEquipment:false },
+  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack - Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG20', status:'auto', equipment:'PKG20-Cell-A', custom:false, planned:38000, canAddEquipment:false },
+  { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study - tip retention', batch:'-', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:true, planned:500, canAddEquipment:false },
+  { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:60000, canAddEquipment:false }
+];
+
+const RESOURCES = [
+  { id:'AFA10-Line-1', name:'AFA10 - Line 1', workCenter:'AFA10', state:'running', currentWo:'WO-4503287' },
+  { id:'AFA10-Line-2', name:'AFA10 - Line 2', workCenter:'AFA10', state:'available', currentWo:null },
+  { id:'AFA10-Line-3', name:'AFA10 - Line 3', workCenter:'AFA10', state:'down', currentWo:null },
+  { id:'PKG20-Cell-A', name:'PKG20 - Cell A', workCenter:'PKG20', state:'running', currentWo:'WO-4503312' },
+  { id:'PKG20-Cell-B', name:'PKG20 - Cell B', workCenter:'PKG20', state:'available', currentWo:null },
+  { id:'AFA10-Bench-1', name:'AFA10 - Eng. Bench 1', workCenter:'AFA10', state:'available', currentWo:null }
+];
+
+let selectedWo = null;
+let selectedRes = null;
+let woFilter = 'all';
+let resFilter = 'all';
+let woSearch = '';
+let resSearch = '';
+let lastAssigned = null;
+
+/* segments per row, in % of total gantt width (0-100) */
+const SEGMENTS = {
+  'Unit 1': [
+    {type:'annual', start:0, end:30}, {type:'stop', start:30, end:33},
+    {type:'annual', start:33, end:64}, {type:'stop', start:64, end:67},
+    {type:'scheduled', start:70, end:88}, {type:'stop', start:88, end:91}
+  ],
+  'Unit 2': [
+    {type:'annual', start:0, end:12}, {type:'stop', start:12, end:15},
+    {type:'annual', start:15, end:30}, {type:'annual', start:32, end:50},
+    {type:'annual', start:52, end:64}, {type:'scheduled', start:64, end:78},
+    {type:'stop', start:78, end:82}, {type:'scheduled', start:84, end:100}
+  ],
+  'Unit 3': [
+    {type:'annual', start:0, end:18}, {type:'annual', start:20, end:38}, {type:'stop', start:38, end:40},
+    {type:'annual', start:40, end:55}, {type:'annual', start:57, end:64}, {type:'annual', start:64, end:67},
+    {type:'scheduled', start:67, end:84}, {type:'stop', start:84, end:90}
+  ],
+  'Unit 4': [
+    {type:'annual', start:0, end:13}, {type:'stop', start:13, end:17},
+    {type:'annual', start:17, end:42}, {type:'stop', start:42, end:46},
+    {type:'annual', start:46, end:55}, {type:'annual', start:57, end:64}, {type:'stop', start:64, end:67},
+    {type:'scheduled', start:67, end:72}, {type:'stop', start:72, end:75}, {type:'annual', start:75, end:91}
+  ]
+};
+
+function renderUnitCards(){
+  document.getElementById('unitCards').innerHTML = UNITS.map(u => `
+    <div class="unit-card" onclick="openControlPanel()">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-extrabold text-[14px]">${u.name}</span>
+        <span class="pill ${u.pillClass}">${u.status}</span>
+      </div>
+      <div class="grid grid-cols-2 gap-y-1.5 mb-2">
+        <div><div class="label-xs">Current Work Order:</div><div class="val">${u.wo}</div></div>
+        <div><div class="label-xs">SKU# / Material:</div><div class="val">${u.sku}</div></div>
+        <div><div class="label-xs">Last 6 AVG PPS:</div><div class="val">${u.pps}</div></div>
+        <div><div class="label-xs">Stability:</div><div class="val">${u.stability}%</div></div>
+        <div><div class="label-xs">Planed Quantity:</div><div class="val">${u.planned.toLocaleString('en-US')}</div></div>
+        <div><div class="label-xs">Scrap:</div><div class="val">${u.scrap}%</div></div>
+      </div>
+      <div class="flex items-center gap-2 mb-2">
+        <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,(u.actual/u.planned)*100*40)}%;"></div></div>
+        <span class="text-[11px] font-semibold whitespace-nowrap" style="color:var(--text-soft);">${u.actual.toLocaleString('en-US')} Pieces</span>
+      </div>
+      <div class="text-[10.5px]" style="color:var(--text-muted);">Estimated Finish Date/Shift: <b style="color:var(--text-soft);">${u.eta}</b></div>
+    </div>
+  `).join('');
+}
+
+function renderGanttHead(){
+  document.getElementById('ganttHead').innerHTML = `
+    <div class="grid" style="grid-template-columns:90px 1fr;">
+      <div></div>
+      <div class="grid" style="grid-template-columns:repeat(${MONTHS.length},1fr);">
+        ${MONTHS.map(m=>`<div class="gantt-month">${m.label}</div>`).join('')}
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:90px 1fr;">
+      <div></div>
+      <div class="grid" style="grid-template-columns:repeat(${MONTHS.length*5},1fr);">
+        ${MONTHS.flatMap(m=>m.days).map(d=>`<div class="gantt-day">${d}</div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderGanttBody(){
+  const body = document.getElementById('ganttBody');
+  const rowsHtml = UNIT_ROWS.map(name => `
+    <div class="grid items-center" style="grid-template-columns:90px 1fr;">
+      <div class="text-[12px] font-bold pl-3" style="color:var(--text-soft);">${name}</div>
+      <div class="gantt-row">
+        ${SEGMENTS[name].map(s=>`
+          <div class="gantt-bar bar-${s.type}" style="left:${s.start}%;width:${s.end-s.start}%;"></div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  body.innerHTML = `
+    <div style="position:relative;">
+      ${rowsHtml}
+      <div class="now-line" style="left:calc(90px + (100% - 90px) * 0.62);"></div>
+    </div>
+  `;
+}
+
+/* =====================================================================
+   FLAG NEXT EVENTS — category picker
+===================================================================== */
+const FLAG_ICON = `<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h13l-2.5 3.5L18 11H5"/></svg>`;
+const FLAG_CATEGORIES = [
+  { label:'Operational',            color:'var(--orange)',  bg:'var(--orange-bg)' },
+  { label:'CILT Routine',           color:'var(--green)',   bg:'var(--green-bg)' },
+  { label:'No Order',               color:'var(--purple)',  bg:'var(--purple-bg)' },
+  { label:'Legal Holidays',         color:'var(--red)',     bg:'var(--red-bg)' },
+  { label:'Planned Maint.',         color:'var(--blue)',    bg:'var(--blue-bg)' },
+  { label:'Start and Stop',         color:'var(--green)',   bg:'var(--green-bg)' },
+  { label:'Changeover',             color:'var(--cyan)',    bg:'#e3fafc' },
+  { label:'Ramp-Up',                color:'var(--red)',     bg:'var(--red-bg)' },
+  { label:'Consumable Replacement', color:'var(--amber)',   bg:'var(--amber-bg)' },
+  { label:'Quality Losses',         color:'#8a8a2e',        bg:'#f6f5e3' },
+  { label:'Breakdown',              color:'var(--blue)',    bg:'var(--blue-bg)' },
+  { label:'Operational Losses',     color:'var(--orange)',  bg:'var(--orange-bg)' }
+];
+let flagCategoryOpen = false;
+let activeFlagCategory = null;
+
+function renderFlagCategories(){
+  document.getElementById('flagCategoryList').innerHTML = FLAG_CATEGORIES.map((c,i)=>`
+    <div class="flag-cat-btn${activeFlagCategory===i?' active':''}" style="${activeFlagCategory===i?`border-color:${c.color};background:${c.bg};`:''}" onclick="selectFlagCategory(${i})">
+      <span style="color:${c.color};">${FLAG_ICON}</span>
+      <span class="flag-cat-label" style="${activeFlagCategory===i?`color:${c.color};`:''}">${c.label}</span>
+    </div>
+  `).join('');
+}
+function toggleFlagCategories(){
+  flagCategoryOpen = !flagCategoryOpen;
+  const row = document.getElementById('flagCategoryRow');
+  row.style.opacity = flagCategoryOpen ? '1' : '0';
+  row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
+  row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-6px)';
+  document.getElementById('flagCategoryBtn').classList.toggle('active', flagCategoryOpen);
+}
+function selectFlagCategory(i){
+  activeFlagCategory = i;
+  renderFlagCategories();
+}
+
+function switchMainTab(tab){
+  const isAssignment = tab === 'assignment';
+  document.getElementById('productionOverviewView').classList.toggle('active', !isAssignment);
+  document.getElementById('workOrderAssignmentView').classList.toggle('active', isAssignment);
+  document.getElementById('tabProductionOverview').classList.toggle('active', !isAssignment);
+  document.getElementById('tabWorkOrderAssignment').classList.toggle('active', isAssignment);
+  if(isAssignment) renderAssignmentAll();
+}
+
+function assignmentStatusPill(status){
+  const map = {
+    created:  ['pill-gray','Created'],
+    assigned: ['pill-blue','Assigned'],
+    auto:     ['pill-purple','Auto Assigned'],
+    started:  ['pill-amber','Started / Locked']
+  };
+  const [cls,label] = map[status] || map.created;
+  return `<span class="pill ${cls}">${label}</span>`;
+}
+
+function assignmentResStatePill(state){
+  const map = {
+    running:   ['pill-green','Running'],
+    available: ['pill-blue','Available'],
+    down:      ['pill-red','Down']
+  };
+  const [cls,label] = map[state] || map.available;
+  return `<span class="pill ${cls}">${label}</span>`;
+}
+
+function woEligibleForSelectedRes(wo){
+  if(!selectedRes) return true;
+  return wo.workCenter === selectedRes.workCenter;
+}
+
+function resEligibleForSelectedWo(res){
+  if(!selectedWo) return true;
+  return res.workCenter === selectedWo.workCenter;
+}
+
+function eligibleResourcesForWo(wo){
+  if(!wo) return [];
+  return RESOURCES.filter(r => r.workCenter === wo.workCenter && r.state === 'available');
+}
+
+function eligibleWosForResource(res){
+  if(!res) return [];
+  return WORK_ORDERS.filter(w => w.workCenter === res.workCenter);
+}
+
+function isWoAssignable(wo, res){
+  if(!wo || !res) return false;
+  if(wo.status === 'created' || wo.status === 'auto') return true;
+  if(wo.status === 'assigned') return !wo.equipment || wo.equipment === res.id;
+  if(wo.status === 'started') return wo.canAddEquipment && wo.equipment !== res.id;
+  return false;
+}
+
+function assignmentValidation(){
+  const checks = [
+    {
+      label:'Same Work Center',
+      ok:Boolean(selectedWo && selectedRes && selectedWo.workCenter === selectedRes.workCenter),
+      reason:'Cannot assign this Work Order to this Resource because they belong to different Work Centers.'
+    },
+    {
+      label:'Resource available',
+      ok:Boolean(selectedRes && selectedRes.state === 'available'),
+      reason:'Cannot assign to a Resource that is not available.'
+    },
+    {
+      label:'Work Order can be assigned',
+      ok:Boolean(selectedWo && selectedRes && isWoAssignable(selectedWo, selectedRes)),
+      reason:'This Work Order is not in a state that can be assigned to the selected Resource.'
+    },
+    {
+      label:'Equipment not locked by started production',
+      ok:Boolean(selectedRes && !(selectedRes.state === 'running' && selectedRes.currentWo && (!selectedWo || selectedRes.currentWo !== selectedWo.wo))),
+      reason:'Equipment is locked by started production and cannot be reassigned here.'
+    }
+  ];
+  return {
+    checks,
+    valid: checks.every(c => c.ok),
+    reason: checks.find(c => !c.ok)?.reason || ''
+  };
+}
+
+function renderWOs(){
+  const list = document.getElementById('woList');
+  const scopeLabel = document.getElementById('woScopeLabel');
+  if(!list) return;
+  if(scopeLabel){
+    scopeLabel.textContent = selectedRes ? `Showing Work Orders compatible with ${selectedRes.name}.` : 'Select an order to filter eligible resources.';
+  }
+  const q = woSearch.toLowerCase();
+  const filtered = WORK_ORDERS.filter(w=>{
+    if(woFilter==='created' && w.status!=='created') return false;
+    if(woFilter==='assigned' && w.status!=='assigned') return false;
+    if(woFilter==='auto' && w.status!=='auto') return false;
+    if(woFilter==='custom' && !w.custom) return false;
+    if(q && !(`${w.wo} ${w.sku} ${w.batch} ${w.material} ${w.desc}`.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  if(filtered.length===0){
+    list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Work Orders match this filter.</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(w=>{
+    const isSel = selectedWo && selectedWo.wo === w.wo;
+    const eligible = woEligibleForSelectedRes(w);
+    const locked = w.status==='started' && w.equipment;
+    const suggested = selectedRes && eligibleWosForResource(selectedRes).length === 1 && eligible;
+    let cls = 'wo-card';
+    if(isSel) cls += ' selected';
+    else if(suggested) cls += ' suggested';
+    else if(selectedRes && eligible) cls += ' eligible';
+    else if(selectedRes && !eligible) cls += ' dimmed';
+    return `
+    <div class="${cls}" onclick="selectWo('${w.wo}')">
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-[13px]">${w.wo}</span>
+            ${w.custom ? '<span class="pill pill-orange">Custom WO</span>' : ''}
+            ${suggested ? '<span class="pill pill-green">Suggested</span>' : ''}
+          </div>
+          <div class="text-[11.5px] mt-0.5" style="color:var(--text-soft);">${w.desc}</div>
+        </div>
+        ${assignmentStatusPill(w.status)}
+      </div>
+      <div class="flex items-center gap-3 mt-2 text-[11px]" style="color:var(--text-muted);">
+        <span>SKU <b style="color:var(--text-soft);">${w.sku}</b></span>
+        <span>Batch <b style="color:var(--text-soft);">${w.batch}</b></span>
+        <span>WC <b style="color:var(--text-soft);">${w.workCenter}</b></span>
+        <span>Planned <b style="color:var(--text-soft);">${w.planned.toLocaleString('en-US')}</b></span>
+      </div>
+      ${w.equipment ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Equipment: <span class="isa-tag">${w.equipment}</span>${locked ? ' <span style="color:var(--amber);font-weight:700;">· locked (started)</span>' : ''}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderResources(){
+  const list = document.getElementById('resList');
+  const scopeLabel = document.getElementById('resScopeLabel');
+  if(!list || !scopeLabel) return;
+  scopeLabel.textContent = selectedWo ? `Showing resources eligible for ${selectedWo.wo}.` : 'All work centers';
+
+  const q = resSearch.toLowerCase();
+  const filtered = RESOURCES.filter(r=>{
+    if(resFilter==='available' && r.state!=='available') return false;
+    if(resFilter==='running' && r.state!=='running') return false;
+    if(resFilter==='down' && r.state!=='down') return false;
+    if(q && !(`${r.id} ${r.name} ${r.workCenter} ${r.state} ${r.currentWo || ''}`.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  if(filtered.length===0){
+    list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Resources match this filter.</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(r=>{
+    const isSel = selectedRes && selectedRes.id === r.id;
+    const eligible = resEligibleForSelectedWo(r);
+    const suggested = selectedWo && eligibleResourcesForWo(selectedWo).length === 1 && eligible && r.state !== 'down';
+    let cls = 'res-card';
+    if(isSel) cls += ' selected';
+    else if(suggested) cls += ' suggested';
+    else if(selectedWo && eligible && r.state!=='down') cls += ' eligible';
+    else if(selectedWo && !eligible) cls += ' dimmed';
+    if(r.state==='down') cls += ' locked';
+    return `
+    <div class="${cls}" onclick="selectRes('${r.id}')" style="${isSel?'border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;':''}">
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <div class="font-bold text-[13px]">${r.name}</div>
+          <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Work Center <b style="color:var(--text-soft);">${r.workCenter}</b></div>
+          ${suggested ? '<div class="text-[11px] mt-1 font-bold" style="color:var(--green);">Suggested match</div>' : ''}
+        </div>
+        ${assignmentResStatePill(r.state)}
+      </div>
+      ${r.currentWo ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Currently running: <span class="isa-tag">${r.currentWo}</span></div>` : ''}
+      ${r.state==='down' ? `<div class="mt-2 text-[11px] font-semibold" style="color:var(--red);">Equipment unavailable</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function selectWo(woId){
+  const w = WORK_ORDERS.find(x=>x.wo===woId);
+  selectedWo = (selectedWo && selectedWo.wo===woId) ? null : w;
+  renderAssignmentAll();
+}
+
+function selectRes(resId){
+  const r = RESOURCES.find(x=>x.id===resId);
+  if(r.state==='down') return;
+  selectedRes = (selectedRes && selectedRes.id===resId) ? null : r;
+  renderAssignmentAll();
+}
+
+function clearSelection(){
+  selectedWo = null;
+  selectedRes = null;
+  lastAssigned = null;
+  renderAssignmentAll();
+}
+
+function setWoFilter(f, el){
+  woFilter = f;
+  document.querySelectorAll('#woFilterRow .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderWOs();
+}
+
+function setResFilter(f, el){
+  resFilter = f;
+  document.querySelectorAll('#resFilterRow .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderResources();
+}
+
+function filterWOs(v){
+  woSearch = v;
+  renderWOs();
+}
+
+function filterResources(v){
+  resSearch = v;
+  renderResources();
+}
+
+function toggleWoMenu(event){
+  event.stopPropagation();
+  document.getElementById('woActionMenu').classList.toggle('open');
+}
+
+function createWOFromMenu(){
+  document.getElementById('woActionMenu').classList.remove('open');
+  showToast('Create WO selected');
+}
+
+document.addEventListener('click', () => {
+  const menu = document.getElementById('woActionMenu');
+  if(menu) menu.classList.remove('open');
+});
+
+function renderReviewPanel(){
+  const panel = document.getElementById('reviewPanel');
+  if(!panel) return;
+
+  if(lastAssigned){
+    panel.innerHTML = `
+      <div class="review-content">
+        <div class="success-panel">
+          <div class="success-title">Work Order ${lastAssigned.wo} assigned to ${lastAssigned.resource}.</div>
+          <div class="helper-note">The Work Order is now pending start. Continue to the control panel or assign another order.</div>
+        </div>
+      </div>
+      <div class="review-actions">
+        <button class="review-clear-btn" onclick="assignAnotherWorkOrder()">Assign Another Work Order</button>
+        <button class="review-primary-btn" onclick="goToControlPanelFromSuccess()">Go to Control Panel</button>
+      </div>`;
+    return;
+  }
+
+  if(!selectedWo || !selectedRes){
+    const hint = selectedWo
+      ? `Choose an eligible Resource for ${selectedWo.wo} to review the assignment.`
+      : selectedRes
+        ? `Choose a compatible Work Order for ${selectedRes.name} to review the assignment.`
+        : 'Select a Work Order and a Resource to review the assignment.';
+    panel.innerHTML = `<div class="review-content"><div class="review-empty">${hint}</div></div>`;
+    return;
+  }
+
+  const validation = assignmentValidation();
+  panel.innerHTML = `
+    <div class="review-content">
+      <div class="review-section">
+        <div class="review-section-title">Assignment Summary</div>
+        <div class="review-grid">
+          <div class="review-row"><span>Work Order</span><b>${selectedWo.wo}</b></div>
+          <div class="review-row"><span>SKU / material</span><b>${selectedWo.sku}<br>${selectedWo.material}</b></div>
+          <div class="review-row"><span>Batch</span><b>${selectedWo.batch}</b></div>
+          <div class="review-row"><span>Planned quantity</span><b>${selectedWo.planned.toLocaleString('en-US')}</b></div>
+          <div class="review-row"><span>Work Center</span><b>${selectedWo.workCenter}</b></div>
+          <div class="review-row"><span>Resource / line</span><b>${selectedRes.name}</b></div>
+          <div class="review-row"><span>Resource status</span><b>${selectedRes.state.toUpperCase()}</b></div>
+        </div>
+      </div>
+      <div class="review-section">
+        <div class="review-section-title">Validation Checklist</div>
+        ${validation.checks.map(check => `
+          <div class="validation-row ${check.ok ? 'ok' : 'bad'}">
+            <span class="validation-dot">${check.ok ? '?' : '!'}</span>
+            <span>${check.label}</span>
+          </div>
+        `).join('')}
+        ${validation.valid ? '' : `<div class="helper-note" style="color:var(--red);font-weight:700;margin-top:6px;">${validation.reason}</div>`}
+      </div>
+    </div>
+    <div class="review-actions">
+      <button class="review-clear-btn" onclick="clearSelection()">Clear selection</button>
+      ${validation.valid
+        ? `<button class="review-primary-btn" onclick="confirmAssignment()">Confirm Assignment</button>`
+        : `<button class="review-primary-btn" onclick="showInvalidAssignmentReason()">Show reason</button>`}
+    </div>`;
+}
+function renderAssignmentAll(){
+  renderWOs();
+  renderResources();
+  renderReviewPanel();
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function confirmAssignment(){
+  if(!selectedWo || !selectedRes) return;
+  const validation = assignmentValidation();
+  if(!validation.valid){
+    showToast(validation.reason);
+    return;
+  }
+  const assignedWo = selectedWo.wo;
+  const assignedResource = selectedRes.name;
+  selectedWo.status = 'assigned';
+  selectedWo.equipment = selectedRes.id;
+  if(!selectedRes.currentWo && selectedRes.state === 'available'){
+    selectedRes.currentWo = assignedWo;
+    selectedRes.state = 'running';
+  }
+  lastAssigned = { wo: assignedWo, resource: assignedResource };
+  selectedWo = null;
+  selectedRes = null;
+  showToast(`Work Order ${assignedWo} assigned to ${assignedResource}.`);
+  renderAssignmentAll();
+}
+
+function showInvalidAssignmentReason(){
+  const validation = assignmentValidation();
+  showToast(validation.reason || 'Select a valid Work Order and Resource combination.');
+}
+
+function assignAnotherWorkOrder(){
+  lastAssigned = null;
+  selectedWo = null;
+  selectedRes = null;
+  renderAssignmentAll();
+}
+
+function goToControlPanelFromSuccess(){
+  openControlPanel();
+}
+
+renderFlagCategories();
+renderUnitCards();
+renderGanttHead();
+renderGanttBody();
+renderAssignmentAll();
+</script>
+</body>
+</html>
