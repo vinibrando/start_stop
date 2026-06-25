@@ -68,8 +68,10 @@
   .unit-card:hover{border-color:var(--accent);box-shadow:0 4px 14px -4px rgba(10,16,32,.12);}
   .unit-card .label-xs{font-size:10px;font-weight:700;color:var(--text-muted);}
   .unit-card .val{font-size:12px;font-weight:600;color:var(--text);}
-  .event-info-icon{width:18px;height:18px;color:var(--amber);flex-shrink:0;}
-  .work-orders-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:20px;}
+  .event-info-icon{width:14px;height:14px;color:var(--amber);flex:0 0 14px;display:block;}
+  .next-event-alert{height:31px;line-height:1.25;overflow:hidden;}
+  .next-event-alert span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .work-orders-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 18px 12px;margin-bottom:20px;min-height:332px;}
   .carousel-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;}
   .carousel-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
   .carousel-subtitle{font-size:11px;color:var(--text-muted);}
@@ -78,7 +80,8 @@
   .carousel-btn:hover:not(:disabled){background:var(--blue-bg);border-color:var(--accent);}
   .carousel-btn:disabled{opacity:.35;cursor:not-allowed;color:var(--text-muted);}
   .carousel-page-pill{min-width:62px;height:32px;border-radius:12px;border:1px solid rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--accent);}
-  .carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin:-8px 0 18px;}
+  #unitCards{min-height:236px;margin-bottom:2px!important;}
+  .carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 auto;width:max-content;height:16px;line-height:0;}
   .carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.2);}
   .carousel-dot.active{background:var(--accent);}
 
@@ -150,33 +153,51 @@
   .select-box{font-size:12.5px;border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--main-card);color:var(--text);cursor:pointer;}
   .select-box:focus{outline:none;border-color:var(--accent);}
 
-  .legend-swatch{width:14px;height:8px;border-radius:2px;display:inline-block;}
+  .legend-swatch{width:18px;height:8px;border-radius:999px;display:inline-block;}
+  .timeline-legend-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 10px 2px;}
+  .timeline-legend{display:flex;align-items:center;gap:18px;font-family:Roboto,var(--ix-font);font-size:12px;color:rgba(0,0,0,.6);}
+  .timeline-legend-item{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .timeline-tools{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .timeline-tool-btn{width:28px;height:26px;border:1px solid rgba(37,99,235,.28);background:#fff;color:var(--accent);border-radius:7px;padding:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;line-height:1;cursor:pointer;}
+  .timeline-tool-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
 
+  :root{--timeline-label-width:154px;--timeline-day-width:52px;}
   .gantt-shell{border:1px solid var(--divider,rgba(0,0,0,.12));border-radius:12px;background:#fff;overflow-x:auto;overflow-y:hidden;}
-  .timeline-canvas{min-width:2600px;}
-  .timeline-head{display:grid;grid-template-columns:123px 1fr;}
-  .timeline-left-head{background:#fbfcfc;border-right:1px solid var(--divider,rgba(0,0,0,.12));border-bottom:1px solid var(--divider,rgba(0,0,0,.12));}
+  .timeline-canvas{width:calc(var(--timeline-label-width) + (var(--timeline-day-width) * var(--timeline-total-days)));min-width:calc(var(--timeline-label-width) + (var(--timeline-day-width) * var(--timeline-total-days)));}
+  .timeline-head{display:grid;grid-template-columns:var(--timeline-label-width) 1fr;}
+  .timeline-left-head{position:sticky;left:0;z-index:12;background:#fbfcfc;border-right:1px solid var(--divider,rgba(0,0,0,.12));border-bottom:1px solid var(--divider,rgba(0,0,0,.12));}
   .timeline-head-main{background:#fff;border-bottom:1px solid var(--divider,rgba(0,0,0,.12));}
-  .timeline-month-row{display:grid;height:58px;border-bottom:1px solid var(--divider,rgba(0,0,0,.12));}
+  .timeline-month-row{display:grid;height:44px;border-bottom:1px solid var(--divider,rgba(0,0,0,.12));}
   .timeline-month{display:flex;align-items:center;justify-content:center;background:#fbfcfc;border-right:1px solid var(--divider,rgba(0,0,0,.12));font-size:14px;font-weight:500;color:rgba(0,0,0,.87);letter-spacing:.17px;}
-  .timeline-day-row{display:grid;height:44px;}
-  .timeline-day{display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(118,185,255,.2);font-size:14px;font-weight:400;color:rgba(0,0,0,.6);letter-spacing:.17px;}
+  .timeline-day-row{display:grid;height:32px;}
+  .timeline-day{display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(118,185,255,.2);font-size:11px;font-weight:400;color:rgba(0,0,0,.6);letter-spacing:0;}
   .timeline-body{position:relative;background:#fff;}
-  .timeline-row{display:grid;grid-template-columns:123px 1fr;height:46px;}
-  .gantt-row-label{position:relative;background:#fbfcfc;border-right:1px solid var(--divider,rgba(0,0,0,.12));display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:400;color:rgba(0,0,0,.6);letter-spacing:.15px;overflow:hidden;}
-  .gantt-row-label:before{content:"";position:absolute;left:0;right:0;top:18px;height:14px;background:rgba(0,0,0,.035);}
-  .gantt-row-label span{position:relative;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:98px;}
-  .gantt-lane{position:relative;border-bottom:1px solid rgba(118,185,255,.12);background-image:linear-gradient(to right,rgba(118,185,255,.18) 1px,transparent 1px),linear-gradient(to right,rgba(118,185,255,.08) 1px,transparent 1px);background-size:10% 100%,1.25% 100%;}
-  .gantt-lane:before{content:"";position:absolute;left:0;right:0;top:18px;height:14px;background:rgba(0,0,0,.035);}
-  .timeline-empty-row{display:grid;grid-template-columns:123px 1fr;height:29px;}
+  .timeline-row{display:grid;grid-template-columns:var(--timeline-label-width) 1fr;height:26px;}
+  .gantt-row-label{position:sticky;left:0;z-index:10;background:#fbfcfc;border-right:1px solid var(--divider,rgba(0,0,0,.12));display:flex;align-items:center;padding-left:12px;font-family:Roboto,var(--ix-font);font-size:15px;font-weight:400;color:rgba(0,0,0,.6);letter-spacing:0;overflow:hidden;}
+  .gantt-row-label:before{content:"";position:absolute;left:0;right:0;top:9px;height:8px;background:rgba(0,0,0,.035);}
+  .gantt-row-label span{position:relative;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:128px;}
+  .gantt-lane{position:relative;}
+  .gantt-lane:before{content:"";position:absolute;left:0;right:0;top:9px;height:8px;background:rgba(0,0,0,.035);}
+  .timeline-grid-lines{position:absolute;inset:0;display:grid;z-index:2;pointer-events:none;}
+  .timeline-grid-lines span{border-right:1px solid rgba(118,185,255,.16);}
+  .timeline-empty-row{display:grid;grid-template-columns:var(--timeline-label-width) 1fr;height:18px;}
   .timeline-empty-row .gantt-row-label{border-bottom:0;}
   .timeline-empty-row .gantt-row-label:before{top:8px;height:13px;}
   .timeline-empty-row .gantt-lane:before{top:8px;height:13px;}
-  .gantt-bar{position:absolute;top:21px;height:6px;border-radius:1px;clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 50%,calc(100% - 4px) 100%,4px 100%,0 50%);z-index:4;}
-  .bar-annual{background:#1f63ea;}
-  .bar-scheduled{background:#ff9800;}
-  .bar-stop{top:17px;height:13px;border-radius:0;border:1px solid #94d5ff;background:repeating-linear-gradient(-45deg,rgba(148,213,255,.55) 0 2px,#fff 2px 4px);}
-  .timeline-today-band{position:absolute;top:0;bottom:0;width:12px;background:rgba(239,83,80,.23);z-index:2;transform:translateX(-50%);}
+  .gantt-bar{position:absolute;top:10px;height:6px;border-radius:3px;z-index:4;overflow:hidden;}
+  .bar-annual{background:#76B9FF;}
+  .bar-scheduled{top:6px;height:14px;border-radius:0;border:1px solid #ff9800;background:repeating-linear-gradient(-45deg,rgba(255,152,0,.55) 0 2px,#fff 2px 4px);}
+  .bar-changeover{top:6px;height:14px;border-radius:0;border:1px solid #94D5FF;background:repeating-linear-gradient(-45deg,rgba(148,213,255,.65) 0 2px,#fff 2px 4px);}
+  .bar-stop{top:6px;height:14px;border-radius:0;border:1px solid #dc2626;background:repeating-linear-gradient(-45deg,rgba(220,38,38,.55) 0 2px,#fff 2px 4px);}
+  .workorder-delay{position:absolute;top:0;bottom:0;right:0;border-radius:0 4px 4px 0;background:#E57373;}
+  .workorder-forecast{position:absolute;top:0;bottom:0;right:0;border-radius:0 3px 3px 0;background:#c9d1dc;}
+  .timeline-today-marker{position:absolute;top:0;bottom:0;width:2px;background:#ef4444;border-radius:1px;z-index:6;transform:translateX(-50%);}
+  .wo-tooltip{position:fixed;z-index:500;display:none;width:236px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:8px;box-shadow:0 14px 36px rgba(15,23,42,.18);padding:10px 12px;pointer-events:none;font-family:Roboto,var(--ix-font);color:var(--text);}
+  .wo-tooltip.visible{display:block;}
+  .wo-tooltip-title{font-size:12px;font-weight:800;color:rgba(0,0,0,.86);margin-bottom:8px;}
+  .wo-tooltip-row{display:flex;justify-content:space-between;gap:12px;font-size:11px;line-height:1.45;padding:2px 0;}
+  .wo-tooltip-label{color:rgba(0,0,0,.52);}
+  .wo-tooltip-value{font-weight:600;color:rgba(0,0,0,.78);text-align:right;}
   .screen-switcher{position:relative;z-index:200;}
   .screen-switcher .topbar-app-icon{cursor:pointer;transition:background .15s ease;}
   .screen-switcher .topbar-app-icon:hover,.screen-switcher.open .topbar-app-icon{background:rgba(255,255,255,.16);}
@@ -260,6 +281,21 @@
   </div>
 
   <!-- gantt -->
+  <div class="timeline-legend-bar">
+    <div class="timeline-legend" aria-label="Timeline legend">
+      <div class="timeline-legend-item"><span class="legend-swatch bar-annual"></span><span>Work Order</span></div>
+      <div class="timeline-legend-item"><span class="legend-swatch" style="background:#E57373;"></span><span>Past due</span></div>
+      <div class="timeline-legend-item"><span class="legend-swatch bar-scheduled"></span><span>Planned Maintenance</span></div>
+      <div class="timeline-legend-item"><span class="legend-swatch bar-changeover"></span><span>Changeover</span></div>
+      <div class="timeline-legend-item"><span class="legend-swatch bar-stop"></span><span>Line stop</span></div>
+      <div class="timeline-legend-item"><span class="legend-swatch" style="width:3px;height:16px;background:#ef4444;"></span><span>Today</span></div>
+    </div>
+    <div class="timeline-tools" aria-label="Timeline zoom controls">
+      <button class="timeline-tool-btn" onclick="changeTimelineZoom(-1)" aria-label="Decrease timeline zoom" title="Decrease timeline zoom">−</button>
+      <button class="timeline-tool-btn" onclick="goTimelineToday()" aria-label="Go to today" title="Go to today">⌖</button>
+      <button class="timeline-tool-btn" onclick="changeTimelineZoom(1)" aria-label="Increase timeline zoom" title="Increase timeline zoom">+</button>
+    </div>
+  </div>
   <div class="gantt-shell">
     <div class="timeline-canvas">
       <div id="ganttHead"></div>
@@ -268,6 +304,8 @@
   </div>
 
 </div>
+
+<div id="woTimelineTooltip" class="wo-tooltip"></div>
 
 <!-- ============ WORK ORDER ASSIGNMENT VIEW ============ -->
 <div id="workOrderAssignmentView" class="view-panel pt-5">
@@ -348,24 +386,25 @@
   <div class="popup">
 
     <!-- header -->
-    <div class="flex items-center justify-between px-5 py-3 border-b" style="border-color:var(--border);">
+    <div class="flex items-center justify-between px-6 pt-4 pb-0">
       <div>
-        <div class="text-[15px] font-extrabold">Work Order Control Panel</div>
+        <div class="flex items-center gap-2">
+          <div class="text-[15px] font-extrabold">Work Order Control Panel</div>
+          <span id="cp-hdrStatus" class="pill pill-green">Running</span>
+        </div>
         <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="cp-hdrSub">WO-4503287 · Batch 1847 · 80-APX-50000 · AFA10</div>
       </div>
       <div class="flex items-center gap-2">
-        <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="cpJumpTo('RUNNING_NEAR')">Simulate: &lt;5% Remaining</span>
-        <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="cpJumpTo('HELD')">Simulate: Flag Issue</span>
-        <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="cpResetDemo()">Reset</span>
         <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg" onclick="closeControlPanel()">✕</button>
       </div>
     </div>
 
     <!-- body -->
-    <div class="grid flex-1 min-h-0" style="grid-template-columns:1fr 320px;">
+    <div id="cpPanelBody" class="cp-panel-body flex-1 min-h-0">
 
       <!-- LEFT: CONTROL CONTENT -->
-      <div class="overflow-y-auto px-5 py-4 flex flex-col gap-3.5 border-r" style="border-color:var(--border);max-height:calc(92vh - 64px);">
+      <div class="cp-main-pane overflow-y-auto px-6 py-4 flex flex-col gap-6" style="max-height:calc(82vh - 72px);">
+        <button class="cp-inline-log-btn" onclick="cpToggleLog()" aria-label="Toggle activity log" title="Activity log">›</button>
 
         <div id="cp-statusHero" class="status-hero" style="background:var(--green-bg);">
           <span id="cp-statusDot" class="status-dot pulse" style="background:var(--green);"></span>
@@ -374,13 +413,13 @@
             <div id="cp-statusDesc" class="text-[11.5px]" style="color:var(--text-soft);">Production is active — good counts are being recorded normally.</div>
           </div>
           <div class="text-right">
-            <div class="label-xs">Since</div>
+            <div class="label-xs text-[13px] normal-case tracking-normal">Since</div>
             <div id="cp-statusSince" class="text-[13px] font-bold">06:00 AM</div>
           </div>
         </div>
 
         <div id="cp-progressWrap">
-          <div class="flex justify-between text-[12px] font-semibold mb-1.5">
+          <div class="flex justify-between text-[11px] font-semibold mb-1.5 gap-2">
             <span id="cp-progressLabel">Progress to Planned Quantity (WO-4503287)</span>
             <span><span id="cp-progActual" style="color:var(--accent);">82,450</span> / <span id="cp-progPlanned">100,000</span> pcs (<span id="cp-progPct">82%</span>)</span>
           </div>
@@ -391,15 +430,11 @@
 
         <div class="flex items-center justify-between text-[11px] pt-2 mt-auto border-t" style="border-color:var(--border);color:var(--text-muted);">
           <span>⏱ Next scheduled break: 12:00 PM (10 min) — will auto-pause this order</span>
-          <label class="flex items-center gap-1.5 cursor-pointer">
-            <input id="cp-autoResume" type="checkbox" checked class="accent-[var(--accent)]">
-            Auto-resume when production restarts
-          </label>
         </div>
       </div>
 
       <!-- RIGHT: ACTIVITY / STATE LOG -->
-      <div class="flex flex-col min-h-0" style="background:var(--gray-bg);">
+      <div id="cpActivityPane" class="cp-activity-pane flex flex-col min-h-0" style="background:var(--gray-bg);">
         <div class="px-4 py-3 border-b flex items-center justify-between shrink-0" style="border-color:var(--border);">
           <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Activity &amp; State Log</div>
           <button class="text-[11px] font-bold" style="color:var(--accent);">Export</button>
@@ -409,7 +444,11 @@
           <span class="isa-tag">mono</span> rows show the ISA-88 / equipment state path for traceability.
         </div>
       </div>
-
+    </div>
+    <div class="cp-debug-tools" aria-label="Control panel shortcuts">
+      <button class="cp-debug-btn" onclick="cpJumpTo('RUNNING_NEAR')" aria-label="Simulate less than 5 percent remaining" title="Simulate: <5% Remaining">%</button>
+      <button class="cp-debug-btn" onclick="cpJumpTo('HELD')" aria-label="Simulate engineering hold" title="Simulate: Engineering Hold">!</button>
+      <button class="cp-debug-btn" onclick="cpResetDemo()" aria-label="Reset demo" title="Reset">↺</button>
     </div>
   </div>
 </div>
@@ -417,20 +456,29 @@
 <style>
   /* ---- control panel modal styles (ported from Josh's prototype) ---- */
   .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:200;}
-  .popup{background:#fff;border-radius:16px;width:940px;max-height:92vh;overflow:hidden;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;}
-  .status-hero{border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;transition:background .2s;}
+  .popup{position:relative;background:#fff;border-radius:16px;width:500px;max-height:82vh;overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;}
+  .cp-debug-tools{position:absolute;right:0;bottom:-44px;display:flex;flex-direction:row;gap:8px;}
+  .cp-debug-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);box-shadow:0 8px 18px rgba(10,16,32,.12);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;line-height:1;cursor:pointer;}
+  .cp-debug-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
+  .cp-inline-log-btn{position:absolute;right:14px;top:14px;width:26px;height:26px;border-radius:7px;border:1px solid var(--border-strong);background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;line-height:1;cursor:pointer;z-index:6;}
+  .cp-inline-log-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .cp-panel-body{position:relative;display:block;}
+  .cp-main-pane{border-right:0;}
+  .cp-activity-pane{position:absolute;left:calc(100% + 14px);top:0;width:320px;height:100%;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 18px 42px rgba(10,16,32,.18);opacity:1;transform:translateX(0);transition:opacity .15s ease,transform .15s ease;}
+  .cp-panel-body.log-collapsed .cp-activity-pane{opacity:0;pointer-events:none;transform:translateX(-8px);}
+  .status-hero{border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;transition:background .2s;}
   .status-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;transition:background .2s;}
   .pulse{animation:cp-pulse 1.6s ease-in-out infinite;}
   @keyframes cp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.45);}50%{box-shadow:0 0 0 6px rgba(22,163,74,0);}}
   .spin{animation:cp-spin 1s linear infinite;}
   @keyframes cp-spin{to{transform:rotate(360deg);}}
   .ic{width:16px;height:16px;flex-shrink:0;}
-  .action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:12px;border:1px solid transparent;padding:14px 8px;cursor:pointer;font-weight:700;font-size:12.5px;letter-spacing:.01em;transition:filter .15s, transform .1s, opacity .15s;min-height:78px;}
+  .action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:10px;border:1px solid transparent;padding:10px 6px;cursor:pointer;font-weight:700;font-size:11.5px;letter-spacing:.01em;transition:filter .15s, transform .1s, opacity .15s;min-height:62px;}
   .action-btn:hover{filter:brightness(.96);}
   .action-btn:active{transform:scale(.98);}
   .action-btn.disabled{opacity:.4;pointer-events:none;}
-  .action-btn .ic{width:24px;height:24px;}
-  .reason-btn{border:1px solid var(--border-strong);border-radius:10px;padding:11px 6px;text-align:center;font-size:11.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.12s;}
+  .action-btn .ic{width:20px;height:20px;}
+  .reason-btn{border:1px solid var(--border-strong);border-radius:9px;padding:9px 5px;text-align:center;font-size:10.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.12s;}
   .reason-btn:hover{border-color:var(--accent);background:var(--blue-bg);color:var(--accent);}
   .reason-btn .ic{width:20px;height:20px;}
   .btn-icon-row{display:flex;align-items:center;justify-content:center;gap:7px;}
@@ -449,6 +497,15 @@
   .slide{transition:max-height .25s ease, opacity .2s ease;overflow:hidden;}
   .demo-chip{font-size:10px;font-weight:700;padding:4px 9px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);}
   .demo-chip:hover{border-color:var(--cyan);color:var(--text-soft);}
+  .auto-resume-control{display:flex;align-items:center;gap:8px;color:var(--text-soft);}
+  .auto-resume-toggle{position:relative;width:34px;height:18px;border:0;border-radius:999px;background:var(--border-strong);cursor:pointer;transition:background .15s ease;flex-shrink:0;}
+  .auto-resume-toggle:before{content:"";position:absolute;width:14px;height:14px;border-radius:50%;left:2px;top:2px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22);transition:left .15s ease;}
+  .auto-resume-toggle.on{background:var(--green);}
+  .auto-resume-toggle.on:before{left:18px;}
+  .auto-resume-text{font-size:11px;font-weight:700;color:var(--green);}
+  .auto-resume-help{position:relative;width:16px;height:16px;border-radius:50%;border:1px solid var(--border-strong);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--text-muted);cursor:help;}
+  .auto-resume-help:after{content:attr(data-tip);position:absolute;right:0;bottom:22px;width:230px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:11px;font-weight:500;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(4px);transition:.12s;z-index:30;}
+  .auto-resume-help:hover:after{opacity:1;transform:translateY(0);}
 
   .flag-category-scroll{overflow:visible;background:#fff;}
   .flag-category-panel{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;padding:10px 16px;background:#fff;overflow:visible;min-height:100px;position:relative;z-index:80;min-width:max-content;}
@@ -501,6 +558,8 @@ let cpPhase = 'RUNNING';
 let cpPauseReturnPhase = 'RUNNING';
 let cpPauseReason = null;
 let cpLineClearanceRecorded = false;
+let cpAutoResumeEnabled = true;
+let cpLogCollapsed = true;
 
 function cpNextWo(){ return CP_NEXT_WO_OPTIONS[cpNextWoIndex]; }
 
@@ -536,15 +595,15 @@ const CP_PHASES = {
 };
 
 const CP_BUSY_LABEL = {
-  STARTING:'Starting…', PAUSING:'Pausing…', RESUMING:'Resuming…', HOLDING:'Flagging for engineering…',
+  STARTING:'Starting…', PAUSING:'Pausing…', RESUMING:'Resuming…', HOLDING:'Putting on engineering hold…',
   STOPPING:'Closing order…', ABORTING:'Aborting…', RAMPING_DOWN:'Beginning ramp down…',
   CHANGEOVER:'Switching to tooling changeover…', FINALIZING:'Finalizing changeover…'
 };
 
 const cpIcons = {
-  pause:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`,
+  pause:`<svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></svg>`,
   resume:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 4l14 8-14 8V4z"/></svg>`,
-  end:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`,
+  end:`<svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>`,
   flag:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h11l-2 3 2 3H5"/></svg>`,
   clear:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
   start:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 4l14 8-14 8V4z"/></svg>`,
@@ -621,6 +680,12 @@ function cpRenderProgress(){
 }
 
 function cpRenderHeader(){
+  const p = CP_PHASES[cpPhase];
+  const hdrStatus = document.getElementById('cp-hdrStatus');
+  if(hdrStatus){
+    hdrStatus.className = `pill ${CP_PILL_CLASS[cpPhase] || 'pill-gray'}`;
+    hdrStatus.textContent = p.label;
+  }
   let sub;
   if(['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME','RAMP_UP'].includes(cpPhase)){
     sub = `${cpNextWo().wo} · ${cpNextWo().sku} · AFA10  (was ${CP_WO_CURRENT.wo})`;
@@ -727,22 +792,22 @@ function cpRenderDynamic(){
 
   else if(cpPhase === 'RUNNING'){
     area.innerHTML = `
-      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
-      ${cpActionGrid([
-        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"],
-        ['End Order', cpIcons.end, 'var(--gray-bg)','var(--text-soft)',"cpOpenSlide('endPanel')"]
-      ])}
+      <div class="flex flex-col gap-1.5">
+        <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
+        ${cpActionGrid([
+          ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+          ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
+        ])}
+      </div>
       ${cpSlidePanels()}
-      <div class="text-[10.5px]" style="color:var(--text-muted);">"Confirm Next Work Order" becomes available once production approaches its planned quantity.</div>
     `;
   }
 
   else if(cpPhase === 'RUNNING_NEAR'){
     area.innerHTML = `
-      <div class="rounded-xl border p-3" style="border-color:var(--blue-bd);background:var(--blue-bg);">
-        <div class="font-bold text-[13px] mb-1" style="color:var(--blue);">Confirm Next Work Order</div>
-        <div class="text-[11px] mb-3" style="color:var(--text-soft);">This Work Order is approaching its planned quantity. Confirm what runs next so changeover can be prepared correctly.</div>
+      <div class="rounded-xl border p-2.5" style="border-color:var(--blue-bd);background:var(--blue-bg);">
+        <div class="font-bold text-[12px] mb-1" style="color:var(--blue);">Confirm Next Work Order</div>
+        <div class="text-[10.5px] mb-2" style="color:var(--text-soft);">Approaching planned quantity. Confirm what runs next.</div>
         ${cpNextWoCard(true)}
         <div class="flex gap-2 mt-3">
           <button class="btn" style="background:var(--blue);color:#fff;" onclick="cpConfirmNextWo()">Confirm — ${cpNextWo().wo}</button>
@@ -751,7 +816,7 @@ function cpRenderDynamic(){
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
       ${cpActionGrid([
         ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
       ])}
       ${cpSlidePanels()}
     `;
@@ -765,7 +830,7 @@ function cpRenderDynamic(){
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
       ${cpActionGrid([
         ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
       ])}
       ${cpSlidePanels()}
     `;
@@ -825,8 +890,7 @@ function cpRenderDynamic(){
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
       ${cpActionGrid([
         ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['Flag Issue', cpIcons.flag, 'var(--red-bg)','var(--red)',"cpOpenSlide('flagPanel')"],
-        ['End Order', cpIcons.end, 'var(--gray-bg)','var(--text-soft)',"cpOpenSlide('endPanel')"]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
       ])}
       ${cpSlidePanels()}
     `;
@@ -836,11 +900,11 @@ function cpRenderDynamic(){
     area.innerHTML = `
       <div class="grid grid-cols-2 gap-2">
         <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Pause Reason</div><div class="val">${cpPauseReason || '—'}</div></div>
-        <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Auto-Resume</div><div class="val" style="color:var(--green);">Enabled</div></div>
+        <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs mb-1">Auto-Resume</div>${cpAutoResumeControl()}</div>
       </div>
       ${cpActionGrid([
         ['Resume Production', cpIcons.resume, 'var(--green-bg)','var(--green)','cpDoResume()',2],
-        ['End Order', cpIcons.end, 'var(--gray-bg)','var(--text-soft)',"cpOpenSlide('endPanel')",1]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')",1]
       ])}
       ${cpSlidePanels(true)}
     `;
@@ -849,7 +913,7 @@ function cpRenderDynamic(){
   else if(cpPhase === 'HELD'){
     area.innerHTML = `
       <div class="rounded-xl border p-3" style="border-color:var(--red-bd);background:var(--red-bg);">
-        <div class="font-bold text-[12.5px] mb-1" style="color:var(--red);">Flagged Issue</div>
+        <div class="font-bold text-[12.5px] mb-1" style="color:var(--red);">Engineering Hold</div>
         <div class="text-[11.5px]" style="color:var(--text-soft);">"Z5C30 worn drive belt and broken slide for the prestop." — awaiting engineering clearance.</div>
       </div>
       ${cpActionGrid([
@@ -880,20 +944,6 @@ function cpSlidePanels(endOnly){
       <button onclick="cpCancelSlide('reasonPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
     </div>
   </div>
-  <div id="flagPanel" class="slide" style="max-height:0;opacity:0;">
-    <div class="rounded-xl border p-3" style="border-color:var(--amber-bd);background:var(--amber-bg);">
-      <div class="font-bold text-[13px] mb-1" style="color:var(--amber);">Flag for Engineering?</div>
-      <div class="text-[11px] mb-3" style="color:var(--text-soft);">Stops production and notifies maintenance/engineering until cleared.</div>
-      <textarea id="cp-flagComment" maxlength="100" rows="2" class="w-full border rounded-md px-2 py-1.5 text-[12px] mb-2" style="border-color:var(--border-strong);" placeholder="Briefly describe the issue (max 100 chars)…"></textarea>
-      <label class="flex items-center gap-2 text-[11px] font-semibold mb-3" style="color:var(--darkred);">
-        <input id="cp-emergencyCheck" type="checkbox" class="accent-[var(--darkred)]"> This is a safety / emergency issue — abort immediately
-      </label>
-      <div class="flex gap-2">
-        <button onclick="cpConfirmFlag()" class="btn btn-icon-row" style="background:var(--amber);color:#fff;flex:2;padding:11px 14px;">${cpIcons.flag}Flag &amp; Stop Production</button>
-        <button onclick="cpCancelSlide('flagPanel')" class="btn btn-outline" style="flex:1;">Cancel</button>
-      </div>
-    </div>
-  </div>
   ` : ''}
   <div id="endPanel" class="slide" style="max-height:0;opacity:0;">
     <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
@@ -908,7 +958,7 @@ function cpSlidePanels(endOnly){
   </div>`;
 }
 function cpOpenSlide(id){
-  ['reasonPanel','flagPanel','endPanel'].forEach(x=>{ const e=document.getElementById(x); if(e && x!==id){ e.style.maxHeight='0'; e.style.opacity='0'; }});
+  ['reasonPanel','endPanel'].forEach(x=>{ const e=document.getElementById(x); if(e && x!==id){ e.style.maxHeight='0'; e.style.opacity='0'; }});
   const el = document.getElementById(id);
   el.style.maxHeight = '320px'; el.style.opacity = '1';
 }
@@ -937,7 +987,23 @@ function cpRender(){
   cpRenderHero();
   cpRenderProgress();
   cpRenderDynamic();
+  cpRenderAutoResumeControls();
+  cpRenderLogPanel();
   cpSyncOuterHeader();
+}
+
+function cpToggleLog(){
+  cpLogCollapsed = !cpLogCollapsed;
+  cpRenderLogPanel();
+}
+
+function cpRenderLogPanel(){
+  const body = document.getElementById('cpPanelBody');
+  if(body) body.classList.toggle('log-collapsed', cpLogCollapsed);
+  document.querySelectorAll('.cp-inline-log-btn').forEach(btn => {
+    btn.textContent = cpLogCollapsed ? '›' : '‹';
+    btn.title = cpLogCollapsed ? 'Show activity log' : 'Hide activity log';
+  });
 }
 
 const CP_PILL_CLASS = {
@@ -968,12 +1034,29 @@ function cpSyncOuterHeader(){
   const label = document.getElementById('outerCategoryLabel');
   if(badge) badge.style.background = cat.bg;
   if(label){ label.textContent = cat.label; label.style.color = cat.color; }
-  const afa10 = UNITS.find(u=>u.name==='AFA10');
-  if(afa10){
-    afa10.status = p.label.toUpperCase();
-    afa10.pillClass = CP_PILL_CLASS[cpPhase] || 'pill-gray';
+  const currentUnit = UNITS.find(u=>u.name==='AFA10 Line 1');
+  if(currentUnit){
+    currentUnit.status = p.label.toUpperCase();
+    currentUnit.pillClass = CP_PILL_CLASS[cpPhase] || 'pill-gray';
     renderUnitCards();
   }
+}
+
+function cpAutoResumeControl(){
+  return `<div class="auto-resume-control">
+    <button type="button" class="auto-resume-toggle ${cpAutoResumeEnabled ? 'on' : ''}" onclick="cpToggleAutoResume()" aria-label="Toggle auto resume"></button>
+    <span class="auto-resume-text">${cpAutoResumeEnabled ? 'On' : 'Off'}</span>
+    <span class="auto-resume-help" data-tip="When enabled, the order automatically resumes when production restarts after a planned break or pause.">i</span>
+  </div>`;
+}
+
+function cpRenderAutoResumeControls(){
+}
+
+function cpToggleAutoResume(){
+  cpAutoResumeEnabled = !cpAutoResumeEnabled;
+  cpRenderAutoResumeControls();
+  cpRenderDynamic();
 }
 
 function cpTransition(busyKey, toPhase, delay, after){
@@ -1049,21 +1132,6 @@ function cpConfirmPause(reason){
     cpLogActivity(`Paused — ${reason}`, `${CP_WO_CURRENT.wo}: RUNNING → PAUSING → PAUSED  ·  Category: ${reason}`);
   });
 }
-function cpConfirmFlag(){
-  const note = document.getElementById('cp-flagComment').value.trim();
-  const emergency = document.getElementById('cp-emergencyCheck').checked;
-  cpPauseReturnPhase = cpPhase;
-  cpCancelSlide('flagPanel');
-  if(emergency){
-    cpTransition('ABORTING','ABORTED',600, ()=>{
-      cpLogActivity(`Emergency abort${note?' — '+note:''}`, `${CP_WO_CURRENT.wo}: RUNNING → ABORTING → ABORTED`);
-    });
-  } else {
-    cpTransition('HOLDING','HELD',600, ()=>{
-      cpLogActivity(`Flagged for engineering${note?' — '+note:''}`, `${CP_WO_CURRENT.wo}: RUNNING → HOLDING → HELD`);
-    });
-  }
-}
 function cpDoResume(){
   const wasHeld = cpPhase === 'HELD';
   const target = cpPauseReturnPhase || 'RUNNING';
@@ -1100,7 +1168,7 @@ function cpJumpTo(p){
   cpLogActivity('— jumped to state for demo —', `(manual demo shortcut) → ${p}`);
 }
 function cpResetDemo(){
-  cpPhase = 'RUNNING'; cpNextWoIndex = 0; cpPauseReason = null; cpLineClearanceRecorded = false;
+  cpPhase = 'RUNNING'; cpNextWoIndex = 0; cpPauseReason = null; cpLineClearanceRecorded = false; cpAutoResumeEnabled = true; cpLogCollapsed = true;
   cpActivity.length = 0;
   cpActivity.push({t:'06:00 AM', text:'Order started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`});
   cpRender(); cpRenderActivity(); cpSyncOuterHeader();
@@ -1114,6 +1182,8 @@ function openControlPanel(){
     cpRenderActivity();
     cpSyncOuterHeader();
     cpInitialized = true;
+  }else{
+    cpRenderLogPanel();
   }
 }
 function closeControlPanel(){
@@ -1222,17 +1292,23 @@ const UNITS = [
 ];
 
 const MONTHS = [
-  { label:'APRIL', days:[3,10,17,24,31] },
-  { label:'MAY', days:[3,10,17,24,31] },
-  { label:'JUNE', days:[3,10,17,24,31] },
-  { label:'JULY', days:[3,10,17,24,31] },
-  { label:'AUGUST', days:[3,10,17,24,31] },
-  { label:'SEPTEMBER', days:[3,10,17,24,31] },
-  { label:'OCTOBER', days:[3,10,17,24,31] },
-  { label:'NOVEMBER', days:[3,10,17,24,31] },
-  { label:'DECEMBER', days:[3,10,17,24,31] },
-  { label:'JANUARY', days:[3,10,17,24,31] }
+  { label:'MARCH', startDay:27, days:5 },
+  { label:'APRIL', startDay:1, days:30 },
+  { label:'MAY', startDay:1, days:31 },
+  { label:'JUNE', startDay:1, days:30 },
+  { label:'JULY', startDay:1, days:2 }
 ];
+const TIMELINE_START = new Date('2026-03-27T00:00:00');
+const TIMELINE_END = new Date('2026-07-03T00:00:00');
+const TODAY_MARKER_DATE = new Date('2026-06-25T00:00:00');
+const TOTAL_TIMELINE_DAYS = MONTHS.reduce((sum, month) => sum + month.days, 0);
+document.documentElement.style.setProperty('--timeline-total-days', TOTAL_TIMELINE_DAYS);
+const DAY_GRID_TEMPLATE = MONTHS.map(m => `repeat(${m.days}, var(--timeline-day-width))`).join(' ');
+const DAY_GRID_CELLS = MONTHS.flatMap(m => Array.from({length:m.days}, (_, index)=>m.startDay + index));
+const MONTH_START_DAYS = MONTHS.reduce((starts, month, index) => {
+  starts.push(index === 0 ? 0 : starts[index - 1] + MONTHS[index - 1].days);
+  return starts;
+}, []);
 
 const UNIT_ROWS = UNITS.slice(0, 8).map(u => u.name);
 
@@ -1264,24 +1340,117 @@ let resSearch = '';
 let lastAssigned = null;
 let unitCarouselPage = 0;
 const UNIT_CARDS_PER_PAGE = 4;
+let timelineDayWidth = 52;
+
+function dayToPct(day){
+  const clampedDay = Math.max(0, Math.min(day, TOTAL_TIMELINE_DAYS));
+  return (clampedDay / TOTAL_TIMELINE_DAYS) * 100;
+}
+
+function dateToTimelinePct(date){
+  const dayIndex = Math.max(0, Math.min(TOTAL_TIMELINE_DAYS, (date - TIMELINE_START) / 86400000));
+  return dayToPct(dayIndex);
+}
+
+function dateFromTimelineDay(day){
+  const date = new Date(TIMELINE_START);
+  date.setDate(date.getDate() + Math.floor(day));
+  return date.toLocaleDateString('en-US', { month:'2-digit', day:'2-digit', year:'numeric' });
+}
+
+function dateTimeFromTimelineDay(day){
+  const date = new Date(TIMELINE_START);
+  date.setTime(date.getTime() + day * 86400000);
+  return date.toLocaleString('en-US', { month:'2-digit', day:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function durationLabel(startDay, endDay){
+  const hours = Math.max(1, Math.round((endDay - startDay) * 24));
+  if(hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  const restHours = hours % 24;
+  return restHours ? `${days}d ${restHours}h` : `${days}d`;
+}
 
 function buildTimelineSegments(rowIndex){
-  const offset = rowIndex * 1.15;
-  return [
-    {type:'annual', start:.6 + offset, end:6.1 + offset},
-    {type:'stop', start:6.2 + offset, end:7.3 + offset},
-    {type:'annual', start:7.7 + offset, end:18.8 + offset},
-    {type:'stop', start:18.9 + offset, end:20.2 + offset},
-    {type:'annual', start:20.6 + offset, end:31.7 + offset},
-    {type:'stop', start:31.8 + offset, end:33.3 + offset},
-    {type:'annual', start:33.6 + offset, end:45.6 + offset},
-    {type:'scheduled', start:46.2 + offset, end:56.6 + offset},
-    {type:'stop', start:56.7 + offset, end:58.4 + offset},
-    {type:'scheduled', start:58.8 + offset, end:70.8 + offset},
-    {type:'annual', start:71.2 + offset, end:82.4 + offset},
-    {type:'stop', start:82.5 + offset, end:84.2 + offset},
-    {type:'annual', start:84.6 + offset, end:96.8}
-  ].filter(s => s.start < 98).map(s => ({...s, end: Math.min(s.end, 98.5)}));
+  const todayDay = (TODAY_MARKER_DATE - TIMELINE_START) / 86400000;
+  const workDurations = [
+    [5.2, 6.4, 4.7, 7.1, 5.8, 4.3],
+    [6.1, 4.8, 5.5, 6.8, 4.4, 5.9],
+    [4.6, 5.8, 7.0, 4.9, 6.2, 5.1],
+    [6.7, 5.0, 4.5, 6.1, 7.2, 5.4]
+  ][rowIndex % 4];
+  const startOffsets = [0.5, 1.2, 0.0, 2.1, 0.8, 1.7, 0.3, 2.6];
+  const segments = [];
+  let day = startOffsets[rowIndex % startOffsets.length];
+  let index = 0;
+
+  while(day < todayDay + 7){
+    if(day >= todayDay) break;
+    const duration = workDurations[index % workDurations.length] + (((rowIndex + index) % 3) - 1) * .35;
+    const plannedEnd = Math.min(day + duration, TOTAL_TIMELINE_DAYS);
+    const isCurrent = plannedEnd >= todayDay;
+    const end = isCurrent ? Math.min(plannedEnd, todayDay + 7, TOTAL_TIMELINE_DAYS) : plannedEnd;
+    const isLate = !isCurrent && (rowIndex + index) % 5 === 2 && end - day > 4.6;
+    const delayStart = isLate ? Math.max(day + 3.9, end - 1.25) : null;
+    const forecastStart = isCurrent ? todayDay : null;
+    const unit = UNITS[rowIndex % UNITS.length];
+    const plannedQuantity = Math.max(12000, Math.round((unit.planned / 8) * (.82 + ((index + rowIndex) % 5) * .08)));
+    const actualQuantity = Math.round(plannedQuantity * (isCurrent ? .62 : (isLate ? .88 : .96)) + ((index % 3) * 1200));
+    segments.push({
+      type:'annual',
+      start:dayToPct(day),
+      end:dayToPct(end),
+      delayStart: delayStart ? dayToPct(delayStart) : null,
+      forecastStart: forecastStart ? dayToPct(forecastStart) : null,
+      woNumber:`${unit.wo}-${String(index + 1).padStart(2, '0')}`,
+      sku:unit.sku,
+      plannedQuantity,
+      actualQuantity,
+      startDate:dateFromTimelineDay(day),
+      endDate:dateFromTimelineDay(end)
+    });
+    const eventType = index % 4 === 1 ? 'stop' : 'scheduled';
+    const eventDuration = eventType === 'scheduled' ? .33 : .12;
+    const eventLabels = { scheduled:'Planned Maintenance', changeover:'Changeover', stop:'Line Stop' };
+    if(!isCurrent){
+      const eventStart = day + Math.min(duration * .45, Math.max(1.2, duration - eventDuration - 1.5));
+      const eventEnd = Math.min(eventStart + eventDuration, end, todayDay);
+      if(eventEnd > eventStart && eventStart < todayDay){
+        segments.push({
+          type:eventType,
+          start:dayToPct(eventStart),
+          end:dayToPct(eventEnd),
+          eventName:eventLabels[eventType],
+          startTime:dateTimeFromTimelineDay(eventStart),
+          endTime:dateTimeFromTimelineDay(eventEnd),
+          duration:durationLabel(eventStart, eventEnd),
+          attached:true
+        });
+      }
+    }
+
+    day = plannedEnd;
+    if(!isCurrent && day < todayDay){
+      const changeoverEnd = Math.min(day + .25, todayDay);
+      if(changeoverEnd > day){
+        segments.push({
+          type:'changeover',
+          start:dayToPct(day),
+          end:dayToPct(changeoverEnd),
+          eventName:eventLabels.changeover,
+          startTime:dateTimeFromTimelineDay(day),
+          endTime:dateTimeFromTimelineDay(changeoverEnd),
+          duration:durationLabel(day, changeoverEnd),
+          attached:false
+        });
+        day = changeoverEnd;
+      }
+    }
+    if(isCurrent) break;
+    index++;
+  }
+  return segments;
 }
 
 const SEGMENTS = Object.fromEntries(UNIT_ROWS.map((name, index) => [name, buildTimelineSegments(index)]));
@@ -1312,7 +1481,7 @@ function renderUnitCards(){
         <div class="progress-track"><div class="progress-fill" style="width:${Math.min(96,(u.actual/u.planned)*100)}%;"></div></div>
         <span class="text-[11px] font-semibold whitespace-nowrap" style="color:var(--text-soft);">${u.actual.toLocaleString('en-US')} Pieces</span>
       </div>
-      <div class="text-[10.5px] rounded-lg px-2.5 py-2 border flex items-center gap-1.5" style="color:var(--text-soft);background:#fff;border-color:${u.eventSoon ? 'var(--amber-bd)' : 'var(--border)'};">
+      <div class="next-event-alert text-[10.5px] rounded-lg px-2.5 py-2 border flex items-center gap-1.5" style="color:var(--text-soft);background:#fff;border-color:${u.eventSoon ? 'var(--amber-bd)' : 'var(--border)'};">
         ${u.eventSoon ? '<svg class="event-info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 11v5"/><path stroke-linecap="round" d="M12 8h.01"/></svg>' : ''}
         <span><b>Next Planned Event:</b> ${u.nextEvent}</span>
       </div>
@@ -1339,16 +1508,15 @@ function moveUnitCarousel(direction){
 }
 
 function renderGanttHead(){
-  const totalWeeks = MONTHS.reduce((sum, m) => sum + m.days.length, 0);
   document.getElementById('ganttHead').innerHTML = `
     <div class="timeline-head">
       <div class="timeline-left-head"></div>
       <div class="timeline-head-main">
-        <div class="timeline-month-row" style="grid-template-columns:${MONTHS.map(m=>`${m.days.length}fr`).join(' ')};">
+        <div class="timeline-month-row" style="grid-template-columns:${MONTHS.map(m=>`calc(var(--timeline-day-width) * ${m.days})`).join(' ')};">
           ${MONTHS.map(m=>`<div class="timeline-month">${m.label}</div>`).join('')}
         </div>
-        <div class="timeline-day-row" style="grid-template-columns:repeat(${totalWeeks},1fr);">
-          ${MONTHS.flatMap(m=>m.days).map(d=>`<div class="timeline-day">${d}</div>`).join('')}
+        <div class="timeline-day-row" style="grid-template-columns:${DAY_GRID_TEMPLATE};">
+          ${DAY_GRID_CELLS.map(d=>`<div class="timeline-day">${d}</div>`).join('')}
         </div>
       </div>
     </div>
@@ -1357,30 +1525,96 @@ function renderGanttHead(){
 
 function renderGanttBody(){
   const body = document.getElementById('ganttBody');
+  const todayPct = dateToTimelinePct(TODAY_MARKER_DATE);
   const rowsHtml = UNIT_ROWS.map(name => `
     <div class="timeline-row">
       <div class="gantt-row-label"><span>${name}</span></div>
       <div class="gantt-lane">
+        <div class="timeline-grid-lines" style="grid-template-columns:${DAY_GRID_TEMPLATE};">
+          ${DAY_GRID_CELLS.map(()=>'<span></span>').join('')}
+        </div>
         ${SEGMENTS[name].map(s=>`
-          <div class="gantt-bar bar-${s.type}" style="left:${s.start}%;width:${s.end-s.start}%;"></div>
+          <div class="gantt-bar bar-${s.type}" ${s.type === 'annual' ? `data-tooltip-type="workorder" data-wo="${s.woNumber}" data-sku="${s.sku}" data-planned="${s.plannedQuantity.toLocaleString('en-US')}" data-actual="${s.actualQuantity.toLocaleString('en-US')}" data-start="${s.startDate}" data-end="${s.endDate}"` : `data-tooltip-type="event" data-event-name="${s.eventName}" data-start-time="${s.startTime}" data-end-time="${s.endTime}" data-duration="${s.duration}"`} style="${s.attached ? `left:${s.start}%;width:${s.end-s.start}%;` : `left:calc(${s.start}% + 1px);width:calc(${s.end-s.start}% - 2px);`}">
+            ${s.delayStart ? `<span class="workorder-delay" style="left:${((s.delayStart - s.start) / (s.end - s.start)) * 100}%;"></span>` : ''}
+            ${s.forecastStart ? `<span class="workorder-forecast" style="left:${((s.forecastStart - s.start) / (s.end - s.start)) * 100}%;"></span>` : ''}
+          </div>
         `).join('')}
       </div>
     </div>
   `).join('');
-  const emptyRows = Array.from({length: 5}, () => `
-    <div class="timeline-empty-row">
-      <div class="gantt-row-label"></div>
-      <div class="gantt-lane"></div>
-    </div>
-  `).join('');
-
   body.innerHTML = `
     <div class="timeline-body">
-      <div class="timeline-today-band" style="left:calc(123px + (100% - 123px) * .62);"></div>
+      <div class="timeline-today-marker" style="left:calc(var(--timeline-label-width) + (100% - var(--timeline-label-width)) * ${todayPct / 100});"></div>
       ${rowsHtml}
-      ${emptyRows}
     </div>
   `;
+  bindTimelineTooltips();
+  requestAnimationFrame(() => centerTimelineOnToday(todayPct));
+}
+
+function centerTimelineOnToday(todayPct){
+  const shell = document.querySelector('.gantt-shell');
+  const canvas = document.querySelector('.timeline-canvas');
+  if(!shell || !canvas) return;
+  const labelWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--timeline-label-width')) || 0;
+  const dayWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--timeline-day-width')) || 52;
+  const laneWidth = canvas.scrollWidth - labelWidth;
+  const markerX = labelWidth + laneWidth * (todayPct / 100);
+  const lookAheadWidth = dayWidth * 7;
+  shell.scrollLeft = Math.max(0, markerX - (shell.clientWidth - lookAheadWidth));
+}
+
+function setTimelineDayWidth(width, keepToday = false){
+  timelineDayWidth = Math.min(88, Math.max(32, width));
+  document.documentElement.style.setProperty('--timeline-day-width', `${timelineDayWidth}px`);
+  if(keepToday) requestAnimationFrame(goTimelineToday);
+}
+
+function changeTimelineZoom(direction){
+  setTimelineDayWidth(timelineDayWidth + direction * 8, true);
+}
+
+function goTimelineToday(){
+  centerTimelineOnToday(dateToTimelinePct(TODAY_MARKER_DATE));
+}
+
+function bindTimelineTooltips(){
+  const tooltip = document.getElementById('woTimelineTooltip');
+  if(!tooltip) return;
+  document.querySelectorAll('.gantt-bar[data-tooltip-type]').forEach(bar => {
+    bar.addEventListener('mouseenter', () => {
+      if(bar.dataset.tooltipType === 'workorder'){
+        tooltip.innerHTML = `
+          <div class="wo-tooltip-title">Work Order</div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">WO number</span><span class="wo-tooltip-value">${bar.dataset.wo}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">SKU</span><span class="wo-tooltip-value">${bar.dataset.sku}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">Planned Quantity</span><span class="wo-tooltip-value">${bar.dataset.planned}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">Actual Quantity</span><span class="wo-tooltip-value">${bar.dataset.actual}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">Start Date</span><span class="wo-tooltip-value">${bar.dataset.start}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">End Date</span><span class="wo-tooltip-value">${bar.dataset.end}</span></div>
+        `;
+      }else{
+        tooltip.innerHTML = `
+          <div class="wo-tooltip-title">${bar.dataset.eventName}</div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">Start time</span><span class="wo-tooltip-value">${bar.dataset.startTime}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">End time</span><span class="wo-tooltip-value">${bar.dataset.endTime}</span></div>
+          <div class="wo-tooltip-row"><span class="wo-tooltip-label">Duration</span><span class="wo-tooltip-value">${bar.dataset.duration}</span></div>
+        `;
+      }
+      tooltip.classList.add('visible');
+    });
+    bar.addEventListener('mousemove', event => {
+      const padding = 14;
+      const rect = tooltip.getBoundingClientRect();
+      const left = Math.min(window.innerWidth - rect.width - padding, event.clientX + padding);
+      const top = Math.min(window.innerHeight - rect.height - padding, event.clientY + padding);
+      tooltip.style.left = `${Math.max(padding, left)}px`;
+      tooltip.style.top = `${Math.max(padding, top)}px`;
+    });
+    bar.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+  });
 }
 
 /* =====================================================================
