@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -34,7 +34,14 @@
 
   /* ---------- background dashboard placeholder ---------- */
   .bg-dash{filter:blur(3px) saturate(.9);transform:scale(1.01);}
-  .bg-toolbar{height:48px;background:var(--navy);}
+  .bg-toolbar{height:64px;background:#020043;color:#fff;}
+  .bd-mark{width:36px;height:36px;border-radius:999px;background:#fff;color:#020043;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;position:relative;}
+  .bd-mark:before{content:"";width:20px;height:20px;border-radius:50%;background:conic-gradient(from 0deg,#020043 0 10%,transparent 10% 20%,#020043 20% 30%,transparent 30% 40%,#020043 40% 50%,transparent 50% 60%,#020043 60% 70%,transparent 70% 80%,#020043 80% 90%,transparent 90% 100%);position:absolute;}
+  .bd-mark span{font-size:0;}
+  .topbar-app-icon{width:52px;height:64px;margin-left:0;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
+  .topbar-line-pill{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.10);color:#fff;}
+  .topbar-action-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;opacity:.95;}
+  .topbar-avatar{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#d6b08b,#6f8a66);border:2px solid rgba(255,255,255,.18);}
   .kpi-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;}
   .skeleton{background:linear-gradient(90deg,#eef1f5 25%,#e4e9f0 37%,#eef1f5 63%);border-radius:6px;}
 
@@ -102,12 +109,29 @@
 
 <!-- background placeholder dashboard -->
 <div class="bg-dash h-screen flex flex-col">
-  <div class="bg-toolbar flex items-center px-5 gap-3 text-white">
-    <div class="w-6 h-6 rounded-full flex items-center justify-center font-extrabold text-[11px]" style="background:var(--cyan);color:var(--navy);">BD</div>
-    <span class="font-bold text-[13px]">Smart Factory</span>
-    <div class="flex-1"></div>
-    <span class="text-[11px] text-white/60">Tijuana / Assembly Room / Line 1</span>
-    <button class="text-[11px] font-bold rounded-md px-3 py-1.5" style="background:var(--accent);">SHIFT ENTRY ▾</button>
+  <div class="bg-toolbar flex items-center text-white">
+    <div class="topbar-app-icon" aria-label="Apps">&#9638;</div>
+    <div class="flex items-center gap-2 pl-4 pr-5">
+      <div class="bd-mark"><span>BD</span></div>
+      <div class="text-[25px] font-bold tracking-[-.02em] leading-none">BD</div>
+      <div class="text-[20px] font-bold leading-none ml-1">Smart Factory</div>
+    </div>
+    <div class="flex-1 flex justify-center">
+      <div class="relative" style="width:260px;">
+        <input class="w-full h-10 text-[14px] border rounded-[10px] pl-4 pr-11 text-[var(--text)]" placeholder="Search ...">
+        <span class="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white text-[14px]" style="background:var(--accent);">&#128269;</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 pr-5">
+      <span class="text-[12px] whitespace-nowrap">&#9679; Tijuana / Assembly Room / Unit A /</span>
+      <span class="topbar-line-pill text-[11px] font-bold rounded-full px-3 py-1.5 border whitespace-nowrap">Line 1 <span class="ml-1 opacity-60">+2</span></span>
+      <span class="topbar-action-icon">&#10022;</span>
+      <span class="topbar-action-icon">&#8962;</span>
+      <span class="topbar-action-icon">&#9635;</span>
+      <span class="topbar-action-icon relative">&#9679;<span class="absolute right-0 top-0 w-2 h-2 rounded-full" style="background:#ff6b2c;"></span></span>
+      <button class="h-10 text-[12px] font-bold rounded-[10px] px-4 text-white flex items-center gap-2" style="background:var(--accent);">SHIFT ENTRY <span>v</span></button>
+      <div class="topbar-avatar"></div>
+    </div>
   </div>
   <div class="p-4 grid grid-cols-4 gap-3">
     <div class="kpi-card"><div class="skeleton h-3 w-16 mb-2"></div><div class="skeleton h-7 w-20"></div></div>
@@ -131,14 +155,14 @@
     <div class="flex items-center justify-between px-5 py-3 border-b" style="border-color:var(--border);">
       <div>
         <div class="text-[15px] font-extrabold">Work Order Control Panel</div>
-        <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="hdrSub">WO-4503287 · Batch 1847 · 80-APX-50000 · AFA10</div>
+        <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="hdrSub">WO-4503287 Â· Batch 1847 Â· 80-APX-50000 Â· AFA10</div>
       </div>
       <div class="flex items-center gap-2">
         <!-- edge-case shortcuts, off the happy path -->
         <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="jumpTo('RUNNING_NEAR')">Simulate: &lt;5% Remaining</span>
         <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="jumpTo('HELD')">Simulate: Flag Issue</span>
         <span class="demo-chip" style="background:#fff;color:var(--text-muted);border-color:var(--border-strong);" onclick="resetDemo()">Reset</span>
-        <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg">✕</button>
+        <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg">âœ•</button>
       </div>
     </div>
 
@@ -153,7 +177,7 @@
           <span id="statusDot" class="status-dot pulse" style="background:var(--green);"></span>
           <div class="flex-1">
             <div id="statusTitle" class="font-extrabold text-[15px]" style="color:var(--green);">Running</div>
-            <div id="statusDesc" class="text-[11.5px]" style="color:var(--text-soft);">Production is active — good counts are being recorded normally.</div>
+            <div id="statusDesc" class="text-[11.5px]" style="color:var(--text-soft);">Production is active â€” good counts are being recorded normally.</div>
           </div>
           <div class="text-right">
             <div class="label-xs">Since</div>
@@ -175,7 +199,7 @@
 
         <!-- footer notes -->
         <div class="flex items-center justify-between text-[11px] pt-2 mt-auto border-t" style="border-color:var(--border);color:var(--text-muted);">
-          <span>⏱ Next scheduled break: 12:00 PM (10 min) — will auto-pause this order</span>
+          <span>â± Next scheduled break: 12:00 PM (10 min) â€” will auto-pause this order</span>
           <label class="flex items-center gap-1.5 cursor-pointer">
             <input id="autoResume" type="checkbox" checked class="accent-[var(--accent)]">
             Auto-resume when production restarts
@@ -205,7 +229,7 @@
 ===================================================================== */
 const WO_CURRENT = { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', planned:100000 };
 
-// Two candidate "next" work orders for the demo — one different SKU
+// Two candidate "next" work orders for the demo â€” one different SKU
 // (triggers ramp down / tooling changeover), one same SKU (batch
 // closeout only). "Select Different Work Order" toggles between them.
 const NEXT_WO_OPTIONS = [
@@ -222,32 +246,32 @@ let lineClearanceRecorded = false;
 function nextWo(){ return NEXT_WO_OPTIONS[nextWoIndex]; }
 
 /* =====================================================================
-   PHASE DEFINITIONS — operator-visible label + description per phase
+   PHASE DEFINITIONS â€” operator-visible label + description per phase
 ===================================================================== */
 const PHASES = {
   IDLE:      { label:'Not Started', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
                desc:'No active Work Order on this equipment yet.' },
   RUNNING:   { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
-               desc:'Production is active — good counts are being recorded normally.' },
+               desc:'Production is active â€” good counts are being recorded normally.' },
   RUNNING_NEAR: { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
-               desc:'Approaching planned quantity — confirm the next Work Order.' },
+               desc:'Approaching planned quantity â€” confirm the next Work Order.' },
   RUNNING_CONFIRMED: { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
-               desc:'Next Work Order confirmed — ready to complete.' },
-  CHG_RAMPDOWN: { label:'Changeover — Ramp Down', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Next Work Order confirmed â€” ready to complete.' },
+  CHG_RAMPDOWN: { label:'Changeover â€” Ramp Down', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
                desc:'Clearing current material from the line.' },
-  CHG_TOOLING:  { label:'Changeover — Tooling', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+  CHG_TOOLING:  { label:'Changeover â€” Tooling', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
                desc:'Tooling/recipe changeover in progress for the next Work Order.' },
   CHG_READY:    { label:'Changeover Complete', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
                desc:'Ready for Manufacturing Start.' },
-  CHG_SAME:     { label:'Changeover — Batch Closeout', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
-               desc:'Same SKU as next Work Order — no ramp down or tooling changeover required.' },
-  RAMP_UP:   { label:'Running — Ramp-Up', dot:'var(--purple)', bg:'var(--purple-bg)', text:'var(--purple)', pulse:true,
-               desc:'Manufacturing Start recorded — stabilizing to target speed.' },
+  CHG_SAME:     { label:'Changeover â€” Batch Closeout', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'Same SKU as next Work Order â€” no ramp down or tooling changeover required.' },
+  RAMP_UP:   { label:'Running â€” Ramp-Up', dot:'var(--purple)', bg:'var(--purple-bg)', text:'var(--purple)', pulse:true,
+               desc:'Manufacturing Start recorded â€” stabilizing to target speed.' },
   PAUSED:    { label:'Paused', dot:'var(--amber)', bg:'var(--amber-bg)', text:'var(--amber)', pulse:false,
-               desc:'Production is paused — good counts and OEE clocks are on hold.' },
-  HELD:      { label:'On Hold — Engineering', dot:'var(--red)', bg:'var(--red-bg)', text:'var(--red)', pulse:false,
+               desc:'Production is paused â€” good counts and OEE clocks are on hold.' },
+  HELD:      { label:'On Hold â€” Engineering', dot:'var(--red)', bg:'var(--red-bg)', text:'var(--red)', pulse:false,
                desc:'Production stopped pending engineering review.' },
-  ABORTED:   { label:'Aborted — Emergency Stop', dot:'var(--darkred)', bg:'var(--darkred-bg)', text:'var(--darkred)', pulse:false,
+  ABORTED:   { label:'Aborted â€” Emergency Stop', dot:'var(--darkred)', bg:'var(--darkred-bg)', text:'var(--darkred)', pulse:false,
                desc:'Order was emergency-aborted. Requires supervisor review.' },
   STOPPED:   { label:'Stopped', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
                desc:'This Work Order was stopped early and is closed.' },
@@ -256,9 +280,9 @@ const PHASES = {
 };
 
 const BUSY_LABEL = {
-  STARTING:'Starting…', PAUSING:'Pausing…', RESUMING:'Resuming…', HOLDING:'Flagging for engineering…',
-  STOPPING:'Closing order…', ABORTING:'Aborting…', RAMPING_DOWN:'Beginning ramp down…',
-  CHANGEOVER:'Switching to tooling changeover…', FINALIZING:'Finalizing changeover…'
+  STARTING:'Startingâ€¦', PAUSING:'Pausingâ€¦', RESUMING:'Resumingâ€¦', HOLDING:'Flagging for engineeringâ€¦',
+  STOPPING:'Closing orderâ€¦', ABORTING:'Abortingâ€¦', RAMPING_DOWN:'Beginning ramp downâ€¦',
+  CHANGEOVER:'Switching to tooling changeoverâ€¦', FINALIZING:'Finalizing changeoverâ€¦'
 };
 
 const icons = {
@@ -275,7 +299,7 @@ const icons = {
 };
 
 /* =====================================================================
-   RENDER — HERO + PROGRESS
+   RENDER â€” HERO + PROGRESS
 ===================================================================== */
 function fmtTime(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
 function fmtNum(n){ return n.toLocaleString('en-US'); }
@@ -303,7 +327,7 @@ function renderBusy(key){
   dot.style.borderTopColor = 'transparent';
   document.getElementById('statusTitle').textContent = BUSY_LABEL[key];
   document.getElementById('statusTitle').style.color = 'var(--text-soft)';
-  document.getElementById('statusDesc').textContent = 'Updating work order / equipment status…';
+  document.getElementById('statusDesc').textContent = 'Updating work order / equipment statusâ€¦';
 }
 
 function renderProgress(){
@@ -317,7 +341,7 @@ function renderProgress(){
   wrap.style.visibility = 'visible';
 
   if(inChangeover){
-    document.getElementById('progressLabel').textContent = `Progress to Planned Quantity (${nextWo().wo} — not yet started)`;
+    document.getElementById('progressLabel').textContent = `Progress to Planned Quantity (${nextWo().wo} â€” not yet started)`;
     document.getElementById('progActual').textContent = '0';
     document.getElementById('progPlanned').textContent = fmtNum(nextWo().planned);
     document.getElementById('progPct').textContent = '0%';
@@ -346,17 +370,17 @@ function renderProgress(){
 function renderHeader(){
   let sub;
   if(['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME','RAMP_UP'].includes(phase)){
-    sub = `${nextWo().wo} · ${nextWo().sku} · AFA10  (was ${WO_CURRENT.wo})`;
+    sub = `${nextWo().wo} Â· ${nextWo().sku} Â· AFA10  (was ${WO_CURRENT.wo})`;
   } else if(phase === 'IDLE'){
-    sub = `Next: ${nextWo().wo} · ${nextWo().sku} · AFA10`;
+    sub = `Next: ${nextWo().wo} Â· ${nextWo().sku} Â· AFA10`;
   } else {
-    sub = `${WO_CURRENT.wo} · Batch ${WO_CURRENT.batch} · ${WO_CURRENT.sku} · AFA10`;
+    sub = `${WO_CURRENT.wo} Â· Batch ${WO_CURRENT.batch} Â· ${WO_CURRENT.sku} Â· AFA10`;
   }
   document.getElementById('hdrSub').textContent = sub;
 }
 
 /* =====================================================================
-   DYNAMIC AREA — per-phase content
+   DYNAMIC AREA â€” per-phase content
 ===================================================================== */
 function actionGrid(items){
   return `<div class="grid gap-2.5" style="grid-template-columns:repeat(${items.length},1fr);">
@@ -368,16 +392,16 @@ function actionGrid(items){
 
 function dhrChecklist(idPrefix){
   return `<div class="rounded-xl border p-3" style="border-color:var(--border);">
-    <div class="font-bold text-[12.5px] mb-2">DHR Batch Record Closeout — ${WO_CURRENT.wo}</div>
-    <div class="task-row"><div class="ckbox done" onclick="toggleCk(this)">✓</div><div class="text-[12px]">Reconcile good / scrap counts</div></div>
-    <div class="task-row"><div class="ckbox done" onclick="toggleCk(this)">✓</div><div class="text-[12px]">Sample collection closed</div></div>
+    <div class="font-bold text-[12.5px] mb-2">DHR Batch Record Closeout â€” ${WO_CURRENT.wo}</div>
+    <div class="task-row"><div class="ckbox done" onclick="toggleCk(this)">âœ“</div><div class="text-[12px]">Reconcile good / scrap counts</div></div>
+    <div class="task-row"><div class="ckbox done" onclick="toggleCk(this)">âœ“</div><div class="text-[12px]">Sample collection closed</div></div>
     <div class="task-row"><div class="ckbox" onclick="toggleCk(this)"></div><div class="text-[12px]">Operator sign-off</div></div>
-    <div class="text-[10px] mt-2" style="color:var(--text-muted);">Required for record-keeping — does not block Manufacturing Start.</div>
+    <div class="text-[10px] mt-2" style="color:var(--text-muted);">Required for record-keeping â€” does not block Manufacturing Start.</div>
   </div>`;
 }
 function toggleCk(el){
   el.classList.toggle('done');
-  el.innerHTML = el.classList.contains('done') ? '✓' : '';
+  el.innerHTML = el.classList.contains('done') ? 'âœ“' : '';
 }
 
 function nextWoCard(showSwitcher){
@@ -389,8 +413,8 @@ function nextWoCard(showSwitcher){
     </div>
     <div class="flex items-center justify-between">
       <div>
-        <div class="val text-[13px]">${n.wo} · ${n.sku}</div>
-        <div class="text-[11px]" style="color:var(--text-muted);">${n.desc} · Planned ${fmtNum(n.planned)} pcs ${n.sameSku?'· <b>Same SKU</b> — no changeover required':'· Different SKU — ramp down + tooling changeover required'}</div>
+        <div class="val text-[13px]">${n.wo} Â· ${n.sku}</div>
+        <div class="text-[11px]" style="color:var(--text-muted);">${n.desc} Â· Planned ${fmtNum(n.planned)} pcs ${n.sameSku?'Â· <b>Same SKU</b> â€” no changeover required':'Â· Different SKU â€” ramp down + tooling changeover required'}</div>
       </div>
       ${showSwitcher ? `<button class="btn btn-outline" onclick="switchNextWo()">Select Different Work Order</button>` : ''}
     </div>
@@ -405,12 +429,12 @@ function changeoverStepper(activeIndex){
   ];
   const colors = i => i<activeIndex ? 'var(--green)' : (i===activeIndex ? 'var(--orange)' : 'var(--border-strong)');
   return `<div class="rounded-xl border p-3" style="border-color:var(--border);">
-    <div class="label-xs mb-2">Changeover Progress — ${WO_CURRENT.sku} → ${nextWo().sku}</div>
+    <div class="label-xs mb-2">Changeover Progress â€” ${WO_CURRENT.sku} â†’ ${nextWo().sku}</div>
     <div class="flex items-center">
       ${steps.map((st,i)=>`
         ${i>0?`<div class="step-line ${i-1<activeIndex?'done':''}"></div>`:''}
         <div class="step">
-          <div class="step-circle" style="background:${colors(i)};">${i<activeIndex?'✓':(i+1)}</div>
+          <div class="step-circle" style="background:${colors(i)};">${i<activeIndex?'âœ“':(i+1)}</div>
           <div class="step-label" style="color:${i===activeIndex?'var(--orange)':'var(--text-soft)'};">${st.label}</div>
           <div class="step-sub">${st.sub}</div>
         </div>`).join('')}
@@ -423,7 +447,7 @@ function lineClearanceCard(blocking){
     return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:var(--green-bd);background:var(--green-bg);">
       <div><div class="font-bold text-[12.5px]" style="color:var(--green);">Line Clearance Recorded</div>
       <div class="text-[11px]" style="color:var(--text-soft);">Confirmed clear for ${nextWo().sku}.</div></div>
-      <span class="pill pill-green">✓ Done</span>
+      <span class="pill pill-green">âœ“ Done</span>
     </div>`;
   }
   return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:${blocking?'var(--amber-bd)':'var(--border)'};background:${blocking?'var(--amber-bg)':'#fff'};">
@@ -437,7 +461,7 @@ function lineClearanceCard(blocking){
 function recordLineClearance(){
   lineClearanceRecorded = true;
   renderDynamic();
-  logActivity('Line clearance recorded', `Equipment — line clearance confirmed for ${nextWo().sku}`);
+  logActivity('Line clearance recorded', `Equipment â€” line clearance confirmed for ${nextWo().sku}`);
 }
 
 function renderDynamic(){
@@ -446,7 +470,7 @@ function renderDynamic(){
   if(phase === 'IDLE'){
     area.innerHTML = `
       ${nextWoCard(false)}
-      <div class="text-[11px]" style="color:var(--text-muted);">Production has not started on this equipment. Manufacturing Start will run the IDLE → STARTING → RUNNING transition for ${nextWo().wo}.</div>
+      <div class="text-[11px]" style="color:var(--text-muted);">Production has not started on this equipment. Manufacturing Start will run the IDLE â†’ STARTING â†’ RUNNING transition for ${nextWo().wo}.</div>
       ${actionGrid([['Manufacturing Start', icons.start, 'var(--green-bg)','var(--green)','doManufacturingStartCold()',1]])}
     `;
   }
@@ -471,7 +495,7 @@ function renderDynamic(){
         <div class="text-[11px] mb-3" style="color:var(--text-soft);">This Work Order is approaching its planned quantity. Confirm what runs next so changeover can be prepared correctly.</div>
         ${nextWoCard(true)}
         <div class="flex gap-2 mt-3">
-          <button class="btn" style="background:var(--blue);color:#fff;" onclick="confirmNextWo()">Confirm — ${nextWo().wo}</button>
+          <button class="btn" style="background:var(--blue);color:#fff;" onclick="confirmNextWo()">Confirm â€” ${nextWo().wo}</button>
         </div>
       </div>
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
@@ -537,7 +561,7 @@ function renderDynamic(){
     area.innerHTML = `
       ${dhrChecklist()}
       ${nextWoCard(false)}
-      <div class="text-[11px]" style="color:var(--text-muted);">Same SKU as next Work Order — no ramp down, tooling changeover, or line clearance required.</div>
+      <div class="text-[11px]" style="color:var(--text-muted);">Same SKU as next Work Order â€” no ramp down, tooling changeover, or line clearance required.</div>
       ${actionGrid([['Manufacturing Start', icons.start, 'var(--green-bg)','var(--green)','doManufacturingStartChangeover()',1]])}
     `;
   }
@@ -561,7 +585,7 @@ function renderDynamic(){
   else if(phase === 'PAUSED'){
     area.innerHTML = `
       <div class="grid grid-cols-2 gap-2">
-        <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Pause Reason</div><div class="val">${pauseReason || '—'}</div></div>
+        <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Pause Reason</div><div class="val">${pauseReason || 'â€”'}</div></div>
         <div class="rounded-md p-2" style="background:var(--gray-bg);"><div class="label-xs">Auto-Resume</div><div class="val" style="color:var(--green);">Enabled</div></div>
       </div>
       ${actionGrid([
@@ -576,11 +600,11 @@ function renderDynamic(){
     area.innerHTML = `
       <div class="rounded-xl border p-3" style="border-color:var(--red-bd);background:var(--red-bg);">
         <div class="font-bold text-[12.5px] mb-1" style="color:var(--red);">Flagged Issue</div>
-        <div class="text-[11.5px]" style="color:var(--text-soft);">"Z5C30 worn drive belt and broken slide for the prestop." — awaiting engineering clearance.</div>
+        <div class="text-[11.5px]" style="color:var(--text-soft);">"Z5C30 worn drive belt and broken slide for the prestop." â€” awaiting engineering clearance.</div>
       </div>
       ${actionGrid([
-        ['Cleared — Resume', icons.clear, 'var(--green-bg)','var(--green)','doResume()',2],
-        ['Escalate — Abort', icons.abort, 'var(--darkred-bg)','var(--darkred)','doAbort()',1]
+        ['Cleared â€” Resume', icons.clear, 'var(--green-bg)','var(--green)','doResume()',2],
+        ['Escalate â€” Abort', icons.abort, 'var(--darkred-bg)','var(--darkred)','doAbort()',1]
       ])}
     `;
   }
@@ -611,9 +635,9 @@ function slidePanels(endOnly){
     <div class="rounded-xl border p-3" style="border-color:var(--amber-bd);background:var(--amber-bg);">
       <div class="font-bold text-[13px] mb-1" style="color:var(--amber);">Flag for Engineering?</div>
       <div class="text-[11px] mb-3" style="color:var(--text-soft);">Stops production and notifies maintenance/engineering until cleared.</div>
-      <textarea id="flagComment" maxlength="100" rows="2" class="w-full border rounded-md px-2 py-1.5 text-[12px] mb-2" style="border-color:var(--border-strong);" placeholder="Briefly describe the issue (max 100 chars)…"></textarea>
+      <textarea id="flagComment" maxlength="100" rows="2" class="w-full border rounded-md px-2 py-1.5 text-[12px] mb-2" style="border-color:var(--border-strong);" placeholder="Briefly describe the issue (max 100 chars)â€¦"></textarea>
       <label class="flex items-center gap-2 text-[11px] font-semibold mb-3" style="color:var(--darkred);">
-        <input id="emergencyCheck" type="checkbox" class="accent-[var(--darkred)]"> This is a safety / emergency issue — abort immediately
+        <input id="emergencyCheck" type="checkbox" class="accent-[var(--darkred)]"> This is a safety / emergency issue â€” abort immediately
       </label>
       <div class="flex gap-2">
         <button onclick="confirmFlag()" class="btn" style="background:var(--amber);color:#fff;">Flag &amp; Stop Production</button>
@@ -626,7 +650,7 @@ function slidePanels(endOnly){
       <div class="font-bold text-[13px] mb-1">How did this order end?</div>
       <div class="text-[11px] mb-3" style="color:var(--text-muted);">This closes the Work Order.</div>
       <div class="grid grid-cols-2 gap-2">
-        <div class="reason-btn" onclick="endOrder('COMPLETE')">${icons.check} Completed — target reached</div>
+        <div class="reason-btn" onclick="endOrder('COMPLETE')">${icons.check} Completed â€” target reached</div>
         <div class="reason-btn" onclick="endOrder('STOPPED')">${icons.end} Stopped early / cancelled</div>
       </div>
       <button onclick="cancelSlide('endPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
@@ -644,7 +668,7 @@ function cancelSlide(id){ const e=document.getElementById(id); e.style.maxHeight
    ACTIVITY LOG
 ===================================================================== */
 const activity = [
-  {t:'06:00 AM', text:'Order started', isa:`${WO_CURRENT.wo}: IDLE → STARTING → RUNNING`}
+  {t:'06:00 AM', text:'Order started', isa:`${WO_CURRENT.wo}: IDLE â†’ STARTING â†’ RUNNING`}
 ];
 function renderActivity(){
   document.getElementById('activityList').innerHTML = activity.map(a => `
@@ -687,7 +711,7 @@ function transition(busyKey, toPhase, delay, after){
 /* --- Idle / cold start --- */
 function doManufacturingStartCold(){
   transition('STARTING','RAMP_UP',550, ()=>{
-    logActivity(`Manufacturing Start — ${nextWo().wo}`, `Equipment: IDLE → STARTING → RUNNING  ·  ${nextWo().wo}: IDLE → STARTING → RUNNING`);
+    logActivity(`Manufacturing Start â€” ${nextWo().wo}`, `Equipment: IDLE â†’ STARTING â†’ RUNNING  Â·  ${nextWo().wo}: IDLE â†’ STARTING â†’ RUNNING`);
   });
 }
 
@@ -695,7 +719,7 @@ function doManufacturingStartCold(){
 function confirmNextWo(){
   phase = 'RUNNING_CONFIRMED';
   render();
-  logActivity(`Next Work Order confirmed — ${nextWo().wo}`, `No state change · sequencing checkpoint`);
+  logActivity(`Next Work Order confirmed â€” ${nextWo().wo}`, `No state change Â· sequencing checkpoint`);
 }
 function switchNextWo(){
   nextWoIndex = (nextWoIndex + 1) % NEXT_WO_OPTIONS.length;
@@ -706,19 +730,19 @@ function switchNextWo(){
 function doCompleteWO(){
   const sameSku = nextWo().sameSku;
   transition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN', 600, ()=>{
-    logActivity(`Order completed — ${WO_CURRENT.wo}`, `${WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'} — from_sku=${WO_CURRENT.sku}`);
+    logActivity(`Order completed â€” ${WO_CURRENT.wo}`, `${WO_CURRENT.wo}: RUNNING â†’ STOPPING â†’ COMPLETE  Â·  Equipment: PRODUCTION â†’ ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'} â€” from_sku=${WO_CURRENT.sku}`);
   });
 }
 
 /* --- Changeover flow --- */
 function doMarkLineCleared(){
   transition('CHANGEOVER','CHG_TOOLING',550, ()=>{
-    logActivity('Line cleared — ramp down complete', `Equipment: CHANGEOVER (Ramp Down) → CHANGEOVER (Tooling Changeover)`);
+    logActivity('Line cleared â€” ramp down complete', `Equipment: CHANGEOVER (Ramp Down) â†’ CHANGEOVER (Tooling Changeover)`);
   });
 }
 function doToolingComplete(){
   transition('FINALIZING','CHG_READY',550, ()=>{
-    logActivity(`Tooling changeover complete — recipe sent to PLC for ${nextWo().wo}`, `Equipment: CHANGEOVER (Tooling Changeover) → CHANGEOVER (Ready)  ·  to_sku=${nextWo().sku}`);
+    logActivity(`Tooling changeover complete â€” recipe sent to PLC for ${nextWo().wo}`, `Equipment: CHANGEOVER (Tooling Changeover) â†’ CHANGEOVER (Ready)  Â·  to_sku=${nextWo().sku}`);
   });
 }
 function doManufacturingStartChangeover(){
@@ -727,9 +751,9 @@ function doManufacturingStartChangeover(){
   const proceed = ()=>{
     transition('STARTING','RAMP_UP',550, ()=>{
       const co = wasSame
-        ? `Equipment: CHANGEOVER (Batch Closeout) → RUNNING  ·  ${nextWo().wo}: IDLE → STARTING → RUNNING — no ramp down / tooling required (same SKU)`
-        : `Equipment: CHANGEOVER (Ready) → RUNNING  ·  ${nextWo().wo}: IDLE → STARTING → RUNNING — changeover record closed (from_sku=${WO_CURRENT.sku}, to_sku=${nextWo().sku})${!lineClearanceRecorded ? ' · Line clearance NOT recorded' : ''}`;
-      logActivity(`Manufacturing Start — ${nextWo().wo}`, co);
+        ? `Equipment: CHANGEOVER (Batch Closeout) â†’ RUNNING  Â·  ${nextWo().wo}: IDLE â†’ STARTING â†’ RUNNING â€” no ramp down / tooling required (same SKU)`
+        : `Equipment: CHANGEOVER (Ready) â†’ RUNNING  Â·  ${nextWo().wo}: IDLE â†’ STARTING â†’ RUNNING â€” changeover record closed (from_sku=${WO_CURRENT.sku}, to_sku=${nextWo().sku})${!lineClearanceRecorded ? ' Â· Line clearance NOT recorded' : ''}`;
+      logActivity(`Manufacturing Start â€” ${nextWo().wo}`, co);
       lineClearanceRecorded = false; // reset for next cycle
     });
   };
@@ -748,7 +772,7 @@ function confirmPause(reason){
   pauseReturnPhase = phase;
   cancelSlide('reasonPanel');
   transition('PAUSING','PAUSED',500, ()=>{
-    logActivity(`Paused — ${reason}`, `${WO_CURRENT.wo}: RUNNING → PAUSING → PAUSED  ·  Category: ${reason}`);
+    logActivity(`Paused â€” ${reason}`, `${WO_CURRENT.wo}: RUNNING â†’ PAUSING â†’ PAUSED  Â·  Category: ${reason}`);
   });
 }
 function confirmFlag(){
@@ -758,11 +782,11 @@ function confirmFlag(){
   cancelSlide('flagPanel');
   if(emergency){
     transition('ABORTING','ABORTED',600, ()=>{
-      logActivity(`Emergency abort${note?' — '+note:''}`, `${WO_CURRENT.wo}: RUNNING → ABORTING → ABORTED`);
+      logActivity(`Emergency abort${note?' â€” '+note:''}`, `${WO_CURRENT.wo}: RUNNING â†’ ABORTING â†’ ABORTED`);
     });
   } else {
     transition('HOLDING','HELD',600, ()=>{
-      logActivity(`Flagged for engineering${note?' — '+note:''}`, `${WO_CURRENT.wo}: RUNNING → HOLDING → HELD`);
+      logActivity(`Flagged for engineering${note?' â€” '+note:''}`, `${WO_CURRENT.wo}: RUNNING â†’ HOLDING â†’ HELD`);
     });
   }
 }
@@ -771,13 +795,13 @@ function doResume(){
   const target = pauseReturnPhase || 'RUNNING';
   transition('RESUMING', target, 550, ()=>{
     const from = wasHeld ? 'HELD' : 'PAUSED';
-    logActivity(wasHeld ? 'Cleared by engineering — resumed' : 'Resumed production', `${WO_CURRENT.wo}: ${from} → STARTING → RUNNING`);
+    logActivity(wasHeld ? 'Cleared by engineering â€” resumed' : 'Resumed production', `${WO_CURRENT.wo}: ${from} â†’ STARTING â†’ RUNNING`);
     pauseReason = null;
   });
 }
 function doAbort(){
   transition('ABORTING','ABORTED',600, ()=>{
-    logActivity('Escalated to emergency abort', `${WO_CURRENT.wo}: HELD → ABORTING → ABORTED`);
+    logActivity('Escalated to emergency abort', `${WO_CURRENT.wo}: HELD â†’ ABORTING â†’ ABORTED`);
   });
 }
 function endOrder(outcome){
@@ -785,11 +809,11 @@ function endOrder(outcome){
   if(outcome === 'COMPLETE'){
     const sameSku = nextWo().sameSku;
     transition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN',600, ()=>{
-      logActivity(`Order completed — ${WO_CURRENT.wo}`, `${WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'}`);
+      logActivity(`Order completed â€” ${WO_CURRENT.wo}`, `${WO_CURRENT.wo}: RUNNING â†’ STOPPING â†’ COMPLETE  Â·  Equipment: PRODUCTION â†’ ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'}`);
     });
   } else {
     transition('STOPPING','STOPPED',600, ()=>{
-      logActivity('Order stopped early', `${WO_CURRENT.wo}: RUNNING → STOPPING → STOPPED`);
+      logActivity('Order stopped early', `${WO_CURRENT.wo}: RUNNING â†’ STOPPING â†’ STOPPED`);
     });
   }
 }
@@ -801,12 +825,12 @@ function jumpTo(p){
   pauseReturnPhase = 'RUNNING';
   phase = p;
   render();
-  logActivity('— jumped to state for demo —', `(manual demo shortcut) → ${p}`);
+  logActivity('â€” jumped to state for demo â€”', `(manual demo shortcut) â†’ ${p}`);
 }
 function resetDemo(){
   phase = 'RUNNING'; nextWoIndex = 0; pauseReason = null; lineClearanceRecorded = false;
   activity.length = 0;
-  activity.push({t:'06:00 AM', text:'Order started', isa:`${WO_CURRENT.wo}: IDLE → STARTING → RUNNING`});
+  activity.push({t:'06:00 AM', text:'Order started', isa:`${WO_CURRENT.wo}: IDLE â†’ STARTING â†’ RUNNING`});
   render(); renderActivity();
 }
 

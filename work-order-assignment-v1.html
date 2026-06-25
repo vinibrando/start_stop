@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -32,7 +32,14 @@
   ::-webkit-scrollbar{width:6px;}
   ::-webkit-scrollbar-thumb{background:#c3cdda;border-radius:4px;}
 
-  .bg-toolbar{height:48px;background:var(--navy);}
+  .bg-toolbar{height:64px;background:#020043;color:#fff;}
+  .bd-mark{width:36px;height:36px;border-radius:999px;background:#fff;color:#020043;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;position:relative;}
+  .bd-mark:before{content:"";width:20px;height:20px;border-radius:50%;background:conic-gradient(from 0deg,#020043 0 10%,transparent 10% 20%,#020043 20% 30%,transparent 30% 40%,#020043 40% 50%,transparent 50% 60%,#020043 60% 70%,transparent 70% 80%,#020043 80% 90%,transparent 90% 100%);position:absolute;}
+  .bd-mark span{font-size:0;}
+  .topbar-app-icon{width:52px;height:64px;margin-left:0;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
+  .topbar-line-pill{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.10);color:#fff;}
+  .topbar-action-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;opacity:.95;}
+  .topbar-avatar{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#d6b08b,#6f8a66);border:2px solid rgba(255,255,255,.18);}
 
   .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:50;}
   .popup{background:#fff;border-radius:16px;width:1180px;max-height:92vh;overflow:hidden;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;}
@@ -87,11 +94,29 @@
 
 <!-- background placeholder dashboard -->
 <div class="h-screen flex flex-col" style="filter:blur(3px) saturate(.9);transform:scale(1.01);">
-  <div class="bg-toolbar flex items-center px-5 gap-3 text-white">
-    <div class="w-6 h-6 rounded-full flex items-center justify-center font-extrabold text-[11px]" style="background:var(--cyan);color:var(--navy);">BD</div>
-    <span class="font-bold text-[13px]">Smart Factory</span>
-    <div class="flex-1"></div>
-    <span class="text-[11px] text-white/60">Tijuana / Assembly Room / Line 1</span>
+  <div class="bg-toolbar flex items-center text-white">
+    <div class="topbar-app-icon" aria-label="Apps">&#9638;</div>
+    <div class="flex items-center gap-2 pl-4 pr-5">
+      <div class="bd-mark"><span>BD</span></div>
+      <div class="text-[25px] font-bold tracking-[-.02em] leading-none">BD</div>
+      <div class="text-[20px] font-bold leading-none ml-1">Smart Factory</div>
+    </div>
+    <div class="flex-1 flex justify-center">
+      <div class="relative" style="width:260px;">
+        <input class="w-full h-10 text-[14px] border rounded-[10px] pl-4 pr-11 text-[var(--text)]" placeholder="Search ...">
+        <span class="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white text-[14px]" style="background:var(--accent);">&#128269;</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 pr-5">
+      <span class="text-[12px] whitespace-nowrap">&#9679; Tijuana / Assembly Room / Unit A /</span>
+      <span class="topbar-line-pill text-[11px] font-bold rounded-full px-3 py-1.5 border whitespace-nowrap">Line 1 <span class="ml-1 opacity-60">+2</span></span>
+      <span class="topbar-action-icon">&#10022;</span>
+      <span class="topbar-action-icon">&#8962;</span>
+      <span class="topbar-action-icon">&#9635;</span>
+      <span class="topbar-action-icon relative">&#9679;<span class="absolute right-0 top-0 w-2 h-2 rounded-full" style="background:#ff6b2c;"></span></span>
+      <button class="h-10 text-[12px] font-bold rounded-[10px] px-4 text-white flex items-center gap-2" style="background:var(--accent);">SHIFT ENTRY <span>v</span></button>
+      <div class="topbar-avatar"></div>
+    </div>
   </div>
 </div>
 
@@ -109,7 +134,7 @@
       </div>
       <div class="flex items-center gap-2">
         <button class="btn btn-outline" onclick="window.location.href='work-order-control-panel-v1.html'">Open Control Panel</button>
-        <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg">✕</button>
+        <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg">âœ•</button>
       </div>
     </div>
 
@@ -122,7 +147,7 @@
           <div class="col-header mb-2">Work Orders</div>
           <div class="relative mb-2">
             <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
-            <input class="search-input" placeholder="Search WO, SKU, batch, material…" oninput="filterWOs(this.value)">
+            <input class="search-input" placeholder="Search WO, SKU, batch, materialâ€¦" oninput="filterWOs(this.value)">
           </div>
           <div class="flex gap-1.5 overflow-x-auto pb-1" id="woFilterRow">
             <span class="filter-chip active" data-f="all" onclick="setWoFilter('all',this)">All</span>
@@ -173,18 +198,18 @@ const WORK_ORDERS = [
   { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', batch:'1851', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:120000 },
   { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', batch:'1852', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:90000 },
   { wo:'WO-4503305', sku:'80-BLD-22010', desc:'Blister Pack Assembly', batch:'2210', material:'PETG Blister Sheet', workCenter:'PKG20', status:'created', equipment:null, custom:false, planned:45000 },
-  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack — Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG20', status:'auto', equipment:'PKG20-Cell-A', custom:false, planned:38000 },
-  { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study — tip retention', batch:'—', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:true, planned:500 },
+  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack â€” Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG20', status:'auto', equipment:'PKG20-Cell-A', custom:false, planned:38000 },
+  { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study â€” tip retention', batch:'â€”', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:true, planned:500 },
   { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:60000 }
 ];
 
 const RESOURCES = [
-  { id:'AFA10-Line-1', name:'AFA10 — Line 1', workCenter:'AFA10', state:'running', currentWo:'WO-4503287' },
-  { id:'AFA10-Line-2', name:'AFA10 — Line 2', workCenter:'AFA10', state:'available', currentWo:null },
-  { id:'AFA10-Line-3', name:'AFA10 — Line 3', workCenter:'AFA10', state:'down', currentWo:null },
-  { id:'PKG20-Cell-A', name:'PKG20 — Cell A', workCenter:'PKG20', state:'running', currentWo:'WO-4503312' },
-  { id:'PKG20-Cell-B', name:'PKG20 — Cell B', workCenter:'PKG20', state:'available', currentWo:null },
-  { id:'AFA10-Bench-1', name:'AFA10 — Eng. Bench 1', workCenter:'AFA10', state:'available', currentWo:null }
+  { id:'AFA10-Line-1', name:'AFA10 â€” Line 1', workCenter:'AFA10', state:'running', currentWo:'WO-4503287' },
+  { id:'AFA10-Line-2', name:'AFA10 â€” Line 2', workCenter:'AFA10', state:'available', currentWo:null },
+  { id:'AFA10-Line-3', name:'AFA10 â€” Line 3', workCenter:'AFA10', state:'down', currentWo:null },
+  { id:'PKG20-Cell-A', name:'PKG20 â€” Cell A', workCenter:'PKG20', state:'running', currentWo:'WO-4503312' },
+  { id:'PKG20-Cell-B', name:'PKG20 â€” Cell B', workCenter:'PKG20', state:'available', currentWo:null },
+  { id:'AFA10-Bench-1', name:'AFA10 â€” Eng. Bench 1', workCenter:'AFA10', state:'available', currentWo:null }
 ];
 
 let selectedWo = null;
@@ -194,7 +219,7 @@ let resFilter = 'all';
 let woSearch = '';
 
 /* =====================================================================
-   RENDER — WORK ORDERS
+   RENDER â€” WORK ORDERS
 ===================================================================== */
 function statusPill(status){
   const map = {
@@ -258,13 +283,13 @@ function renderWOs(){
         <span>WC <b style="color:var(--text-soft);">${w.workCenter}</b></span>
         <span>Planned <b style="color:var(--text-soft);">${w.planned.toLocaleString('en-US')}</b></span>
       </div>
-      ${w.equipment ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Equipment: <span class="isa-tag">${w.equipment}</span>${locked ? ' <span style="color:var(--amber);font-weight:700;">· locked (started)</span>' : ''}</div>` : ''}
+      ${w.equipment ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Equipment: <span class="isa-tag">${w.equipment}</span>${locked ? ' <span style="color:var(--amber);font-weight:700;">Â· locked (started)</span>' : ''}</div>` : ''}
     </div>`;
   }).join('');
 }
 
 /* =====================================================================
-   RENDER — RESOURCES
+   RENDER â€” RESOURCES
 ===================================================================== */
 function resStatePill(state){
   const map = {
@@ -279,7 +304,7 @@ function resStatePill(state){
 function renderResources(){
   const list = document.getElementById('resList');
   const scopeLabel = document.getElementById('resScopeLabel');
-  scopeLabel.textContent = selectedWo ? `— filtered to Work Center ${selectedWo.workCenter}` : '';
+  scopeLabel.textContent = selectedWo ? `â€” filtered to Work Center ${selectedWo.workCenter}` : '';
 
   const filtered = RESOURCES.filter(r=>{
     if(resFilter==='available' && r.state!=='available') return false;
@@ -361,15 +386,15 @@ function renderSummaryBar(){
       summary.style.color = 'var(--text)';
       btn.classList.remove('btn-disabled');
     } else {
-      summary.innerHTML = `<span style="color:var(--red);font-weight:600;">Not eligible</span> — ${selectedWo.wo} requires Work Center ${selectedWo.workCenter}, but ${selectedRes.name} is in ${selectedRes.workCenter}.`;
+      summary.innerHTML = `<span style="color:var(--red);font-weight:600;">Not eligible</span> â€” ${selectedWo.wo} requires Work Center ${selectedWo.workCenter}, but ${selectedRes.name} is in ${selectedRes.workCenter}.`;
       btn.classList.add('btn-disabled');
     }
   } else if(selectedWo){
-    summary.innerHTML = `<b>${selectedWo.wo}</b> selected — choose an eligible Resource.`;
+    summary.innerHTML = `<b>${selectedWo.wo}</b> selected â€” choose an eligible Resource.`;
     summary.style.color = 'var(--text-muted)';
     btn.classList.add('btn-disabled');
   } else if(selectedRes){
-    summary.innerHTML = `<b>${selectedRes.name}</b> selected — choose an eligible Work Order.`;
+    summary.innerHTML = `<b>${selectedRes.name}</b> selected â€” choose an eligible Work Order.`;
     summary.style.color = 'var(--text-muted)';
     btn.classList.add('btn-disabled');
   } else {
