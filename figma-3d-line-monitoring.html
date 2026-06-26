@@ -235,6 +235,17 @@
       </aside>
     </section>
   </main>
+<script>
+  function openProductionWithHeaderAction(action){
+    sessionStorage.setItem('smartFactoryPendingHeaderAction', action);
+    window.location.href = 'production-work-order-v1.html';
+  }
+  window.addEventListener('smart-factory:open-control-panel', () => openProductionWithHeaderAction('control-panel'));
+  window.addEventListener('smart-factory:open-badge-auth', () => openProductionWithHeaderAction('badge-auth'));
+  window.addEventListener('smart-factory:toggle-flag-categories', () => {
+    window.location.href = 'production-work-order-v1.html';
+  });
+</script>
 </body>
 </html>
 

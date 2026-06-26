@@ -46,9 +46,9 @@
         .flow-copy{font-size:12px;color:rgba(0,0,0,.6);white-space:nowrap;}
         .flow-divider{width:1px;height:46px;align-self:center;background:var(--line);flex-shrink:0;margin-left:12px;}
         .bottleneck{display:flex;flex-direction:column;justify-content:center;gap:2px;flex-shrink:0;margin-left:12px;}
-        .active-category{flex:1;border-radius:8px;padding:0 16px;margin-left:12px;display:flex;flex-direction:column;justify-content:center;min-width:0;position:relative;overflow:hidden;background:var(--green-bg);}
-        .active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--green);}
-        .active-category-label{font-size:20px;font-weight:400;color:var(--green);}
+        .active-category{flex:1;border-radius:8px;padding:0 16px;margin-left:12px;display:flex;flex-direction:column;justify-content:center;min-width:0;position:relative;overflow:hidden;background:var(--cat-bg, var(--green-bg));transition:background .15s ease;}
+        .active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat-accent, var(--green));transition:background .15s ease;}
+        .active-category-label{font-size:20px;font-weight:400;color:var(--cat-accent, var(--green));transition:color .15s ease;}
         .active-category-sub{font-size:10px;color:rgba(0,0,0,.72);}
         .status-control{padding-left:16px;display:flex;flex-direction:column;justify-content:center;gap:6px;flex-shrink:0;}
         .status-buttons{display:flex;align-items:center;gap:8px;}
@@ -133,6 +133,17 @@
       });
     }
     document.addEventListener('click', () => switcher.classList.remove('open'));
+  }
+
+  setActiveCategory(label, color, bg) {
+    if (!this.shadowRoot) return;
+    const wrap = this.shadowRoot.querySelector('.active-category');
+    const labelEl = this.shadowRoot.querySelector('.active-category-label');
+    if (wrap) {
+      wrap.style.setProperty('--cat-accent', color);
+      wrap.style.setProperty('--cat-bg', bg);
+    }
+    if (labelEl) labelEl.textContent = label;
   }
 }
 customElements.define('smart-factory-header', SmartFactoryHeader);
