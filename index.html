@@ -430,31 +430,6 @@
         <span>Sandy USA &gt; Unit 1 &gt; <span class="breadcrumb-line-list" tabindex="0" data-full="AFA10, AFA11, AFA12, AFA13, AFA14">AFA10, AFA11 +3</span></span>
       </div>
     </div>
-    <div class="page-flow">
-      <div class="page-flow-block page-flow-product">
-        <div class="page-flow-title">NEXIVA 20 GA X 1 IN SINGLE PORT</div>
-        <div class="page-flow-copy">SKU: 80-APX-50000 | Lot: L2075-0245</div>
-      </div>
-      <div class="page-flow-divider"></div>
-      <div class="page-flow-block">
-        <div class="page-flow-copy">Bottleneck</div>
-        <div class="page-flow-copy">Autoguard 13 Zone #5</div>
-      </div>
-      <div class="page-flow-divider"></div>
-      <div class="page-active-category" id="pageActiveCategory">
-        <div class="page-active-category-label" id="pageActiveCategoryLabel">Production</div>
-        <div class="page-active-category-sub">Active Category</div>
-      </div>
-      <div class="page-status-control">
-        <span class="page-flow-copy">Status Control</span>
-        <div class="page-status-buttons">
-          <button class="page-header-action primary" type="button" onclick="openBadgeAuthModal()" title="Assign & Run a Work Order" aria-label="Assign and run a Work Order"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button>
-          <button class="page-header-action outline" type="button" onclick="openControlPanel()" title="Open Work Order Control Panel" aria-label="Open Work Order Control Panel"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
-          <div class="page-button-divider"></div>
-          <button class="page-header-action outline" type="button" onclick="toggleFlagCategories()" title="Flag Category" aria-label="Flag Category"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 4C20.33 4 21 4.67 21 5.5V18.5C21 19.33 20.33 20 19.5 20C18.67 20 18 19.33 18 18.5V5.5C18 4.67 18.67 4 19.5 4ZM4.5 13C5.33 13 6 13.67 6 14.5V18.5C6 19.33 5.33 20 4.5 20C3.67 20 3 19.33 3 18.5V14.5C3 13.67 3.67 13 4.5 13ZM15.5 4C16.33 4 17 4.67 17 5.5C17 6.33 16.33 7 15.5 7C14.67 7 14 6.33 14 5.5C14 4.67 14.67 4 15.5 4ZM11.5 5C12.33 5 13 5.67 13 6.5V7.5C13 8.33 12.33 9 11.5 9C10.67 9 10 8.33 10 7.5V6.5C10 5.67 10.67 5 11.5 5ZM8.5 10C9.33 10 10 10.67 10 11.5V12.5C10 13.33 9.33 14 8.5 14C7.67 14 7 13.33 7 12.5V11.5C7 10.67 7.67 10 8.5 10Z"/></svg></button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -589,7 +564,7 @@
           <div class="assignment-search-row">
             <div class="relative">
               <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
-              <input class="search-input" placeholder="Search resource, PWO, work center..." oninput="filterResources(this.value)">
+              <input id="resSearchInput" class="search-input" placeholder="Search resource, PWO, work center..." oninput="filterResources(this.value)">
             </div>
             <div class="assignment-filter-wrap">
               <button id="resFilterButton" class="assignment-filter-btn" type="button" aria-label="Filter Resources" title="Filter Resources" onclick="toggleAssignmentFilter('res')">
@@ -998,7 +973,7 @@ const CP_PHASES = {
                desc:'Order was emergency-aborted. Requires supervisor review.' },
   STOPPED:   { label:'Stopped', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
                desc:'This Work Order was stopped early and is closed.' },
-  COMPLETE:  { label:'Completed', dot:'var(--blue)', bg:'var(--blue-bg)', text:'var(--blue)', pulse:false,
+  COMPLETE:  { label:'Completed - Idle', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
                desc:'This Work Order reached its target and is complete.' }
 };
 
@@ -1240,8 +1215,16 @@ function cpToggleEndDebugState(){
 }
 
 function cpConfirmNextWoForEndFlow(){
-  cpNextWoConfirmed = true;
-  cpRenderDynamic();
+  cpGoToAssignmentForResource('AFA10');
+}
+
+function cpGoToAssignmentForResource(resourceName){
+  closeControlPanel();
+  switchMainTab('assignment');
+  resSearch = resourceName;
+  const input = document.getElementById('resSearchInput');
+  if(input) input.value = resourceName;
+  renderResources();
 }
 
 function cpSetEndOrderLayout(open){
@@ -1476,14 +1459,13 @@ function cpSlidePanels(endOnly){
   ${!endOnly ? `
   <div id="reasonPanel" class="slide" style="max-height:0;opacity:0;">
     <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
-      <div class="font-bold text-[13px] mb-1">Why are you pausing?</div>
-      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Select a waterfall category so this time is recorded correctly.</div>
+      <div class="font-bold text-[13px] mb-2">Why are you pausing?</div>
       <div class="grid grid-cols-3 gap-2">
         ${['Changeover / Setup','Break / Crew','Material Missing','Quality Check','Planned Maintenance','Other'].map(r=>`
           <div class="reason-btn" onclick="cpConfirmPause('${r}')">${cpIcons.check}${r}</div>
         `).join('')}
       </div>
-      <button onclick="cpCancelSlide('reasonPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
+      <button onclick="cpCancelSlide('reasonPanel')" class="mt-2 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
     </div>
   </div>
   ` : ''}`;
@@ -1542,7 +1524,7 @@ const CP_PILL_CLASS = {
   RUNNING:'pill-green', RUNNING_NEAR:'pill-green', RUNNING_CONFIRMED:'pill-green',
   RAMP_UP:'pill-blue',
   CHG_RAMPDOWN:'pill-orange', CHG_TOOLING:'pill-orange', CHG_READY:'pill-orange', CHG_SAME:'pill-gray',
-  PAUSED:'pill-amber', HELD:'pill-red', ABORTED:'pill-red', STOPPED:'pill-gray', COMPLETE:'pill-blue', IDLE:'pill-gray'
+  PAUSED:'pill-amber', HELD:'pill-red', ABORTED:'pill-red', STOPPED:'pill-gray', COMPLETE:'pill-gray', IDLE:'pill-gray'
 };
 
 /* "Active Category" reflects the actual OEE/downtime category — the
@@ -1555,8 +1537,9 @@ function cpActiveCategory(){
   if(cpPhase === 'CHG_SAME') return { label:'Batch Closeout', bg:'#f1f4f8', color:'var(--text-soft)' };
   if(cpPhase === 'RAMP_UP') return { label:'Ramp-Up', bg:'var(--purple-bg)', color:'var(--purple)' };
   if(cpPhase === 'STOPPED') return { label:'Stopped', bg:'#f1f4f8', color:'var(--text-soft)' };
-  if(cpPhase === 'COMPLETE') return { label:'Completed', bg:'var(--blue-bg)', color:'var(--blue)' };
-  return { label:'Production', bg:'var(--green-bg)', color:'var(--green)' }; // RUNNING / RUNNING_NEAR / RUNNING_CONFIRMED / IDLE
+  if(cpPhase === 'COMPLETE') return { label:'Completed - Idle', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'IDLE') return { label:'Not Started', bg:'#f1f4f8', color:'var(--text-soft)' };
+  return { label:'Production', bg:'var(--green-bg)', color:'var(--green)' }; // RUNNING / RUNNING_NEAR / RUNNING_CONFIRMED
 }
 
 function cpResolveColor(v){
@@ -1579,6 +1562,8 @@ function cpSyncOuterHeader(){
     pageCategory.style.setProperty('--cat-bg', cpResolveColor(cat.bg));
   }
   if(pageCategoryLabel) pageCategoryLabel.textContent = cat.label;
+  const pageCategorySub = document.getElementById('pageActiveCategorySub');
+  if(pageCategorySub) pageCategorySub.textContent = p.desc;
   const currentUnit = UNITS.find(u=>u.name==='AFA10');
   if(currentUnit){
     currentUnit.status = p.label.toUpperCase();
@@ -1629,10 +1614,7 @@ function cpConfirmNextWo(){
   cpLogActivity(`Next Work Order confirmed — ${cpNextWo().wo}`, `No state change · sequencing checkpoint`);
 }
 function cpSwitchNextWo(){
-  cpNextWoIndex = (cpNextWoIndex + 1) % CP_NEXT_WO_OPTIONS.length;
-  cpLineClearanceRecorded = false;
-  cpRenderDynamic();
-  cpRenderHeader();
+  cpGoToAssignmentForResource('AFA10');
 }
 function cpDoCompleteWO(){
   const sameSku = cpNextWo().sameSku;
@@ -2382,10 +2364,15 @@ function clearFlagSubcategories(){
   hoveredFlagCategory = null;
   renderFlagCategories();
 }
+function positionFlagCategoryRow(row){
+  const titlebar = document.querySelector('.page-titlebar');
+  if(titlebar) row.style.top = titlebar.getBoundingClientRect().bottom + 'px';
+}
 function toggleFlagCategories(){
   flagCategoryOpen = !flagCategoryOpen;
   const row = document.getElementById('flagCategoryRow');
   if(!row) return;
+  if(flagCategoryOpen) positionFlagCategoryRow(row);
   row.style.opacity = flagCategoryOpen ? '1' : '0';
   row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
   row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-4px)';
@@ -2394,6 +2381,12 @@ function toggleFlagCategories(){
   if(!flagCategoryOpen) hoveredFlagCategory = null;
   renderFlagCategories();
 }
+document.addEventListener('click', (e) => {
+  if(!flagCategoryOpen) return;
+  if(e.target.closest('[title="Flag Category"]')) return;
+  const row = document.getElementById('flagCategoryRow');
+  if(row && !row.contains(e.target)) toggleFlagCategories();
+});
 function selectFlagSubcategory(i, subcategory){
   activeFlagCategory = i;
   activeFlagSubcategory = subcategory;
@@ -3056,6 +3049,7 @@ function consumePendingHeaderAction(){
     if(action === 'control-panel') openControlPanel();
     if(action === 'badge-auth') openBadgeAuthModal();
     if(action === 'flag-categories') toggleFlagCategories();
+    if(action.startsWith('assignment-resource:')) cpGoToAssignmentForResource(action.slice('assignment-resource:'.length));
   });
 }
 
@@ -3066,6 +3060,7 @@ renderGanttBody();
 renderAssignmentAll();
 routeFromLocation();
 consumePendingHeaderAction();
+cpSyncOuterHeader();
 window.addEventListener('hashchange', routeFromLocation);
 window.addEventListener('resize', () => {
   unitCarouselPage = 0;

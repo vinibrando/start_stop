@@ -11,10 +11,10 @@
         .app-icon{width:52px;height:64px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:background .15s ease;color:#fff;border:0;}
         .app-icon svg{width:22px;height:22px;fill:currentColor;display:block;}
         .screen-switcher.open .app-icon,.app-icon:hover{background:rgba(255,255,255,.16);}
-        .screen-menu{position:absolute;left:8px;top:64px;width:272px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:12px;box-shadow:0 18px 48px rgba(8,16,38,.22);padding:10px;display:none;color:#1f2937;}
-        .screen-switcher.open .screen-menu{display:block;}
+        .screen-menu{position:absolute;left:8px;top:64px;width:272px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:12px;box-shadow:0 18px 48px rgba(8,16,38,.22);padding:10px;display:none;flex-direction:column;gap:4px;color:#1f2937;}
+        .screen-switcher.open .screen-menu{display:flex;}
         .screen-menu-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(0,0,0,.52);padding:8px 10px 8px;}
-        .screen-menu-item{width:100%;border:0;background:#fff;border-radius:9px;padding:12px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;color:#1f2937;}
+        .screen-menu-item{width:100%;border:0;background:#fff;border-radius:9px;padding:8px 12px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;color:#1f2937;}
         .screen-menu-item:hover{background:#eaf1ff;color:#115dff;}
         .screen-menu-item.active{background:#eef4ff;color:#115dff;}
         .screen-menu-icon{width:34px;height:34px;border-radius:9px;background:#f3f6fb;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:currentColor;}

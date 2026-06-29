@@ -83,9 +83,9 @@
   .page-flow-title{font-size:14px;font-weight:400;color:var(--text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .page-flow-copy{font-size:12px;color:rgba(0,0,0,.6);line-height:1.25;white-space:nowrap;}
   .page-flow-divider{width:1px;height:46px;align-self:center;background:var(--line);}
-  .page-active-category{flex:1;border-radius:8px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;min-width:160px;position:relative;overflow:hidden;background:#e9f0fe;}
-  .page-active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent);}
-  .page-active-category-label{font-size:20px;font-weight:400;line-height:1.2;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .page-active-category{flex:1;border-radius:8px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;min-width:160px;position:relative;overflow:hidden;background:var(--cat-bg,#e9f0fe);transition:background .15s ease;}
+  .page-active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat-accent,var(--accent));transition:background .15s ease;}
+  .page-active-category-label{font-size:20px;font-weight:400;line-height:1.2;color:var(--cat-accent,var(--accent));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s ease;}
   .page-active-category-sub{font-size:10px;color:rgba(0,0,0,.72);line-height:1.2;}
   .page-status-control{display:flex;flex-direction:column;justify-content:center;gap:6px;flex:0 0 auto;}
   .page-status-buttons{display:flex;align-items:center;gap:8px;}
@@ -154,13 +154,12 @@
   .line-overview-title{font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-size:16px;font-weight:700;line-height:1.2;color:#000;}
   .line-overview-actions{display:flex;align-items:center;gap:12px;color:var(--accent);}
   .line-overview-actions svg{width:24px;height:24px;fill:currentColor;display:block;}
-  .line-overview-body{padding:24px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-rows:210px 1fr;gap:16px;min-height:0;flex:1;}
+  .line-overview-body{padding:24px;display:grid;grid-template-columns:auto auto;column-gap:12px;row-gap:8px;align-items:start;justify-content:start;min-height:0;flex:1;}
   .placeholder-card{background:#d8d8d8;border:1px solid #e8edf5;border-radius:12px;box-shadow:0 2px 6px rgba(32,48,74,.12);}
-  .placeholder-card.oee{position:relative;}
-  .placeholder-card.oee:before{content:"OEE";position:absolute;left:16px;top:14px;font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-size:16px;font-weight:700;color:#000;}
-  .placeholder-stack{display:grid;grid-template-rows:1fr 1fr 1fr;gap:10px;}
-  .placeholder-card.top-losses{grid-column:1 / -1;position:relative;}
-  .placeholder-card.top-losses:before{content:"Top Losses";position:absolute;left:16px;top:14px;font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-size:18px;font-weight:700;color:#000;}
+  .placeholder-stack{display:flex;flex-direction:column;gap:2px;width:196px;}
+  .placeholder-stack .line-overview-img{width:196px;height:auto;}
+  .line-overview-img{display:block;width:auto;height:auto;max-width:none;max-height:none;}
+  .line-overview-img.top-losses{grid-column:1 / -1;}
   .panel-card{padding:16px;overflow:hidden;}
   .panel-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
   .panel-title{font-size:20px;font-weight:800;line-height:1.15;}
@@ -219,7 +218,7 @@
   .screen-menu-sub{font-size:11px;color:rgba(0,0,0,.55);margin-top:2px;}
   /* ---- control panel modal styles (ported from Josh's prototype) ---- */
   .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:200;overflow-y:auto;padding:24px 0;}
-  .popup{position:relative;background:#fff;border-radius:16px;width:500px;height:524px;max-height:calc(100vh - 48px);overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
+  .popup{position:relative;background:#fff;border-radius:16px;width:500px;height:548px;max-height:calc(100vh - 48px);overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
   .cp-modal-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.2;color:var(--text);}
   .cp-modal-close{width:32px;height:32px;border:0;border-radius:999px;background:transparent;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
   .cp-modal-close:hover{background:var(--blue-bg);color:var(--accent);}
@@ -272,7 +271,7 @@
   .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
   .task-row:last-child{border-bottom:none;}
   .slide{margin-top:-12px;transition:max-height .25s ease, opacity .2s ease, margin-top .2s ease;overflow:hidden;}
-  .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;}
+  .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;height:100%;}
   .end-order-head{display:none;}
   .end-order-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.25;}
   .end-order-copy{font-size:12px;line-height:1.35;color:var(--text-muted);margin-top:1px;}
@@ -310,7 +309,7 @@
   .end-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
   .end-option.full{grid-column:1 / -1;}
   .end-option.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
-  .end-order-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:0;padding-top:0;}
+  .end-order-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:auto;padding-top:0;}
   .end-order-back{height:32px;border:1px solid rgba(37,99,235,.4);border-radius:12px;background:#fff;color:var(--accent);font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;padding:6px 16px;white-space:nowrap;text-transform:uppercase;transition:background .15s,border-color .15s;}
   .end-order-back:hover{background:var(--blue-bg);border-color:var(--accent);}
   .changeover-next-footer{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-top:auto;}
@@ -498,11 +497,16 @@
 </head>
 <body>
   <smart-factory-header active-screen="monitoring"></smart-factory-header>
+  <div id="flagCategoryRow" style="position:absolute;top:64px;left:40px;right:40px;height:94px;z-index:80;background:#f6f9fe;border-bottom:0;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
+    <div class="flag-category-scroll">
+      <div class="flag-category-panel" id="flagCategoryList" onmouseleave="clearFlagSubcategories()"></div>
+    </div>
+  </div>
 
   <div class="page-titlebar">
     <div class="page-titlegroup">
       <div class="page-title-copy">
-        <div class="page-title">Production Overview</div>
+        <div class="page-title">Digital OEE</div>
         <div class="page-breadcrumb">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h4v4H6zM14 4h4v4h-4zM14 14h4v4h-4zM10 8h2a2 2 0 012 2v4"/>
@@ -521,9 +525,9 @@
           <div class="page-flow-copy">Autoguard 13 Zone #5</div>
         </div>
         <div class="page-flow-divider"></div>
-        <div class="page-active-category">
-          <div class="page-active-category-label">Monitoring</div>
-          <div class="page-active-category-sub">Active View</div>
+        <div class="page-active-category" id="pageActiveCategory">
+          <div class="page-active-category-label" id="pageActiveCategoryLabel">Production</div>
+          <div class="page-active-category-sub" id="pageActiveCategorySub">Active Category</div>
         </div>
         <div class="page-status-control">
           <span class="page-flow-copy">Status Control</span>
@@ -531,7 +535,7 @@
             <button class="page-header-action primary" type="button" onclick="openProductionWithHeaderAction('badge-auth')" title="Assign & Run a Work Order" aria-label="Assign and run a Work Order"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button>
             <button class="page-header-action outline" type="button" onclick="openControlPanel()" title="Open Work Order Control Panel" aria-label="Open Work Order Control Panel"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
             <div class="page-button-divider"></div>
-            <button class="page-header-action outline" type="button" onclick="openProductionWithHeaderAction('flag-categories')" title="Flag Category" aria-label="Flag Category"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 4C20.33 4 21 4.67 21 5.5V18.5C21 19.33 20.33 20 19.5 20C18.67 20 18 19.33 18 18.5V5.5C18 4.67 18.67 4 19.5 4ZM4.5 13C5.33 13 6 13.67 6 14.5V18.5C6 19.33 5.33 20 4.5 20C3.67 20 3 19.33 3 18.5V14.5C3 13.67 3.67 13 4.5 13ZM15.5 4C16.33 4 17 4.67 17 5.5C17 6.33 16.33 7 15.5 7C14.67 7 14 6.33 14 5.5C14 4.67 14.67 4 15.5 4ZM11.5 5C12.33 5 13 5.67 13 6.5V7.5C13 8.33 12.33 9 11.5 9C10.67 9 10 8.33 10 7.5V6.5C10 5.67 10.67 5 11.5 5ZM8.5 10C9.33 10 10 10.67 10 11.5V12.5C10 13.33 9.33 14 8.5 14C7.67 14 7 13.33 7 12.5V11.5C7 10.67 7.67 10 8.5 10Z"/></svg></button>
+            <button class="page-header-action outline" type="button" onclick="toggleFlagCategories()" title="Flag Category" aria-label="Flag Category"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 4C20.33 4 21 4.67 21 5.5V18.5C21 19.33 20.33 20 19.5 20C18.67 20 18 19.33 18 18.5V5.5C18 4.67 18.67 4 19.5 4ZM4.5 13C5.33 13 6 13.67 6 14.5V18.5C6 19.33 5.33 20 4.5 20C3.67 20 3 19.33 3 18.5V14.5C3 13.67 3.67 13 4.5 13ZM15.5 4C16.33 4 17 4.67 17 5.5C17 6.33 16.33 7 15.5 7C14.67 7 14 6.33 14 5.5C14 4.67 14.67 4 15.5 4ZM11.5 5C12.33 5 13 5.67 13 6.5V7.5C13 8.33 12.33 9 11.5 9C10.67 9 10 8.33 10 7.5V6.5C10 5.67 10.67 5 11.5 5ZM8.5 10C9.33 10 10 10.67 10 11.5V12.5C10 13.33 9.33 14 8.5 14C7.67 14 7 13.33 7 12.5V11.5C7 10.67 7.67 10 8.5 10Z"/></svg></button>
           </div>
         </div>
       </div>
@@ -589,13 +593,13 @@
             </div>
           </div>
           <div class="line-overview-body">
-            <div class="placeholder-card oee"></div>
+            <img class="line-overview-img oee" src="oee.png" alt="OEE">
             <div class="placeholder-stack">
-              <div class="placeholder-card"></div>
-              <div class="placeholder-card"></div>
-              <div class="placeholder-card"></div>
+              <img class="line-overview-img" src="yield.png" alt="Yield">
+              <img class="line-overview-img" src="speed.png" alt="Avg Line Speed">
+              <img class="line-overview-img" src="dt.png" alt="Total Line DT">
             </div>
-            <div class="placeholder-card top-losses"></div>
+            <img class="line-overview-img top-losses" src="top-losses_table.png" alt="Top Losses">
           </div>
         </section>
       </aside>
@@ -769,7 +773,7 @@ const CP_PHASES = {
                desc:'Order was emergency-aborted. Requires supervisor review.' },
   STOPPED:   { label:'Stopped', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
                desc:'This Work Order was stopped early and is closed.' },
-  COMPLETE:  { label:'Completed', dot:'var(--blue)', bg:'var(--blue-bg)', text:'var(--blue)', pulse:false,
+  COMPLETE:  { label:'Completed - Idle', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
                desc:'This work order was closed before reaching its target.' }
 };
 
@@ -1017,8 +1021,12 @@ function cpToggleEndDebugState(){
 }
 
 function cpConfirmNextWoForEndFlow(){
-  cpNextWoConfirmed = true;
-  cpRenderDynamic();
+  cpGoToAssignmentForResource('AFA10');
+}
+
+function cpGoToAssignmentForResource(resourceName){
+  sessionStorage.setItem('smartFactoryPendingHeaderAction', 'assignment-resource:' + resourceName);
+  window.location.href = 'index.html#pwo-assignment';
 }
 
 function cpToggleNextWoConfirmed(){
@@ -1280,14 +1288,12 @@ function cpSlidePanels(endOnly){
   ${!endOnly ? `
   <div id="reasonPanel" class="slide" style="max-height:0;opacity:0;">
     <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
-      <div class="font-bold text-[13px] mb-1">Why are you pausing?</div>
-      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Select a waterfall category so this time is recorded correctly.</div>
+      <div class="font-bold text-[13px] mb-2">Why are you pausing?</div>
       <div class="grid grid-cols-3 gap-2">
         ${['Changeover / Setup','Break / Crew','Material Missing','Quality Check','Planned Maintenance','Other'].map(r=>`
           <div class="reason-btn" onclick="cpConfirmPause('${r}')">${cpIcons.check}${r}</div>
         `).join('')}
       </div>
-      <button onclick="cpCancelSlide('reasonPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
     </div>
   </div>
   ` : ''}`;
@@ -1346,7 +1352,7 @@ const CP_PILL_CLASS = {
   RUNNING:'pill-green', RUNNING_NEAR:'pill-green', RUNNING_CONFIRMED:'pill-green',
   RAMP_UP:'pill-blue',
   CHG_RAMPDOWN:'pill-orange', CHG_TOOLING:'pill-orange', CHG_READY:'pill-orange', CHG_SAME:'pill-gray',
-  PAUSED:'pill-amber', HELD:'pill-red', ABORTED:'pill-red', STOPPED:'pill-gray', COMPLETE:'pill-blue', IDLE:'pill-gray'
+  PAUSED:'pill-amber', HELD:'pill-red', ABORTED:'pill-red', STOPPED:'pill-gray', COMPLETE:'pill-gray', IDLE:'pill-gray'
 };
 
 /* "Active Category" reflects the actual OEE/downtime category — the
@@ -1359,8 +1365,9 @@ function cpActiveCategory(){
   if(cpPhase === 'CHG_SAME') return { label:'Batch Closeout', bg:'#f1f4f8', color:'var(--text-soft)' };
   if(cpPhase === 'RAMP_UP') return { label:'Ramp-Up', bg:'var(--purple-bg)', color:'var(--purple)' };
   if(cpPhase === 'STOPPED') return { label:'Stopped', bg:'#f1f4f8', color:'var(--text-soft)' };
-  if(cpPhase === 'COMPLETE') return { label:'Completed', bg:'var(--blue-bg)', color:'var(--blue)' };
-  return { label:'Production', bg:'var(--green-bg)', color:'var(--green)' }; // RUNNING / RUNNING_NEAR / RUNNING_CONFIRMED / IDLE
+  if(cpPhase === 'COMPLETE') return { label:'Completed - Idle', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'IDLE') return { label:'Not Started', bg:'#f1f4f8', color:'var(--text-soft)' };
+  return { label:'Production', bg:'var(--green-bg)', color:'var(--green)' }; // RUNNING / RUNNING_NEAR / RUNNING_CONFIRMED
 }
 
 function cpResolveColor(v){
@@ -1383,6 +1390,8 @@ function cpSyncOuterHeader(){
     pageCategory.style.setProperty('--cat-bg', cpResolveColor(cat.bg));
   }
   if(pageCategoryLabel) pageCategoryLabel.textContent = cat.label;
+  const pageCategorySub = document.getElementById('pageActiveCategorySub');
+  if(pageCategorySub) pageCategorySub.textContent = p.desc;
   if(typeof UNITS !== 'undefined'){
     const currentUnit = UNITS.find(u=>u.name==='AFA10');
     if(currentUnit){
@@ -1435,10 +1444,7 @@ function cpConfirmNextWo(){
   cpLogActivity(`Next Work Order confirmed — ${cpNextWo().wo}`, `No state change · sequencing checkpoint`);
 }
 function cpSwitchNextWo(){
-  cpNextWoIndex = (cpNextWoIndex + 1) % CP_NEXT_WO_OPTIONS.length;
-  cpLineClearanceRecorded = false;
-  cpRenderDynamic();
-  cpRenderHeader();
+  cpGoToAssignmentForResource('AFA10');
 }
 function cpDoCompleteWO(){
   const sameSku = cpNextWo().sameSku;
@@ -1476,6 +1482,9 @@ function cpDoManufacturingStartChangeover(){
 }
 
 function cpConfirmPause(reason){
+  openBadgeAuthModal(() => cpDoConfirmPause(reason));
+}
+function cpDoConfirmPause(reason){
   cpPauseReason = reason;
   cpPauseReturnPhase = cpPhase;
   cpCancelSlide('reasonPanel');
@@ -1484,6 +1493,9 @@ function cpConfirmPause(reason){
   });
 }
 function cpDoResume(){
+  openBadgeAuthModal(() => cpDoResumeConfirmed());
+}
+function cpDoResumeConfirmed(){
   const wasHeld = cpPhase === 'HELD';
   const target = cpPauseReturnPhase || 'RUNNING';
   cpTransition('RESUMING', target, 550, ()=>{
@@ -1544,6 +1556,124 @@ function openControlPanel(){
 function closeControlPanel(){
   document.getElementById('controlPanelModal').style.display = 'none';
 }
+
+const FLAG_CATEGORIES = [
+  { label:'Running', icon:'play', color:'var(--green)', soft:'rgba(22,163,74,.10)', subs:[['At Speed','trend'],['Reduced Speed','chart'],['Stable Run','checklist']] },
+  { label:'CILT Routine', icon:'checklist', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['Clean','spark'],['Inspect','eye'],['Lubricate','drop']] },
+  { label:'No Order', icon:'ban', color:'var(--text-muted)', soft:'rgba(0,0,0,.06)', subs:[['Queue Empty','ban'],['SAP Delay','clock']] },
+  { label:'Legal Holidays', icon:'calendar', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Plant Holiday','calendar'],['Site Closed','lock']] },
+  { label:'Planned Maintenance', icon:'tool', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['PM Service','tool'],['Calibration','gauge'],['Inspection','eye']] },
+  { label:'Start And Stop', icon:'switch', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Start-up','play'],['Shutdown','stop'],['Restart','refresh']] },
+  { label:'Changeover', icon:'refresh', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Line Clearance','checklist'],['Tooling Swap','tool'],['Recipe Load','file']] },
+  { label:'Ramp-up', icon:'trend', color:'var(--purple)', soft:'rgba(126,58,242,.10)', subs:[['Speed Ramp','trend'],['First Pieces','box'],['Stabilizing','gauge']] },
+  { label:'Consumable Replacement', icon:'box', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Material Roll','box'],['Label Stock','tag'],['Blade Change','tool']] },
+  { label:'Breakdown', icon:'alert', color:'var(--red)', soft:'rgba(220,38,38,.10)', subs:[['Mechanical','gear'],['Electrical','bolt'],['Controls','cpu']] },
+  { label:'Operational Losses', icon:'chart', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Waiting Labor','user'],['Material Search','search'],['Documentation','file']] }
+];
+let flagCategoryOpen = false;
+let activeFlagCategory = null;
+let activeFlagSubcategory = null;
+let hoveredFlagCategory = null;
+
+function flagCategoryIcon(type){
+  const icons = {
+    play:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 5v14l11-7-11-7z"/></svg>`,
+    checklist:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 11l2 2 4-5M7 5h10M7 19h10M5 9h.01M5 15h.01"/></svg>`,
+    ban:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="8"/><path stroke-linecap="round" d="M7 7l10 10"/></svg>`,
+    calendar:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="4" y="5" width="16" height="15" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M4 10h16"/></svg>`,
+    tool:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 015 5L11 20l-5-5 8.7-8.7z"/></svg>`,
+    switch:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10l-3-3M17 17H7l3 3"/></svg>`,
+    refresh:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 00-14-5l-2 2M4 4v4h4M4 13a8 8 0 0014 5l2-2M20 20v-4h-4"/></svg>`,
+    trend:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 17l5-5 4 4 7-9M15 7h5v5"/></svg>`,
+    box:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4 8-4V7M12 11v10"/></svg>`,
+    alert:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3l10 18H2L12 3z"/><path stroke-linecap="round" d="M12 9v5M12 17h.01"/></svg>`,
+    chart:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" d="M5 19V9M12 19V5M19 19v-7"/></svg>`,
+    spark:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3z"/></svg>`,
+    eye:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2"/></svg>`,
+    drop:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3s6 6.5 6 11a6 6 0 11-12 0c0-4.5 6-11 6-11z"/></svg>`,
+    clock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="8"/><path stroke-linecap="round" d="M12 8v5l3 2"/></svg>`,
+    lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>`,
+    gauge:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" d="M5 16a7 7 0 1114 0M12 16l4-5"/><path d="M9 20h6"/></svg>`,
+    stop:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>`,
+    file:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M7 3h7l4 4v14H7V3zM14 3v5h5"/></svg>`,
+    tag:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M4 11V5h6l10 10-6 6L4 11z"/><circle cx="8" cy="8" r="1"/></svg>`,
+    gear:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>`,
+    bolt:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M13 2L5 14h6l-1 8 9-13h-6l0-7z"/></svg>`,
+    cpu:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>`,
+    user:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 20a7 7 0 0114 0"/></svg>`,
+    search:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="6"/><path stroke-linecap="round" d="M16 16l4 4"/></svg>`
+  };
+  return icons[type] || icons.chart;
+}
+
+function renderFlagCategories(){
+  const list = document.getElementById('flagCategoryList');
+  if(!list) return;
+  list.innerHTML = FLAG_CATEGORIES.map((c,i)=>`
+    <div class="flag-cat-wrap ${hoveredFlagCategory===i?'hovered':''} ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" onmouseenter="showFlagSubcategories(${i})">
+      <button class="flag-cat-btn" type="button">
+        <span style="color:${c.color};">${flagCategoryIcon(c.icon)}</span>
+        <span class="flag-cat-label">${c.label}</span>
+      </button>
+      <div class="flag-submenu">
+        ${c.subs.map(([subLabel, subIcon])=>`
+          <button class="flag-sub-btn ${activeFlagCategory===i && activeFlagSubcategory===subLabel ? 'selected' : ''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" type="button" onclick="selectFlagSubcategory(${i}, '${subLabel}')">
+            ${flagCategoryIcon(subIcon)}
+            <span>${subLabel}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function showFlagSubcategories(i){
+  hoveredFlagCategory = i;
+  renderFlagCategories();
+}
+function clearFlagSubcategories(){
+  hoveredFlagCategory = null;
+  renderFlagCategories();
+}
+function positionFlagCategoryRow(row){
+  const titlebar = document.querySelector('.page-titlebar');
+  if(titlebar) row.style.top = titlebar.getBoundingClientRect().bottom + 'px';
+}
+function toggleFlagCategories(){
+  flagCategoryOpen = !flagCategoryOpen;
+  const row = document.getElementById('flagCategoryRow');
+  if(!row) return;
+  if(flagCategoryOpen) positionFlagCategoryRow(row);
+  row.style.opacity = flagCategoryOpen ? '1' : '0';
+  row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
+  row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-4px)';
+  if(!flagCategoryOpen) hoveredFlagCategory = null;
+  renderFlagCategories();
+}
+function selectFlagSubcategory(i, subcategory){
+  openBadgeAuthModal(() => cpDoSelectFlagSubcategory(i, subcategory));
+}
+function cpDoSelectFlagSubcategory(i, subcategory){
+  activeFlagCategory = i;
+  activeFlagSubcategory = subcategory;
+  renderFlagCategories();
+  const c = FLAG_CATEGORIES[i];
+  const pageCategory = document.getElementById('pageActiveCategory');
+  const pageCategoryLabel = document.getElementById('pageActiveCategoryLabel');
+  const pageCategorySub = document.getElementById('pageActiveCategorySub');
+  if(pageCategory){
+    pageCategory.style.setProperty('--cat-accent', cpResolveColor(c.color));
+    pageCategory.style.setProperty('--cat-bg', c.soft || 'rgba(37,99,235,.09)');
+  }
+  if(pageCategoryLabel) pageCategoryLabel.textContent = c.label;
+  if(pageCategorySub) pageCategorySub.textContent = subcategory;
+}
+document.addEventListener('click', (e) => {
+  if(!flagCategoryOpen) return;
+  if(e.target.closest('[title="Flag Category"]')) return;
+  const row = document.getElementById('flagCategoryRow');
+  if(row && !row.contains(e.target)) toggleFlagCategories();
+});
+renderFlagCategories();
 
 /* ---- badge authentication (generic on-success callback, no assignment-review coupling) ---- */
 const BADGE_AUTH_STATES = [
@@ -1752,6 +1882,7 @@ function cpConfirmCompleteAndStop(){
   }
 
   document.getElementById('zoneAccRoot').innerHTML = ZONES.map(renderZoneAccordion).join('');
+  cpSyncOuterHeader();
 
   function openProductionWithHeaderAction(action){
     sessionStorage.setItem('smartFactoryPendingHeaderAction', action);
@@ -1760,7 +1891,7 @@ function cpConfirmCompleteAndStop(){
   window.addEventListener('smart-factory:open-control-panel', () => openControlPanel());
   window.addEventListener('keydown', e => { if(e.key === 'Escape') closeControlPanel(); });
   window.addEventListener('smart-factory:open-badge-auth', () => openProductionWithHeaderAction('badge-auth'));
-  window.addEventListener('smart-factory:toggle-flag-categories', () => openProductionWithHeaderAction('flag-categories'));
+  window.addEventListener('smart-factory:toggle-flag-categories', () => toggleFlagCategories());
 </script>
 </body>
 </html>
