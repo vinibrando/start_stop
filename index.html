@@ -281,7 +281,7 @@
     </div>
 
     <!-- unit cards -->
-    <div class="grid mb-5" style="grid-template-columns:repeat(4,1fr);gap:20px;" id="unitCards"></div>
+    <div class="grid mb-5" style="grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;" id="unitCards"></div>
     <div class="carousel-dots" id="unitCarouselDots"></div>
   </div>
 
@@ -394,13 +394,12 @@
     <div class="flex items-center justify-between px-6 pt-4 pb-0">
       <div>
         <div class="flex items-center gap-2">
-          <div class="text-[15px] font-extrabold">Work Order Control Panel</div>
-          <span id="cp-hdrStatus" class="pill pill-green">Running</span>
+          <div id="cp-modalTitle" class="cp-modal-title">PWO Control Panel</div>
         </div>
-        <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="cp-hdrSub">WO-4503287 · Batch 1847 · 80-APX-50000 · AFA10</div>
+        <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="cp-hdrSub">PWO-4503287 · Batch 1847 · 80-APX-50000 · AFA10</div>
       </div>
       <div class="flex items-center gap-2">
-        <button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--gray-bg)] text-[var(--text-muted)] font-bold text-lg" onclick="closeControlPanel()">✕</button>
+        <button class="cp-modal-close" type="button" onclick="closeControlPanel()" aria-label="Close control panel">✕</button>
       </div>
     </div>
 
@@ -408,7 +407,7 @@
     <div id="cpPanelBody" class="cp-panel-body flex-1 min-h-0">
 
       <!-- LEFT: CONTROL CONTENT -->
-      <div class="cp-main-pane px-6 py-4 flex flex-col gap-6">
+      <div class="cp-main-pane flex flex-col gap-6">
 
         <div id="cp-statusHero" class="status-hero" style="background:var(--green-bg);">
           <span id="cp-statusDot" class="status-dot pulse" style="background:var(--green);"></span>
@@ -424,7 +423,7 @@
 
         <div id="cp-progressWrap">
           <div class="flex justify-between text-[11px] font-semibold mb-1.5 gap-2">
-            <span id="cp-progressLabel">Progress to Planned Quantity (WO-4503287)</span>
+            <span id="cp-progressLabel">Progress to Planned Quantity (PWO-4503287)</span>
             <span><span id="cp-progActual" style="color:var(--accent);">82,450</span> / <span id="cp-progPlanned">100,000</span> pcs (<span id="cp-progPct">82%</span>)</span>
           </div>
           <div class="progress-track"><div class="progress-fill" id="cp-progFill" style="width:82%;"></div></div>
@@ -432,8 +431,8 @@
 
         <div id="cp-dynamicArea" class="flex flex-col gap-3"></div>
 
-        <div class="flex items-center justify-between text-[11px] pt-2 mt-auto border-t" style="border-color:var(--border);color:var(--text-muted);">
-          <span>⏱ Next scheduled break: 12:00 PM (10 min) — will auto-pause this order</span>
+        <div id="cp-scheduleNote" class="flex items-center justify-between text-[11px] pt-0 mt-auto border-t" style="border-color:var(--border);color:var(--text-muted);">
+          <span class="cp-schedule-text">⏱ Next scheduled break: 12:00 PM (10 min) <span class="cp-schedule-help" data-tip="This PWO will auto-pause when the scheduled break starts.">i</span></span>
         </div>
       </div>
 
@@ -453,6 +452,7 @@
       <button class="cp-debug-btn" onclick="cpJumpTo('RUNNING_NEAR')" aria-label="Simulate less than 5 percent remaining" title="Simulate: <5% Remaining">%</button>
       <button class="cp-debug-btn" onclick="cpJumpTo('HELD')" aria-label="Simulate engineering hold" title="Simulate: Engineering Hold">!</button>
       <button class="cp-debug-btn" onclick="cpResetDemo()" aria-label="Reset demo" title="Reset">↺</button>
+      <button id="cpEndDebugToggle" class="cp-debug-btn end-debug-circle" onclick="cpToggleEndDebugState()" aria-label="Toggle End PWO debug state" title="Debug: Produced pieces">↔</button>
     </div>
     <button class="cp-inline-log-btn" onclick="cpToggleLog()" aria-label="Toggle activity log" title="Activity log">›</button>
   </div>
@@ -461,28 +461,40 @@
 <style>
   /* ---- control panel modal styles (ported from Josh's prototype) ---- */
   .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:200;overflow-y:auto;padding:24px 0;}
-  .popup{position:relative;background:#fff;border-radius:16px;width:500px;overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
+  .popup{position:relative;background:#fff;border-radius:16px;width:500px;height:492px;max-height:calc(100vh - 48px);overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
+  .cp-modal-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.2;color:var(--text);}
+  .cp-modal-close{width:32px;height:32px;border:0;border-radius:999px;background:transparent;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
+  .cp-modal-close:hover{background:var(--blue-bg);color:var(--accent);}
+  .cp-schedule-text{display:flex;align-items:center;gap:4px;min-width:0;}
+  .cp-schedule-help{position:relative;width:14px;height:14px;border-radius:50%;border:1px solid var(--border-strong);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--text-muted);cursor:help;flex-shrink:0;}
+  .cp-schedule-help:after{content:attr(data-tip);position:absolute;left:0;bottom:20px;width:210px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:11px;font-weight:500;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(4px);transition:.12s;z-index:30;}
+  .cp-schedule-help:hover:after{opacity:1;transform:translateY(0);}
   .cp-debug-tools{position:absolute;right:0;bottom:-44px;display:flex;flex-direction:row;gap:8px;}
   .cp-debug-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);box-shadow:0 8px 18px rgba(10,16,32,.12);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;line-height:1;cursor:pointer;}
   .cp-debug-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
+  .end-debug-circle{display:none;}
   .cp-inline-log-btn{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:46px;border-radius:8px;border:1px solid var(--border-strong);background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;line-height:1;cursor:pointer;z-index:6;box-shadow:0 8px 18px rgba(10,16,32,.12);}
   .cp-inline-log-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
   .cp-panel-body{position:relative;display:block;}
-  .cp-main-pane{border-right:0;}
+  .cp-main-pane{border-right:0;padding:16px 24px 34px;height:100%;display:flex;flex-direction:column;position:relative;}
+  #cp-dynamicArea{flex:1;min-height:0;}
+  #cp-scheduleNote{position:absolute;left:24px;right:24px;bottom:16px;}
   .cp-activity-pane{position:absolute;left:calc(100% + 14px);top:0;width:320px;height:100%;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 18px 42px rgba(10,16,32,.18);opacity:1;transform:translateX(0);transition:opacity .15s ease,transform .15s ease;}
   .cp-panel-body.log-collapsed .cp-activity-pane{opacity:0;pointer-events:none;transform:translateX(-8px);}
-  .status-hero{border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;transition:background .2s;}
+  .status-hero{border-radius:12px;padding:10px 12px;min-height:92px;display:flex;align-items:center;gap:10px;transition:background .2s;}
   .status-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;transition:background .2s;}
   .pulse{animation:cp-pulse 1.6s ease-in-out infinite;}
   @keyframes cp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.45);}50%{box-shadow:0 0 0 6px rgba(22,163,74,0);}}
   .spin{animation:cp-spin 1s linear infinite;}
   @keyframes cp-spin{to{transform:rotate(360deg);}}
   .ic{width:16px;height:16px;flex-shrink:0;}
-  .action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:10px;border:1px solid transparent;padding:10px 6px;cursor:pointer;font-weight:700;font-size:11.5px;letter-spacing:.01em;transition:filter .15s, transform .1s, opacity .15s;min-height:62px;}
-  .action-btn:hover{filter:brightness(.96);}
+  .action-btn{display:flex;align-items:center;justify-content:flex-start;gap:10px;border-radius:10px;border:1px solid var(--border);background:#fff;padding:9px 10px;cursor:pointer;font-weight:700;font-size:14px;line-height:1.2;letter-spacing:0;transition:border-color .12s ease,background .12s ease,box-shadow .12s ease,transform .1s,opacity .15s;min-height:56px;text-align:left;color:var(--text);}
+  .action-btn:hover{border-color:var(--action-color);background:var(--action-bg);box-shadow:0 8px 20px rgba(10,16,32,.08);}
   .action-btn:active{transform:scale(.98);}
   .action-btn.disabled{opacity:.4;pointer-events:none;}
-  .action-btn .ic{width:20px;height:20px;}
+  .action-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--action-bg);color:var(--action-color);flex-shrink:0;}
+  .action-icon .ic{width:16px;height:16px;}
+  .action-label{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .reason-btn{border:1px solid var(--border-strong);border-radius:9px;padding:9px 5px;text-align:center;font-size:10.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.12s;}
   .reason-btn:hover{border-color:var(--accent);background:var(--blue-bg);color:var(--accent);}
   .reason-btn .ic{width:20px;height:20px;}
@@ -495,11 +507,71 @@
   .step-sub{font-size:10px;color:var(--text-muted);}
   .step-line{flex:1;height:2px;background:var(--border-strong);margin-top:11px;min-width:18px;}
   .step-line.done{background:var(--green);}
+  .changeover-route{font-size:11px;font-weight:700;color:var(--text-muted);white-space:nowrap;}
+  .changeover-progress-section{display:flex;flex-direction:column;}
   .ckbox{width:18px;height:18px;border-radius:5px;border:2px solid var(--border-strong);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
   .ckbox.done{background:var(--accent);border-color:var(--accent);}
   .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
   .task-row:last-child{border-bottom:none;}
   .slide{margin-top:-12px;transition:max-height .25s ease, opacity .2s ease, margin-top .2s ease;overflow:hidden;}
+  .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;}
+  .end-order-head{display:none;}
+  .end-order-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.25;}
+  .end-order-copy{font-size:12px;line-height:1.35;color:var(--text-muted);margin-top:1px;}
+  .end-next-section{display:flex;flex-direction:column;gap:7px;border:1px solid var(--blue-bd);border-radius:12px;background:linear-gradient(180deg,rgba(37,99,235,.11),rgba(37,99,235,.07));padding:9px 10px;}
+  .end-next-section.unconfirmed{border-color:var(--amber-bd);background:var(--amber-bg);}
+  .end-next-header{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:18px;}
+  .end-next-heading{display:flex;align-items:center;gap:8px;min-width:0;}
+  .end-next-card{border:1px solid rgba(37,99,235,.16);border-radius:10px;background:rgba(255,255,255,.68);padding:7px 9px;color:var(--text);}
+  .end-next-card.unconfirmed{border-color:rgba(245,158,11,.26);background:rgba(255,255,255,.58);}
+  .end-next-title{font-size:14px;font-weight:700;color:var(--blue);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .end-next-title.unconfirmed{color:var(--amber);}
+  .end-next-grid{display:flex;align-items:flex-start;justify-content:space-between;gap:0;min-width:0;white-space:nowrap;overflow:hidden;}
+  .end-next-field{min-width:0;flex:0 0 auto;}
+  .end-next-field span{display:block;font-size:10px;color:var(--text-muted);line-height:1.15;overflow:hidden;text-overflow:ellipsis;}
+  .end-next-field b{display:block;font-size:14px;font-weight:700;color:var(--text);line-height:1.2;margin-top:1px;overflow:hidden;text-overflow:ellipsis;}
+  .end-next-footer{display:flex;justify-content:flex-end;margin-top:8px;}
+  .end-tertiary{border:0;background:transparent;color:var(--accent);font-size:12px;font-weight:800;line-height:1.2;cursor:pointer;padding:0;}
+  .end-tertiary:hover{text-decoration:underline;}
+  .end-next-primary{width:100%;height:32px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;line-height:1.2;text-transform:uppercase;cursor:pointer;padding:6px 12px;letter-spacing:.02em;}
+  .end-next-primary:hover{filter:brightness(.96);}
+  .end-option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .end-actions{display:flex;flex-direction:column;gap:6px;}
+  .end-actions-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.025em;color:var(--text-muted);}
+  .end-next-section + .end-option-grid{margin-top:12px;}
+  .end-progress{display:flex;flex-direction:column;gap:0;}
+  .end-progress-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-muted);}
+  .end-progress-row span:last-child{white-space:nowrap;}
+  .end-progress-track{height:7px;border-radius:99px;background:#e6eaf0;overflow:hidden;width:100%;flex:0 0 7px;}
+  .end-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
+  .end-option.full{grid-column:1 / -1;}
+  .end-option.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+  .end-order-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:0;padding-top:0;}
+  .end-order-back{height:32px;border:1px solid rgba(37,99,235,.4);border-radius:12px;background:#fff;color:var(--accent);font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;padding:6px 16px;white-space:nowrap;text-transform:uppercase;transition:background .15s,border-color .15s;}
+  .end-order-back:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .changeover-next-footer{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-top:auto;margin-bottom:24px;}
+  .changeover-next-btn{height:32px;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--accent);border-radius:12px;background:var(--accent);color:#fff;font-size:14px;font-weight:800;line-height:1.2;cursor:pointer;padding:6px 16px;white-space:nowrap;text-transform:uppercase;transition:filter .15s,box-shadow .15s;}
+  .changeover-next-btn:hover{filter:brightness(.96);box-shadow:0 8px 18px rgba(37,99,235,.18);}
+  .changeover-cancel-btn{background:none;border:none;color:var(--text-muted);font-size:14px;font-weight:700;text-transform:uppercase;cursor:pointer;padding:6px 4px;white-space:nowrap;}
+  .changeover-cancel-btn:hover{color:var(--text-soft);}
+  .end-debug-toggle{display:none;}
+  .end-debug-toggle:hover{background:var(--blue-bg);border-color:var(--accent);color:var(--accent);}
+  .end-option{width:100%;height:56px;display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:#fff;border-radius:10px;padding:9px 10px;text-align:left;cursor:pointer;transition:border-color .12s ease,background .12s ease,box-shadow .12s ease;}
+  .end-option:focus-visible{outline:3px solid rgba(37,99,235,.32);outline-offset:3px;}
+  .end-option.primary{height:62px;border-color:var(--green);background:#fff;color:var(--text);justify-content:space-between;}
+  .end-option.primary:hover{border-color:var(--green);background:var(--green-bg);box-shadow:none;}
+  .end-option.primary .end-option-icon{width:36px;height:36px;border-radius:11px;background:var(--green);color:#fff;}
+  .end-option.primary .end-option-title{font-size:14px;color:var(--text);}
+  .end-option.primary .end-option-desc{font-size:12px;}
+  .end-primary-arrow{width:26px;height:26px;border-radius:999px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:900;line-height:1;flex-shrink:0;}
+  .end-option.secondary{background:#fff;}
+  .end-option:hover{border-color:var(--option-color);background:var(--option-bg);box-shadow:0 8px 20px rgba(10,16,32,.08);}
+  .end-option.secondary:hover{background:#fff;}
+  .end-option-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--option-bg);color:var(--option-color);flex-shrink:0;}
+  .end-option-icon .ic{width:16px;height:16px;}
+  .end-option-main{flex:1;min-width:0;}
+  .end-option-title{font-size:14px;font-weight:700;color:var(--text);display:block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .end-option-desc{font-size:12px;line-height:1.3;color:var(--text-muted);margin-top:1px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .demo-chip{font-size:10px;font-weight:700;padding:4px 9px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);}
   .demo-chip:hover{border-color:var(--cyan);color:var(--text-soft);}
   .auto-resume-row{display:flex;align-items:center;gap:10px;}
@@ -576,8 +648,12 @@ let cpAutoResumeEnabled = true;
 let cpLogCollapsed = true;
 let cpLastPhase = cpPhase;
 let cpPhaseSince = Date.now();
+let cpEndOrderFlowOpen = false;
+let cpNextWoConfirmed = true;
+let cpEndHasProducedPieces = true;
 
 function cpNextWo(){ return CP_NEXT_WO_OPTIONS[cpNextWoIndex]; }
+function cpPwo(id){ return String(id).replace(/^WO-/, 'PWO-'); }
 
 const CP_PHASES = {
   IDLE:      { label:'Not Started', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
@@ -613,7 +689,8 @@ const CP_PHASES = {
 const CP_BUSY_LABEL = {
   STARTING:'Starting…', PAUSING:'Pausing…', RESUMING:'Resuming…', HOLDING:'Putting on engineering hold…',
   STOPPING:'Closing order…', ABORTING:'Aborting…', RAMPING_DOWN:'Beginning ramp down…',
-  CHANGEOVER:'Switching to tooling changeover…', FINALIZING:'Finalizing changeover…'
+  CHANGEOVER:'Switching to tooling changeover…', FINALIZING:'Finalizing changeover…',
+  CANCELLING:'Cancelling changeover…'
 };
 
 const cpIcons = {
@@ -626,7 +703,8 @@ const cpIcons = {
   abort:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.86L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.86a2 2 0 00-3.4 0z"/></svg>`,
   check:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
   tool:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 11-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 015.4-5.4z"/></svg>`,
-  lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 018 0v3"/></svg>`
+  lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 018 0v3"/></svg>`,
+  forward:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg>`
 };
 
 function cpFmtTime(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
@@ -643,6 +721,7 @@ function cpRenderHero(){
   const p = CP_PHASES[cpPhase];
   if(cpPhase !== cpLastPhase){ cpLastPhase = cpPhase; cpPhaseSince = Date.now(); }
   const hero = document.getElementById('cp-statusHero');
+  hero.style.display = '';
   hero.style.background = p.bg;
   const dot = document.getElementById('cp-statusDot');
   dot.className = 'status-dot' + (p.pulse ? ' pulse' : '');
@@ -665,6 +744,8 @@ setInterval(()=>{
   if(cpPhase !== 'RUNNING'){
     const el = document.getElementById('cp-statusSince');
     if(el) el.textContent = cpFmtElapsed(Date.now() - cpPhaseSince);
+    const changeoverElapsed = document.getElementById('cp-changeoverElapsed');
+    if(changeoverElapsed) changeoverElapsed.textContent = cpFmtElapsed(Date.now() - cpPhaseSince);
   }
 }, 1000);
 
@@ -686,7 +767,7 @@ function cpRenderProgress(){
   const inChangeover = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase);
   const inRampUp = cpPhase === 'RAMP_UP';
 
-  if(cpPhase === 'IDLE' || cpPhase === 'CHG_RAMPDOWN'){
+  if(cpPhase === 'IDLE' || inChangeover){
     wrap.style.display = 'none'; return;
   }
   wrap.style.display = '';
@@ -719,19 +800,15 @@ function cpRenderProgress(){
 }
 
 function cpRenderHeader(){
-  const p = CP_PHASES[cpPhase];
-  const hdrStatus = document.getElementById('cp-hdrStatus');
-  if(hdrStatus){
-    hdrStatus.className = `pill ${CP_PILL_CLASS[cpPhase] || 'pill-gray'}`;
-    hdrStatus.textContent = p.label;
-  }
   let sub;
-  if(['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME','RAMP_UP'].includes(cpPhase)){
-    sub = `${cpNextWo().wo} · ${cpNextWo().sku} · AFA10  (was ${CP_WO_CURRENT.wo})`;
+  if(cpPhase === 'CHG_RAMPDOWN'){
+    sub = `${CP_WO_CURRENT.sku} → ${cpNextWo().sku}`;
+  } else if(['CHG_TOOLING','CHG_READY','CHG_SAME','RAMP_UP'].includes(cpPhase)){
+    sub = `${cpPwo(cpNextWo().wo)} · ${cpNextWo().sku} · AFA10  (was ${cpPwo(CP_WO_CURRENT.wo)})`;
   } else if(cpPhase === 'IDLE'){
-    sub = `Next: ${cpNextWo().wo} · ${cpNextWo().sku} · AFA10`;
+    sub = `Next: ${cpPwo(cpNextWo().wo)} · ${cpNextWo().sku} · AFA10`;
   } else {
-    sub = `${CP_WO_CURRENT.wo} · Batch ${CP_WO_CURRENT.batch} · ${CP_WO_CURRENT.sku} · AFA10`;
+    sub = `${cpPwo(CP_WO_CURRENT.wo)} · Batch ${CP_WO_CURRENT.batch} · ${CP_WO_CURRENT.sku} · AFA10`;
   }
   document.getElementById('cp-hdrSub').textContent = sub;
 }
@@ -739,9 +816,132 @@ function cpRenderHeader(){
 function cpActionGrid(items){
   return `<div class="flex gap-2.5 items-stretch">
     ${items.map(([label,icon,bg,text,onclick,weight,disabled])=>`
-      <div class="action-btn${disabled?' disabled':''}" style="background:${bg};color:${text};flex:${weight||1};" onclick="${disabled?'':onclick}">${icon}<span>${label}</span></div>
+      <div class="action-btn${disabled?' disabled':''}" style="--action-bg:${bg};--action-color:${text};flex:${weight||1};" onclick="${disabled?'':onclick}">
+        <span class="action-icon">${icon}</span>
+        <span class="action-label">${label}</span>
+      </div>
     `).join('')}
   </div>`;
+}
+
+function cpEndOrderFlow(){
+  const next = cpNextWo();
+  const nextPwo = cpPwo(next.wo);
+  const isNearComplete = cpPhase === 'RUNNING_NEAR' || cpPhase === 'RUNNING_CONFIRMED';
+  const cancelDisabled = cpEndHasProducedPieces;
+  const progressActual = cancelDisabled ? (isNearComplete ? '99,200' : '82,450') : '0';
+  const progressPct = cancelDisabled ? (isNearComplete ? '99%' : '82%') : '0%';
+  const progressWidth = cancelDisabled ? (isNearComplete ? '99%' : '82%') : '0%';
+  const nextSection = cpNextWoConfirmed
+    ? `<div class="end-next-section">
+        <div class="end-next-header">
+          <div class="end-next-heading">
+            <div class="end-next-title">Next Confirmed PWO</div>
+          </div>
+        </div>
+        <div class="end-next-card">
+          <div class="end-next-grid">
+            <div class="end-next-field"><span>SKU</span><b>${next.sku}</b></div>
+            <div class="end-next-field"><span>PWO</span><b>${nextPwo}</b></div>
+            <div class="end-next-field"><span>Batch</span><b>${next.batch || '1851'}</b></div>
+            <div class="end-next-field"><span>Planned Quantity</span><b>${cpFmtNum(next.planned)}</b></div>
+          </div>
+        </div>
+        <button type="button" class="end-next-primary" onclick="cpSwitchNextWo()">Change Next PWO</button>
+      </div>`
+    : `<div class="end-next-section unconfirmed">
+        <div class="end-next-header">
+          <div class="end-next-heading">
+            <div class="end-next-title unconfirmed">Next PWO Not Confirmed</div>
+          </div>
+          <button type="button" class="end-tertiary" onclick="cpConfirmNextWoForEndFlow()">Select Next PWO</button>
+        </div>
+        <div class="end-next-card unconfirmed">
+          <div class="end-order-copy">Select the next PWO before completing and starting the next run.</div>
+        </div>
+      </div>`;
+
+  return `
+    <div class="end-order-flow">
+      ${nextSection}
+      <div class="end-progress">
+        <div class="end-progress-row">
+          <span>Progress to Planned Quantity (${cpPwo(CP_WO_CURRENT.wo)})</span>
+          <span><span style="color:var(--accent);">${progressActual}</span> / ${cpFmtNum(CP_WO_CURRENT.planned)} pcs (${progressPct})</span>
+        </div>
+        <div class="end-progress-track"><div class="end-progress-fill" style="width:${progressWidth};"></div></div>
+      </div>
+
+      <div class="end-actions">
+        <div class="end-actions-label">Actions</div>
+        <div class="end-option-grid">
+          <button type="button" class="end-option primary full ${cpNextWoConfirmed ? '' : 'disabled'}" aria-label="${cpNextWoConfirmed ? `Start ${nextPwo} after completing current PWO` : 'Select next PWO to continue'}" style="--option-color:var(--green);--option-bg:var(--green-bg);" ${cpNextWoConfirmed ? "onclick=\"cpEndOrder('COMPLETE_START_NEXT')\"" : 'aria-disabled="true"'}>
+            <span class="end-option-icon" aria-hidden="true">${cpIcons.check}</span>
+            <span class="end-option-main">
+              <span class="end-option-title">${cpNextWoConfirmed ? `Start ${nextPwo} after completing current PWO` : 'Select next PWO to continue'}</span>
+            </span>
+            <span class="end-primary-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <button type="button" class="end-option secondary ${cancelDisabled ? 'disabled' : ''}" style="--option-color:var(--red);--option-bg:var(--red-bg);" ${cancelDisabled ? 'disabled aria-disabled="true"' : "onclick=\"cpEndOrder('CANCEL')\""}>
+            <span class="end-option-icon" aria-hidden="true">${cpIcons.end}</span>
+            <span class="end-option-main">
+              <span class="end-option-title">Cancel</span>
+              <span class="end-option-desc">${cancelDisabled ? 'Unavailable after production starts.' : 'Close as cancelled.'}</span>
+            </span>
+          </button>
+
+          <button type="button" class="end-option secondary" style="--option-color:var(--blue);--option-bg:var(--blue-bg);" onclick="cpEndOrder('COMPLETE_ONLY')">
+            <span class="end-option-icon">${cpIcons.lock}</span>
+            <span class="end-option-main">
+              <span class="end-option-title">Complete and Stop</span>
+              <span class="end-option-desc">Keep equipment stopped.</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="end-order-footer">
+        <button type="button" class="end-order-back" onclick="cpCloseEndOrderFlow()">Back</button>
+      </div>
+    </div>
+  `;
+}
+
+function cpOpenEndOrderFlow(){
+  cpEndOrderFlowOpen = true;
+  cpRenderDynamic();
+}
+
+function cpCloseEndOrderFlow(){
+  cpEndOrderFlowOpen = false;
+  cpRenderDynamic();
+}
+
+function cpToggleEndDebugState(){
+  cpEndHasProducedPieces = !cpEndHasProducedPieces;
+  cpRenderDynamic();
+}
+
+function cpConfirmNextWoForEndFlow(){
+  cpNextWoConfirmed = true;
+  cpRenderDynamic();
+}
+
+function cpSetEndOrderLayout(open){
+  const title = document.getElementById('cp-modalTitle');
+  const statusHero = document.getElementById('cp-statusHero');
+  const progressWrap = document.getElementById('cp-progressWrap');
+  const scheduleNote = document.getElementById('cp-scheduleNote');
+  const debugToggle = document.getElementById('cpEndDebugToggle');
+  if(title) title.textContent = open ? 'End PWO' : 'PWO Control Panel';
+  if(statusHero) statusHero.style.display = open ? 'none' : '';
+  if(progressWrap) progressWrap.style.display = (open || ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase)) ? 'none' : '';
+  if(scheduleNote) scheduleNote.style.display = '';
+  if(debugToggle){
+    debugToggle.style.display = open ? 'flex' : 'none';
+    debugToggle.title = `Debug: ${cpEndHasProducedPieces ? 'Produced pieces' : 'No produced pieces'}`;
+  }
 }
 
 const CP_DHR_ITEMS = ['Reconcile good / scrap counts','Sample collection closed','Operator sign-off'];
@@ -765,27 +965,27 @@ function cpDhrComplete(){ return cpDhrChecked.every(Boolean); }
 
 function cpNextWoCard(showSwitcher){
   const n = cpNextWo();
-  return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:var(--border);background:#fff;">
-    <div><div class="font-bold text-[13px]">Next Work Order — ${n.wo} · ${n.sku}</div>
+  return `<div class="rounded-xl border p-3" style="border-color:var(--border);background:#fff;">
+    <div class="font-bold text-[13px]">Next Work Order — ${n.wo} · ${n.sku}</div>
     <div class="text-[12px] flex items-center gap-1.5 flex-wrap mt-0.5" style="color:var(--text-soft);">
       <span>${n.desc} · Planned ${cpFmtNum(n.planned)} pcs</span>
       ${n.sameSku ? '<span>· Same SKU — no changeover required</span>' : `<span class="sku-alert" data-tip="Ramp down + tooling changeover required before Manufacturing Start.">⚠ Different SKU</span>`}
     </div>
-    ${showSwitcher ? `<button class="btn btn-outline mt-2" onclick="cpSwitchNextWo()">Select Different Work Order</button>` : ''}</div>
-    ${!showSwitcher ? '<span class="pill pill-blue">✓ Confirmed</span>' : ''}
+    ${showSwitcher ? `<button class="btn btn-outline mt-2" onclick="cpSwitchNextWo()">Select Different Work Order</button>` : ''}
   </div>`;
 }
 
-function cpChangeoverStepper(activeIndex){
+function cpChangeoverProgressSection(activeIndex){
+  const n = cpNextWo();
   const steps = [
     {label:'Ramp Down', sub: activeIndex>0?'Complete':activeIndex===0?'In Progress':'Pending'},
     {label:'Tooling Changeover', sub: activeIndex>1?'Complete':activeIndex===1?'In Progress':'Pending'},
     {label:'Manufacturing Start', sub: activeIndex>2?'Complete':activeIndex===2?'Ready':'Pending'}
   ];
   const colors = i => i<activeIndex ? 'var(--green)' : (i===activeIndex ? 'var(--orange)' : 'var(--border-strong)');
-  return `<div class="rounded-xl border p-3" style="border-color:var(--border);">
-    <div class="font-bold text-[13px] mb-2">Changeover Progress — ${CP_WO_CURRENT.sku} → ${cpNextWo().sku}</div>
-    <div class="flex items-center">
+  return `<div class="changeover-progress-section">
+    <div class="font-bold text-[13px] mb-2">Progress</div>
+    <div class="flex items-center mb-3">
       ${steps.map((st,i)=>`
         ${i>0?`<div class="step-line ${i-1<activeIndex?'done':''}"></div>`:''}
         <div class="step">
@@ -794,35 +994,24 @@ function cpChangeoverStepper(activeIndex){
           <div class="step-sub">${st.sub}</div>
         </div>`).join('')}
     </div>
-  </div>`;
-}
-
-function cpLineClearanceCard(blocking){
-  if(cpLineClearanceRecorded){
-    return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:var(--green-bd);background:var(--green-bg);">
-      <div><div class="font-bold text-[13px]" style="color:var(--green);">Line Clearance Recorded</div>
-      <div class="text-[12px]" style="color:var(--text-soft);">Confirmed clear for ${cpNextWo().sku}.</div></div>
-      <span class="pill pill-green">✓ Done</span>
-    </div>`;
-  }
-  return `<div class="rounded-xl border p-3 flex items-center justify-between" style="border-color:${blocking?'var(--amber-bd)':'var(--border)'};background:${blocking?'var(--amber-bg)':'#fff'};">
     <div>
-      <div class="font-bold text-[13px]" style="color:${blocking?'var(--amber)':'var(--text)'};">Line Clearance</div>
-      <div class="text-[12px]" style="color:var(--text-soft);">${blocking ? 'Not yet recorded for this changeover. Manufacturing Start will show a warning but is not blocked.' : 'Will be required before this changeover completes.'}</div>
+      <div class="font-bold text-[13px]">Next Work Order — ${n.wo} · ${n.sku}</div>
+      <div class="text-[12px] flex items-center gap-1.5 flex-wrap mt-0.5" style="color:var(--text-soft);">
+        <span>${n.desc} · Planned ${cpFmtNum(n.planned)} pcs</span>
+        ${n.sameSku ? '<span>· Same SKU — no changeover required</span>' : `<span class="sku-alert" data-tip="Ramp down + tooling changeover required before Manufacturing Start.">⚠ Different SKU</span>`}
+      </div>
     </div>
-    <button type="button" style="background:none;border:none;color:var(--blue);font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;" onclick="cpRecordLineClearance()">Confirm</button>
   </div>`;
-}
-function cpRecordLineClearance(){
-  openBadgeAuthModal(()=>{
-    cpLineClearanceRecorded = true;
-    cpRenderDynamic();
-    cpLogActivity('Line clearance recorded', `Equipment — line clearance confirmed for ${cpNextWo().sku}`);
-  });
 }
 
 function cpRenderDynamic(){
   const area = document.getElementById('cp-dynamicArea');
+  cpSetEndOrderLayout(cpEndOrderFlowOpen);
+
+  if(cpEndOrderFlowOpen){
+    area.innerHTML = cpEndOrderFlow();
+    return;
+  }
 
   if(cpPhase === 'IDLE'){
     area.innerHTML = `
@@ -838,7 +1027,7 @@ function cpRenderDynamic(){
         <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
         ${cpActionGrid([
           ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-          ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
+          ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
         ])}
       </div>
       ${cpSlidePanels()}
@@ -858,7 +1047,7 @@ function cpRenderDynamic(){
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
       ${cpActionGrid([
         ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
       ])}
       ${cpSlidePanels()}
     `;
@@ -872,43 +1061,47 @@ function cpRenderDynamic(){
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
       ${cpActionGrid([
         ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
       ])}
       ${cpSlidePanels()}
     `;
   }
 
   else if(cpPhase === 'CHG_RAMPDOWN'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
     area.innerHTML = `
-      ${cpChangeoverStepper(0)}
-      ${cpNextWoCard(false)}
-      ${cpDhrChecklist()}
-      ${cpLineClearanceCard(false)}
-      ${cpActionGrid([['Mark Line Cleared', cpIcons.clear, 'var(--blue-bg)','var(--blue)','cpDoMarkLineCleared()',1, !(cpDhrComplete() && cpLineClearanceRecorded)]])}
+      ${cpChangeoverProgressSection(0)}
+      <div class="changeover-next-footer">
+        <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
+        <button type="button" class="changeover-next-btn" onclick="cpDoMarkLineCleared()">Next ${cpIcons.forward}</button>
+      </div>
     `;
   }
 
   else if(cpPhase === 'CHG_TOOLING'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
     area.innerHTML = `
-      ${cpChangeoverStepper(1)}
-      ${cpNextWoCard(false)}
-      ${cpDhrChecklist()}
-      ${cpLineClearanceCard(false)}
-      ${cpActionGrid([['Tooling Changeover Complete', cpIcons.tool, 'var(--blue-bg)','var(--blue)','cpDoToolingComplete()',1]])}
+      ${cpChangeoverProgressSection(1)}
+      <div class="changeover-next-footer">
+        <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
+        <button type="button" class="changeover-next-btn" onclick="cpDoToolingComplete()">Next ${cpIcons.forward}</button>
+      </div>
     `;
   }
 
   else if(cpPhase === 'CHG_READY'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
     area.innerHTML = `
-      ${cpChangeoverStepper(2)}
-      ${cpNextWoCard(false)}
-      ${cpDhrChecklist()}
-      ${cpLineClearanceCard(true)}
-      ${cpActionGrid([['Manufacturing Start', cpIcons.start, 'var(--green-bg)','var(--green)','cpDoManufacturingStartChangeover()',1]])}
+      ${cpChangeoverProgressSection(2)}
+      <div class="changeover-next-footer">
+        <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
+        <button type="button" class="changeover-next-btn" onclick="cpDoManufacturingStartChangeover()">Start ${cpIcons.forward}</button>
+      </div>
     `;
   }
 
   else if(cpPhase === 'CHG_SAME'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
     area.innerHTML = `
       ${cpDhrChecklist()}
       ${cpNextWoCard(false)}
@@ -926,7 +1119,7 @@ function cpRenderDynamic(){
       <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
       ${cpActionGrid([
         ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
-        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')"]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
       ])}
       ${cpSlidePanels()}
     `;
@@ -936,7 +1129,7 @@ function cpRenderDynamic(){
     area.innerHTML = `
       ${cpActionGrid([
         ['Resume Production', cpIcons.resume, 'var(--green-bg)','var(--green)','cpDoResume()',2],
-        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenSlide('endPanel')",1]
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()",1]
       ])}
       ${cpAutoResumeControl()}
       ${cpSlidePanels(true)}
@@ -977,28 +1170,18 @@ function cpSlidePanels(endOnly){
       <button onclick="cpCancelSlide('reasonPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
     </div>
   </div>
-  ` : ''}
-  <div id="endPanel" class="slide" style="max-height:0;opacity:0;">
-    <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
-      <div class="font-bold text-[13px] mb-1">How did this order end?</div>
-      <div class="text-[11px] mb-3" style="color:var(--text-muted);">Completing the Work Order starts the changeover process.</div>
-      <div class="grid grid-cols-2 gap-2">
-        <div class="reason-btn" onclick="cpEndOrder('COMPLETE')">${cpIcons.check} Completed - target reached</div>
-        <div class="reason-btn" onclick="cpEndOrder('STOPPED')">${cpIcons.end} Stopped early / cancelled</div>
-      </div>
-      <button onclick="cpCancelSlide('endPanel')" class="mt-3 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
-    </div>
-  </div>`;
+  ` : ''}`;
 }
 function cpOpenSlide(id){
-  ['reasonPanel','endPanel'].forEach(x=>{ const e=document.getElementById(x); if(e && x!==id){ e.style.maxHeight='0'; e.style.opacity='0'; e.style.marginTop='-12px'; }});
+  ['reasonPanel'].forEach(x=>{ const e=document.getElementById(x); if(e && x!==id){ e.style.maxHeight='0'; e.style.opacity='0'; e.style.marginTop='-12px'; }});
   const el = document.getElementById(id);
+  if(!el) return;
   el.style.maxHeight = '320px'; el.style.opacity = '1'; el.style.marginTop = '0';
 }
 function cpCancelSlide(id){ const e=document.getElementById(id); e.style.maxHeight='0'; e.style.opacity='0'; e.style.marginTop='-12px'; }
 
 const cpActivity = [
-  {t:'06:00 AM', text:'Order started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`}
+  {t:'06:00 AM', text:'PWO started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`}
 ];
 function cpRenderActivity(){
   document.getElementById('cp-activityList').innerHTML = cpActivity.slice(0,3).map(a => `
@@ -1007,7 +1190,7 @@ function cpRenderActivity(){
         <span class="font-semibold">${a.text}</span>
         <span style="color:var(--text-muted);font-size:10.5px;">${a.t}</span>
       </div>
-      <span class="isa-tag">${a.isa}</span>
+      <span class="isa-tag">${String(a.isa).replace(/WO-/g, 'PWO-')}</span>
     </div>`).join('');
 }
 function cpLogActivity(text, isa){
@@ -1073,7 +1256,7 @@ function cpSyncOuterHeader(){
   if(header && typeof header.setActiveCategory === 'function'){
     header.setActiveCategory(cat.label, cpResolveColor(cat.color), cpResolveColor(cat.bg));
   }
-  const currentUnit = UNITS.find(u=>u.name==='AFA10 Line 1');
+  const currentUnit = UNITS.find(u=>u.name==='AFA10');
   if(currentUnit){
     currentUnit.status = p.label.toUpperCase();
     currentUnit.pillClass = CP_PILL_CLASS[cpPhase] || 'pill-gray';
@@ -1101,6 +1284,7 @@ function cpToggleAutoResume(){
 }
 
 function cpTransition(busyKey, toPhase, delay, after){
+  cpEndOrderFlowOpen = false;
   cpRenderBusy(busyKey);
   document.getElementById('cp-dynamicArea').querySelectorAll('.action-btn').forEach(b=>b.classList.add('disabled'));
   setTimeout(()=>{
@@ -1140,6 +1324,12 @@ function cpDoMarkLineCleared(){
     cpLogActivity('Line cleared — ramp down complete', `Equipment: CHANGEOVER (Ramp Down) → CHANGEOVER (Tooling Changeover)`);
   });
 }
+function cpDoCancelChangeover(){
+  const fromStep = cpPhase === 'CHG_TOOLING' ? 'Tooling Changeover' : cpPhase === 'CHG_READY' ? 'Ready' : 'Ramp Down';
+  cpTransition('CANCELLING','RUNNING_CONFIRMED',500, ()=>{
+    cpLogActivity('Changeover cancelled', `Equipment: CHANGEOVER (${fromStep}) → RUNNING`);
+  });
+}
 function cpDoToolingComplete(){
   cpTransition('FINALIZING','CHG_READY',550, ()=>{
     cpLogActivity(`Tooling changeover complete — recipe sent to PLC for ${cpNextWo().wo}`, `Equipment: CHANGEOVER (Tooling Changeover) → CHANGEOVER (Ready)  ·  to_sku=${cpNextWo().sku}`);
@@ -1147,23 +1337,13 @@ function cpDoToolingComplete(){
 }
 function cpDoManufacturingStartChangeover(){
   const wasSame = cpPhase === 'CHG_SAME';
-  const warn = !wasSame && !cpLineClearanceRecorded;
-  const proceed = ()=>{
-    cpTransition('STARTING','RAMP_UP',550, ()=>{
-      const co = wasSame
-        ? `Equipment: CHANGEOVER (Batch Closeout) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — no ramp down / tooling required (same SKU)`
-        : `Equipment: CHANGEOVER (Ready) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — changeover record closed (from_sku=${CP_WO_CURRENT.sku}, to_sku=${cpNextWo().sku})${!cpLineClearanceRecorded ? ' · Line clearance NOT recorded' : ''}`;
-      cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, co);
-      cpLineClearanceRecorded = false;
-    });
-  };
-  if(warn){
-    if(confirm('Line Clearance has not been recorded for this changeover.\\n\\nStart production anyway?')){
-      proceed();
-    }
-  } else {
-    proceed();
-  }
+  cpTransition('STARTING','RAMP_UP',550, ()=>{
+    const co = wasSame
+      ? `Equipment: CHANGEOVER (Batch Closeout) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — no ramp down / tooling required (same SKU)`
+      : `Equipment: CHANGEOVER (Ready) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — changeover record closed (from_sku=${CP_WO_CURRENT.sku}, to_sku=${cpNextWo().sku})`;
+    cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, co);
+    cpLineClearanceRecorded = false;
+  });
 }
 
 function cpConfirmPause(reason){
@@ -1189,19 +1369,23 @@ function cpDoAbort(){
   });
 }
 function cpEndOrder(outcome){
-  cpCancelSlide('endPanel');
-  if(outcome === 'COMPLETE'){
+  if(outcome === 'CANCEL' && cpEndHasProducedPieces) return;
+  cpEndOrderFlowOpen = false;
+  if(outcome === 'COMPLETE_START_NEXT'){
     const sameSku = cpNextWo().sameSku;
     cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN',600, ()=>{
-      cpLogActivity(`Order completed — ${CP_WO_CURRENT.wo}`, `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'}`);
+      cpLogActivity(`Completed — starting next confirmed WO`, `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Next: ${cpNextWo().wo}  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'}`);
     });
-  } else {
+  } else if(outcome === 'CANCEL'){
     cpTransition('STOPPING','STOPPED',600, ()=>{
-      cpLogActivity('Order stopped early', `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → STOPPED`);
+      cpLogActivity('Work Order cancelled', `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → CANCELLED  ·  Next WO not started`);
+    });
+  } else if(outcome === 'COMPLETE_ONLY'){
+    cpTransition('STOPPING','COMPLETE',600, ()=>{
+      cpLogActivity('Work Order completed', `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment remains stopped · Next WO not started`);
     });
   }
 }
-
 function cpJumpTo(p){
   cpPauseReturnPhase = 'RUNNING';
   cpPhase = p;
@@ -1210,9 +1394,9 @@ function cpJumpTo(p){
   cpLogActivity('— jumped to state for demo —', `(manual demo shortcut) → ${p}`);
 }
 function cpResetDemo(){
-  cpPhase = 'RUNNING'; cpNextWoIndex = 0; cpPauseReason = null; cpLineClearanceRecorded = false; cpAutoResumeEnabled = true; cpLogCollapsed = true; cpDhrChecked = [false,false,false];
+  cpPhase = 'RUNNING'; cpNextWoIndex = 0; cpPauseReason = null; cpLineClearanceRecorded = false; cpAutoResumeEnabled = true; cpLogCollapsed = true; cpEndOrderFlowOpen = false; cpNextWoConfirmed = true; cpEndHasProducedPieces = true; cpDhrChecked = [false,false,false];
   cpActivity.length = 0;
-  cpActivity.push({t:'06:00 AM', text:'Order started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`});
+  cpActivity.push({t:'06:00 AM', text:'PWO started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`});
   cpRender(); cpRenderActivity(); cpSyncOuterHeader();
 }
 
@@ -1324,18 +1508,18 @@ window.addEventListener('keydown', e => { if(e.key === 'Escape') closeControlPan
    DATA
 ===================================================================== */
 const UNITS = [
-  { name:'AFA10 Line 1', status:'PRODUCTION', pillClass:'pill-green', eventSoon:true, wo:'WO-4503288', sku:'80-APX-50000', pps:16, planned:1500000, scrap:1.53, actual:161300, eta:'05/23/2026 - Shift B', nextEvent:'06/24/2026 14:30 - Planned Maintenance' },
-  { name:'AFA10 Line 2', status:'MACHINE FAILURES - MECHANICAL', pillClass:'pill-red', wo:'WO-4503294', sku:'80-APX-60000', pps:8, planned:980000, scrap:2.41, actual:118700, eta:'05/23/2026 - Shift C', nextEvent:'06/24/2026 16:00 - Breakdown' },
-  { name:'AFA11 Line 1', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503301', sku:'80-APX-60125', pps:14, planned:1120000, scrap:0.92, actual:254900, eta:'05/24/2026 - Shift A', nextEvent:'07/08/2026 09:00 - CILT Routine' },
-  { name:'AFA111 Line 3', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503308', sku:'80-APX-50210', pps:18, planned:1340000, scrap:1.18, actual:327600, eta:'05/24/2026 - Shift B', nextEvent:'07/10/2026 11:30 - Changeover' },
-  { name:'AFA13 Line 1', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503316', sku:'80-APX-60100', pps:14, planned:980000, scrap:1.12, actual:184100, eta:'05/25/2026 - Shift A', nextEvent:'07/12/2026 08:00 - Consumable Replacement' },
-  { name:'AFA14 Line 2', status:'CHANGEOVER', pillClass:'pill-amber', wo:'WO-4503322', sku:'80-APX-50340', pps:0, planned:720000, scrap:0.74, actual:0, eta:'05/25/2026 - Shift B', nextEvent:'07/15/2026 13:00 - Start And Stop' },
-  { name:'PKG20 Cell A', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503335', sku:'80-BLD-22010', pps:22, planned:430000, scrap:0.42, actual:52900, eta:'05/26/2026 - Shift A', nextEvent:'07/16/2026 10:00 - Ramp-up' },
-  { name:'PKG20 Cell B', status:'WAITING MATERIAL', pillClass:'pill-amber', wo:'WO-4503341', sku:'80-BLD-22011', pps:3, planned:360000, scrap:0.58, actual:18800, eta:'05/26/2026 - Shift C', nextEvent:'07/18/2026 15:30 - Operational Losses' },
-  { name:'AFA15 Line 1', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503349', sku:'80-APX-50450', pps:18, planned:1250000, scrap:1.36, actual:203000, eta:'05/27/2026 - Shift A', nextEvent:'07/21/2026 07:30 - Planned Maintenance' },
-  { name:'AFA16 Line 2', status:'QUALITY HOLD', pillClass:'pill-red', wo:'WO-4503357', sku:'80-APX-60200', pps:0, planned:640000, scrap:3.22, actual:12100, eta:'05/27/2026 - Shift B', nextEvent:'07/23/2026 12:00 - Operational Losses' },
-  { name:'PKG21 Cell A', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503364', sku:'80-BLD-22012', pps:20, planned:510000, scrap:0.66, actual:70400, eta:'05/28/2026 - Shift A', nextEvent:'07/25/2026 09:30 - CILT Routine' },
-  { name:'PKG21 Cell B', status:'SCHEDULED STOP', pillClass:'pill-amber', wo:'WO-4503372', sku:'80-BLD-22013', pps:0, planned:480000, scrap:0.71, actual:9900, eta:'05/28/2026 - Shift C', nextEvent:'07/29/2026 14:00 - Legal Holidays' }
+  { name:'AFA10', status:'PRODUCTION', pillClass:'pill-green', eventSoon:true, wo:'WO-4503288', sku:'80-APX-50000', pps:16, planned:1500000, scrap:1.53, actual:161300, eta:'05/23/2026 - Shift B', nextEvent:'06/24/2026 14:30 - Planned Maintenance' },
+  { name:'AFA11', status:'MACHINE FAILURES - MECHANICAL', pillClass:'pill-red', wo:'WO-4503294', sku:'80-APX-60000', pps:8, planned:980000, scrap:2.41, actual:118700, eta:'05/23/2026 - Shift C', nextEvent:'06/24/2026 16:00 - Breakdown' },
+  { name:'AFA12', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503301', sku:'80-APX-60125', pps:14, planned:1120000, scrap:0.92, actual:254900, eta:'05/24/2026 - Shift A', nextEvent:'07/08/2026 09:00 - CILT Routine' },
+  { name:'AFA13', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503308', sku:'80-APX-50210', pps:18, planned:1340000, scrap:1.18, actual:327600, eta:'05/24/2026 - Shift B', nextEvent:'07/10/2026 11:30 - Changeover' },
+  { name:'AFA14', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503316', sku:'80-APX-60100', pps:14, planned:980000, scrap:1.12, actual:184100, eta:'05/25/2026 - Shift A', nextEvent:'07/12/2026 08:00 - Consumable Replacement' },
+  { name:'AFA15', status:'CHANGEOVER', pillClass:'pill-amber', wo:'WO-4503322', sku:'80-APX-50340', pps:0, planned:720000, scrap:0.74, actual:0, eta:'05/25/2026 - Shift B', nextEvent:'07/15/2026 13:00 - Start And Stop' },
+  { name:'PKG20', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503335', sku:'80-BLD-22010', pps:22, planned:430000, scrap:0.42, actual:52900, eta:'05/26/2026 - Shift A', nextEvent:'07/16/2026 10:00 - Ramp-up' },
+  { name:'PKG21', status:'WAITING MATERIAL', pillClass:'pill-amber', wo:'WO-4503341', sku:'80-BLD-22011', pps:3, planned:360000, scrap:0.58, actual:18800, eta:'05/26/2026 - Shift C', nextEvent:'07/18/2026 15:30 - Operational Losses' },
+  { name:'AFA16', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503349', sku:'80-APX-50450', pps:18, planned:1250000, scrap:1.36, actual:203000, eta:'05/27/2026 - Shift A', nextEvent:'07/21/2026 07:30 - Planned Maintenance' },
+  { name:'AFA17', status:'QUALITY HOLD', pillClass:'pill-red', wo:'WO-4503357', sku:'80-APX-60200', pps:0, planned:640000, scrap:3.22, actual:12100, eta:'05/27/2026 - Shift B', nextEvent:'07/23/2026 12:00 - Operational Losses' },
+  { name:'PKG22', status:'PRODUCTION', pillClass:'pill-green', wo:'WO-4503364', sku:'80-BLD-22012', pps:20, planned:510000, scrap:0.66, actual:70400, eta:'05/28/2026 - Shift A', nextEvent:'07/25/2026 09:30 - CILT Routine' },
+  { name:'PKG23', status:'SCHEDULED STOP', pillClass:'pill-amber', wo:'WO-4503372', sku:'80-BLD-22013', pps:0, planned:480000, scrap:0.71, actual:9900, eta:'05/28/2026 - Shift C', nextEvent:'07/29/2026 14:00 - Legal Holidays' }
 ];
 
 const MONTHS = [
@@ -1360,21 +1544,21 @@ const MONTH_START_DAYS = MONTHS.reduce((starts, month, index) => {
 const UNIT_ROWS = UNITS.slice(0, 8).map(u => u.name);
 
 const WORK_ORDERS = [
-  { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'started', equipment:'AFA10-Line-1', custom:false, planned:100000, canAddEquipment:true },
+  { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'started', equipment:'AFA10', custom:false, planned:100000, canAddEquipment:true },
   { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', batch:'1851', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:120000, canAddEquipment:false },
   { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', batch:'1852', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:90000, canAddEquipment:false },
   { wo:'WO-4503305', sku:'80-BLD-22010', desc:'Blister Pack Assembly', batch:'2210', material:'PETG Blister Sheet', workCenter:'PKG20', status:'created', equipment:null, custom:false, planned:45000, canAddEquipment:false },
-  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack - Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG20', status:'auto', equipment:'PKG20-Cell-A', custom:false, planned:38000, canAddEquipment:false },
+  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack - Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG20', status:'auto', equipment:'PKG20', custom:false, planned:38000, canAddEquipment:false },
   { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study - tip retention', batch:'-', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:true, planned:500, canAddEquipment:false },
   { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:60000, canAddEquipment:false }
 ];
 
 const RESOURCES = [
-  { id:'AFA10-Line-1', name:'AFA10 - Line 1', workCenter:'AFA10', state:'running', currentWo:'WO-4503287' },
-  { id:'AFA10-Line-2', name:'AFA10 - Line 2', workCenter:'AFA10', state:'available', currentWo:null },
-  { id:'AFA10-Line-3', name:'AFA10 - Line 3', workCenter:'AFA10', state:'down', currentWo:null },
-  { id:'PKG20-Cell-A', name:'PKG20 - Cell A', workCenter:'PKG20', state:'running', currentWo:'WO-4503312' },
-  { id:'PKG20-Cell-B', name:'PKG20 - Cell B', workCenter:'PKG20', state:'available', currentWo:null },
+  { id:'AFA10', name:'AFA10', workCenter:'AFA10', state:'running', currentWo:'WO-4503287' },
+  { id:'AFA11', name:'AFA11', workCenter:'AFA11', state:'available', currentWo:null },
+  { id:'AFA12', name:'AFA12', workCenter:'AFA12', state:'down', currentWo:null },
+  { id:'PKG20', name:'PKG20', workCenter:'PKG20', state:'running', currentWo:'WO-4503312' },
+  { id:'PKG21', name:'PKG21', workCenter:'PKG21', state:'available', currentWo:null },
   { id:'AFA10-Bench-1', name:'AFA10 - Eng. Bench 1', workCenter:'AFA10', state:'available', currentWo:null }
 ];
 
@@ -1387,6 +1571,7 @@ let resSearch = '';
 let lastAssigned = null;
 let unitCarouselPage = 0;
 const UNIT_CARDS_PER_PAGE = 4;
+const UNIT_CARD_MIN_WIDTH = 255;
 let timelineDayWidth = 52;
 
 function dayToPct(day){
@@ -1503,12 +1688,17 @@ function buildTimelineSegments(rowIndex){
 const SEGMENTS = Object.fromEntries(UNIT_ROWS.map((name, index) => [name, buildTimelineSegments(index)]));
 
 function renderUnitCards(){
-  const totalPages = Math.ceil(UNITS.length / UNIT_CARDS_PER_PAGE);
+  const cardsEl = document.getElementById('unitCards');
+  const gap = 20;
+  const availableWidth = cardsEl?.clientWidth || 0;
+  const cardsPerPage = availableWidth && availableWidth < (UNIT_CARD_MIN_WIDTH * UNIT_CARDS_PER_PAGE + gap * (UNIT_CARDS_PER_PAGE - 1)) ? 3 : UNIT_CARDS_PER_PAGE;
+  const totalPages = Math.ceil(UNITS.length / cardsPerPage);
   unitCarouselPage = Math.min(Math.max(unitCarouselPage, 0), totalPages - 1);
-  const start = unitCarouselPage * UNIT_CARDS_PER_PAGE;
-  const pageUnits = UNITS.slice(start, start + UNIT_CARDS_PER_PAGE);
+  const start = unitCarouselPage * cardsPerPage;
+  const pageUnits = UNITS.slice(start, start + cardsPerPage);
+  cardsEl.style.gridTemplateColumns = `repeat(${cardsPerPage}, minmax(${UNIT_CARD_MIN_WIDTH}px, 1fr))`;
 
-  document.getElementById('unitCards').innerHTML = pageUnits.map(u => `
+  cardsEl.innerHTML = pageUnits.map(u => `
     <div class="unit-card" onclick="openControlPanel()">
       <div class="flex items-center justify-between mb-2">
         <span class="font-extrabold text-[14px]">${u.name}</span>
@@ -1535,7 +1725,7 @@ function renderUnitCards(){
     </div>
   `).join('');
 
-  document.getElementById('unitCarouselRange').textContent = `Showing ${start + 1}-${Math.min(start + UNIT_CARDS_PER_PAGE, UNITS.length)} of ${UNITS.length} resources`;
+  document.getElementById('unitCarouselRange').textContent = `Showing ${start + 1}-${Math.min(start + cardsPerPage, UNITS.length)} of ${UNITS.length} resources`;
   document.getElementById('unitCarouselPage').textContent = `${unitCarouselPage + 1} / ${totalPages}`;
   document.getElementById('unitCarouselPrev').disabled = unitCarouselPage === 0;
   document.getElementById('unitCarouselNext').disabled = totalPages <= 1;
@@ -1545,7 +1735,11 @@ function renderUnitCards(){
 }
 
 function moveUnitCarousel(direction){
-  const totalPages = Math.ceil(UNITS.length / UNIT_CARDS_PER_PAGE);
+  const cardsEl = document.getElementById('unitCards');
+  const gap = 20;
+  const availableWidth = cardsEl?.clientWidth || 0;
+  const cardsPerPage = availableWidth && availableWidth < (UNIT_CARD_MIN_WIDTH * UNIT_CARDS_PER_PAGE + gap * (UNIT_CARDS_PER_PAGE - 1)) ? 3 : UNIT_CARDS_PER_PAGE;
+  const totalPages = Math.ceil(UNITS.length / cardsPerPage);
   if(direction > 0 && unitCarouselPage === totalPages - 1){
     unitCarouselPage = 0;
   }else{
@@ -2148,6 +2342,10 @@ renderGanttHead();
 renderGanttBody();
 renderAssignmentAll();
 consumePendingHeaderAction();
+window.addEventListener('resize', () => {
+  unitCarouselPage = 0;
+  renderUnitCards();
+});
 </script>
 </body>
 </html>
