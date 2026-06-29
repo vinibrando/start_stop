@@ -31,7 +31,7 @@
     --ix-font:'Roboto','Segoe UI',system-ui,sans-serif;
   }
   *{font-family:var(--ix-font);}
-  html,body{background:#fff;color:var(--text);}
+  html,body{background:#f6f9fe;color:var(--text);overflow:hidden;}
   ::-webkit-scrollbar{width:6px;height:6px;}
   ::-webkit-scrollbar-thumb{background:#c3cdda;border-radius:4px;}
 
@@ -48,7 +48,50 @@
   .topbar-app-icon{width:52px;height:64px;margin-left:0;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
   .topbar-action-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;opacity:.95;}
   .topbar-avatar{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#d6b08b,#6f8a66);border:2px solid rgba(255,255,255,.18);}
-  .main-card-shell{margin:0 40px 40px;background:var(--main-card);border:1px solid var(--border);border-radius:12px;overflow:visible;display:flex;flex-direction:column;padding:16px;}
+  .page-titlebar{margin:0 40px;padding:16px 0 12px;display:flex;align-items:stretch;justify-content:space-between;gap:18px;min-width:0;}
+  .page-titlegroup{display:flex;align-items:stretch;gap:86px;min-width:0;flex:1;}
+  .page-title-copy{display:flex;flex-direction:column;justify-content:center;flex:0 0 auto;}
+  .page-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.6;letter-spacing:.15px;color:var(--navy);}
+  .page-breadcrumb{display:flex;align-items:center;gap:4px;margin-top:1px;color:var(--text-muted);font-size:13px;line-height:18px;letter-spacing:.16px;}
+  .page-breadcrumb svg{width:16px;height:16px;color:var(--accent);flex-shrink:0;}
+  .breadcrumb-line-list{position:relative;display:inline-flex;align-items:center;color:var(--text-muted);cursor:default;}
+  .breadcrumb-line-list:after{content:attr(data-full);position:absolute;left:0;top:22px;min-width:max-content;max-width:420px;padding:5px 8px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text-muted);font-size:12px;line-height:16px;box-shadow:0 10px 24px rgba(15,23,42,.14);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .12s ease,transform .12s ease,visibility .12s ease;z-index:80;white-space:nowrap;pointer-events:none;}
+  .breadcrumb-line-list:hover:after,.breadcrumb-line-list:focus-visible:after{opacity:1;visibility:visible;transform:translateY(0);}
+  .page-flow{display:flex;align-items:stretch;gap:12px;min-width:0;flex:1;}
+  .page-flow-block{display:flex;flex-direction:column;justify-content:center;gap:2px;flex:0 0 auto;min-width:0;}
+  .page-flow-product{max-width:230px;}
+  .page-flow-title{font-size:14px;font-weight:400;color:var(--text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .page-flow-copy{font-size:12px;color:var(--text-muted);line-height:1.25;white-space:nowrap;}
+  .page-flow-divider{width:1px;height:46px;align-self:center;background:var(--border);}
+  .page-active-category{flex:1;border-radius:8px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;min-width:160px;position:relative;overflow:hidden;background:var(--cat-bg,var(--green-bg));transition:background .15s ease;}
+  .page-active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat-accent,var(--green));transition:background .15s ease;}
+  .page-active-category-label{font-size:20px;font-weight:400;line-height:1.2;color:var(--cat-accent,var(--green));transition:color .15s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .page-active-category-sub{font-size:10px;color:var(--text-soft);line-height:1.2;}
+  .page-status-control{display:flex;flex-direction:column;justify-content:center;gap:6px;flex:0 0 auto;}
+  .page-status-buttons{display:flex;align-items:center;gap:8px;}
+  .page-header-action{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;background:#fff;color:var(--accent);box-shadow:none;outline:0;}
+  .page-header-action.primary{background:var(--accent);color:#fff;}
+  .page-header-action.outline{border-color:rgba(37,99,235,.22);}
+  .page-header-action:hover{filter:brightness(.96);background:var(--blue-bg);}
+  .page-header-action.primary:hover{background:var(--accent);filter:brightness(.94);}
+  .page-button-divider{width:1px;height:32px;background:var(--border);}
+  .main-card-shell{margin:0 40px 40px;background:rgba(255,255,255,.64);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:56px minmax(0,1fr);padding:0;height:calc(100vh - 158px);position:relative;}
+  .app-side-nav{position:relative;z-index:25;width:56px;height:100%;background:linear-gradient(90deg,rgba(31,99,234,.08),rgba(31,99,234,.08)),#fff;border-right:1px solid var(--border);padding:8px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;overflow:hidden;transition:width .18s ease,box-shadow .18s ease;}
+  .app-side-nav:hover,.app-side-nav:focus-within{width:272px;box-shadow:12px 0 28px rgba(15,23,42,.12);}
+  .app-side-nav.is-collapsed{width:56px;box-shadow:none;}
+  .app-side-nav.is-collapsed .app-side-label{opacity:0;}
+  .app-side-btn{width:40px;height:40px;border:0;border-radius:7px;background:transparent;color:var(--text);display:flex;align-items:center;justify-content:flex-start;gap:12px;cursor:pointer;transition:background .15s,color .15s;width:100%;padding:0 8px;white-space:nowrap;position:relative;}
+  .app-side-btn:before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:999px;background:transparent;}
+  .app-side-btn:hover{background:rgba(31,99,234,.08);color:var(--text);}
+  .app-side-btn:hover:before{background:var(--accent);}
+  .app-side-btn.active{background:rgba(31,99,234,.12);color:var(--accent);}
+  .app-side-btn.active:before{background:transparent;}
+  .app-side-btn.active:hover:before{background:var(--accent);}
+  .app-side-btn svg{width:24px;height:24px;fill:currentColor;flex:0 0 24px;}
+  .app-side-label{font-family:Roboto,var(--ix-font);font-size:16px;font-weight:400;color:currentColor;opacity:0;transition:opacity .12s ease;}
+  .app-side-nav:hover .app-side-label,.app-side-nav:focus-within .app-side-label{opacity:1;}
+  .app-side-nav.is-collapsed:hover .app-side-label,.app-side-nav.is-collapsed:focus-within .app-side-label{opacity:0;}
+  .app-content{min-width:0;min-height:0;height:100%;padding:16px;background:var(--main-card);overflow:hidden;}
   .hdr-action-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;}
   .hdr-action-btn.primary{background:var(--accent);color:#fff;}
   .hdr-action-btn.primary:hover{filter:brightness(.94);}
@@ -76,7 +119,7 @@
   .event-info-icon{width:14px;height:14px;color:var(--amber);flex:0 0 14px;display:block;}
   .next-event-alert{height:31px;line-height:1.25;overflow:hidden;}
   .next-event-alert span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .work-orders-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 18px 12px;margin-bottom:20px;min-height:332px;}
+  .work-orders-card{background:transparent;border:0;border-radius:0;padding:0;margin-bottom:20px;min-height:0;}
   .carousel-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;}
   .carousel-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
   .carousel-subtitle{font-size:11px;color:var(--text-muted);}
@@ -92,33 +135,72 @@
 
   .view-panel{display:none;}
   .view-panel.active{display:block;}
+  #workOrderAssignmentView.active{height:100%;min-height:0;display:flex;flex-direction:column;padding-top:8px!important;}
+  #productionOverviewView{padding-top:8px!important;}
 
-  .wo-assignment-shell{height:100%;display:flex;flex-direction:column;gap:20px;}
-  .assignment-workbench{display:grid;grid-template-columns:minmax(310px,1fr) minmax(310px,1fr) minmax(300px,.86fr);gap:20px;min-height:0;flex:1;}
-  .assignment-column{display:flex;flex-direction:column;min-height:0;background:var(--main-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-  .assignment-column.resources{background:var(--gray-bg);}
-  .assignment-column.review{background:var(--main-card);}
-  .assignment-column-head{padding:12px 14px 10px;background:var(--main-card);}
+  .wo-assignment-shell{height:100%;min-height:0;display:flex;flex-direction:column;border:0;border-radius:0;background:transparent;overflow:visible;flex:1;}
+  .assignment-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px;flex-shrink:0;}
+  .assignment-page-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
+  .assignment-page-subtitle{font-size:11px;color:var(--text-muted);margin-top:2px;}
+  .assignment-workbench{display:grid;grid-template-columns:minmax(300px,1fr) minmax(300px,1fr) 12px minmax(300px,.86fr);gap:0;min-height:0;height:100%;flex:1;overflow:visible;}
+  .assignment-column{display:flex;flex-direction:column;min-height:0;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .assignment-column:first-child{border-radius:12px 0 0 12px;border-right:0;}
+  .assignment-column.resources{border-radius:0 12px 12px 0;}
+  .assignment-column.resources{background:#fff;}
+  .assignment-column.review{grid-column:4;}
+  .assignment-column.review{background:#f8fafc;box-shadow:0 8px 18px rgba(10,16,32,.06);}
+  .assignment-column.review .assignment-column-head{background:#f8fafc;border-radius:12px 12px 0 0;}
+  .assignment-column-head{padding:10px 14px 8px;background:#fff;border-bottom:1px solid var(--border);}
   .assignment-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .step-kicker{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:2px;}
   .card-title{font-size:15px;font-weight:800;color:var(--text);}
   .hamburger-wrap{position:relative;}
-  .hamburger-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border-strong);background:var(--main-card);color:var(--text-soft);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;}
+  .hamburger-btn{width:32px;height:32px;border-radius:8px;border:1px solid rgba(37,99,235,.4);background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;line-height:1;cursor:pointer;}
   .hamburger-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--blue-bg);}
   .hamburger-menu{position:absolute;right:0;top:38px;width:142px;background:var(--main-card);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px -10px rgba(10,16,32,.35);padding:6px;z-index:20;display:none;}
   .hamburger-menu.open{display:block;}
   .hamburger-item{width:100%;border:0;background:var(--main-card);border-radius:7px;padding:9px 10px;text-align:left;font-size:12px;font-weight:700;color:var(--text-soft);cursor:pointer;}
   .hamburger-item:hover{background:var(--blue-bg);color:var(--accent);}
-  .assignment-list{overflow-y:auto;flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+  .assignment-filter-btn{width:32px;height:32px;border:1px solid var(--accent);border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:filter .15s,background .15s,border-color .15s;}
+  .assignment-filter-btn:hover{filter:brightness(.94);}
+  .assignment-filter-btn.active{background:#174fc7;border-color:#174fc7;color:#fff;}
+  .assignment-filter-btn svg{width:17px;height:17px;stroke:currentColor;}
+  .assignment-search-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .assignment-search-row .relative{flex:1;min-width:0;}
+  .assignment-filter-wrap{position:relative;flex-shrink:0;}
+  .assignment-filter-panel{position:absolute;right:0;top:38px;width:306px;max-height:520px;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 44px rgba(15,23,42,.18);padding:12px;z-index:60;display:none;}
+  .assignment-filter-panel.open{display:block;}
+  .filter-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .filter-panel-title{font-size:13px;font-weight:800;color:var(--text);}
+  .filter-panel-close{border:0;background:transparent;color:var(--accent);font-size:17px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
+  .filter-logic{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+  .filter-logic button{height:28px;border:1px solid var(--border-strong);border-radius:8px;background:#fff;color:var(--text-soft);font-size:11px;font-weight:800;cursor:pointer;}
+  .filter-logic button.active{background:var(--blue-bg);border-color:var(--accent);color:var(--accent);}
+  .filter-fieldset{border-top:1px solid var(--border);padding-top:9px;margin-top:9px;}
+  .filter-fieldset:first-of-type{border-top:0;padding-top:0;margin-top:0;}
+  .filter-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:6px;}
+  .filter-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;}
+  .filter-check{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-soft);line-height:1.2;}
+  .filter-check input{accent-color:var(--accent);}
+  .filter-input-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .filter-input{height:30px;border:1px solid var(--border-strong);border-radius:8px;padding:0 8px;font-size:12px;color:var(--text);background:#fff;min-width:0;}
+  .filter-panel-actions{display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px;}
+  .filter-panel-actions button{height:30px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;padding:0 11px;}
+  .filter-clear{border:0;background:transparent;color:var(--accent);}
+  .filter-apply{border:1px solid var(--accent);background:var(--accent);color:#fff;}
+  .assignment-list{overflow-y:auto;flex:1;padding:10px 14px;display:flex;flex-direction:column;gap:8px;min-height:0;}
+  .assignment-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;border-top:1px solid var(--border);background:#fff;}
+  .assignment-summary{font-size:12px;color:var(--text-muted);}
+  .assignment-footer-actions{display:flex;align-items:center;gap:8px;}
   .wo-card{border:1px solid var(--border);border-radius:12px;padding:11px 12px;cursor:pointer;transition:.12s;background:var(--main-card);}
   .wo-card:hover{border-color:var(--accent);}
   .wo-card.selected{border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;}
-  .wo-card.suggested,.res-card.suggested{border-color:var(--green);box-shadow:0 0 0 1px rgba(22,163,74,.25) inset;}
+  .wo-card.suggested{border-color:var(--green);box-shadow:0 0 0 1px rgba(22,163,74,.25) inset;}
   .wo-card.eligible{border-color:var(--green-bd);}
   .wo-card.dimmed{opacity:.4;}
   .res-card{border:1px solid var(--border);border-radius:12px;padding:11px 12px;cursor:pointer;transition:.12s;background:var(--main-card);}
   .res-card:hover{border-color:var(--accent);}
-  .res-card.eligible{border-color:var(--green-bd);}
+  .res-card.eligible{border-color:var(--border);}
   .res-card.dimmed{opacity:.4;pointer-events:none;}
   .res-card.locked{border-color:var(--border-strong);background:var(--gray-bg);}
   .filter-chip{font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border-strong);color:var(--text-soft);cursor:pointer;white-space:nowrap;transition:.12s;}
@@ -127,24 +209,40 @@
   .search-input{font-size:12.5px;border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px 8px 32px;width:100%;background:var(--main-card);color:var(--text);}
   .search-input:focus{outline:none;border-color:var(--accent);}
   .col-header{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);}
-  .review-body{padding:0 14px 14px;margin-top:-10px;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden;flex:1;}
-  .review-content{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;flex:1;}
+  .review-body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden;flex:1;}
+  .review-content{display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;flex:1;padding-right:2px;}
   .review-empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.45;padding:28px;}
-  .review-section{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--main-card);}
-  .review-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:8px;}
-  .review-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+  .review-section{border:1px solid var(--border);border-radius:12px;padding:9px;background:var(--main-card);}
+  .review-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:6px;}
+  .review-grid{display:grid;grid-template-columns:1fr;gap:6px;}
   .review-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;font-size:12px;}
   .review-row span:first-child{color:var(--text-muted);}
   .review-row b{color:var(--text);text-align:right;}
-  .validation-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-soft);padding:5px 0;}
+  .review-grid.compact{grid-template-columns:1fr 1fr;column-gap:12px;row-gap:5px;}
+  .review-resource-line{display:grid;grid-template-columns:minmax(48px,.55fr) minmax(42px,.45fr) minmax(82px,.7fr) minmax(88px,1fr) minmax(88px,1fr);align-items:center;gap:8px;font-size:12px;line-height:1.25;}
+  .review-resource-line span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .review-resource-name{font-weight:700;color:var(--text);}
+  .review-resource-muted{color:var(--text-muted);}
+  .review-resource-strong{font-weight:700;color:var(--text);text-align:right;}
+  .review-combined-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+  .review-combined-title{font-size:13px;font-weight:800;color:var(--text);line-height:1.2;}
+  .review-combined-sub{font-size:11px;color:var(--text-muted);line-height:1.25;margin-top:2px;}
+  .validation-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-soft);padding:4px 0;}
   .validation-dot{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:800;margin-top:1px;}
   .validation-row.ok .validation-dot{background:var(--green-bg);color:var(--green);}
   .validation-row.bad .validation-dot{background:var(--red-bg);color:var(--red);}
+  .validation-row.warn .validation-dot{background:var(--amber-bg);color:var(--amber);}
+  .validation-row.block .validation-dot{background:var(--red-bg);color:var(--red);}
+  .validation-group-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-top:7px;margin-bottom:2px;}
+  .validation-group-label.pass{color:var(--green);}
+  .validation-group-label.warning{color:var(--amber);}
+  .validation-group-label.blocker{color:var(--red);}
   .review-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:12px;flex-shrink:0;}
-  .review-primary-btn{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:8px 22px;font-size:15px;font-weight:700;line-height:1.2;cursor:pointer;transition:filter .15s, transform .1s;}
-  .review-primary-btn:hover{filter:brightness(.94);}
+  .review-primary-btn{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:8px 22px;font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;transition:filter .15s, transform .1s;}
+  .review-primary-btn:disabled{opacity:.45;cursor:not-allowed;filter:none;}
+  .review-primary-btn:hover:not(:disabled){filter:brightness(.94);}
   .review-primary-btn:active{transform:scale(.98);}
-  .review-clear-btn{background:transparent;border:0;color:var(--accent);border-radius:12px;padding:8px 11px;font-size:15px;font-weight:700;line-height:1.2;cursor:pointer;transition:background .15s;}
+  .review-clear-btn{background:transparent;border:0;color:var(--accent);border-radius:12px;padding:8px 11px;font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;transition:background .15s;}
   .review-clear-btn:hover{background:var(--blue-bg);}
   .success-panel{border:1px solid var(--green-bd);background:var(--green-bg);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;}
   .success-title{font-size:13px;font-weight:800;color:var(--green);}
@@ -159,7 +257,7 @@
   .select-box:focus{outline:none;border-color:var(--accent);}
 
   .legend-swatch{width:18px;height:8px;border-radius:999px;display:inline-block;}
-  .timeline-legend-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 10px 2px;}
+  .timeline-legend-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:24px 0 10px 2px;}
   .timeline-legend{display:flex;align-items:center;gap:18px;font-family:Roboto,var(--ix-font);font-size:12px;color:rgba(0,0,0,.6);}
   .timeline-legend-item{display:flex;align-items:center;gap:6px;white-space:nowrap;}
   .timeline-tools{display:flex;align-items:center;gap:6px;flex-shrink:0;}
@@ -216,7 +314,7 @@
   .screen-menu-label{font-size:13px;font-weight:800;line-height:1.15;}
   .screen-menu-sub{font-size:11px;color:rgba(0,0,0,.55);margin-top:2px;}
 </style>
-<script src="smart-factory-header.js?v=4" defer></script>
+<script src="smart-factory-header.js?v=11" defer></script>
 </head>
 <body class="min-h-screen flex flex-col">
 <div id="toast" class="toast"></div>
@@ -228,17 +326,33 @@
         <div class="badge-auth-title" id="badgeAuthTitle">Authentication Required</div>
       </div>
     </div>
-    <div class="badge-auth-body">
-      <div class="badge-auth-reader" id="badgeAuthReaderIcon"></div>
-      <div>
-        <div class="badge-auth-message" id="badgeAuthMessage">Scan your operator badge to continue.</div>
-        <div class="badge-auth-sub" id="badgeAuthSub">This confirms who is performing the action on the shared station.</div>
+    <div class="badge-auth-content">
+      <div class="badge-auth-pane badge-pane">
+        <div class="badge-auth-pane-kicker">Badge</div>
+        <div class="badge-auth-body">
+          <div class="badge-auth-reader" id="badgeAuthReaderIcon"></div>
+          <div>
+            <div class="badge-auth-message" id="badgeAuthMessage">Scan your badge or</div>
+            <div class="badge-auth-sub" id="badgeAuthSub">Use another sign-in method to confirm this action.</div>
+          </div>
+        </div>
+        <div class="badge-auth-role">
+          <span>Required role</span>
+          <span id="badgeAuthRole">Production Supervisor</span>
+        </div>
+      </div>
+      <div class="badge-auth-pane login-pane">
+        <div class="badge-auth-form">
+          <label>Email</label>
+          <input id="badgeAuthEmail" type="email" placeholder="operator@bd.com">
+          <label>Password</label>
+          <input id="badgeAuthPassword" type="password" placeholder="Password">
+          <button class="badge-auth-submit" type="button" onclick="showPwoAuthReview()">SIGN IN</button>
+        </div>
+        <button class="badge-auth-sso" type="button" onclick="setBadgeAuthState('sso')">CONTINUE WITH SSO</button>
       </div>
     </div>
-    <div class="badge-auth-role">
-      <span>Required role</span>
-      <span id="badgeAuthRole">Production Supervisor</span>
-    </div>
+    <div id="badgeAuthReview" class="badge-auth-review" style="display:none;"></div>
     <button class="badge-auth-cycle" type="button" onclick="cycleBadgeAuthState()" title="Cycle modal state" aria-label="Cycle badge modal state">
       <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-15.1 6.6M3 12a9 9 0 0115.1-6.6"/>
@@ -248,21 +362,118 @@
   </div>
 </div>
 
+<div id="createPwoModal" class="scrim create-pwo-scrim" style="display:none;">
+  <div class="create-pwo-popup">
+    <button class="create-pwo-close" type="button" onclick="closeCreatePwoModal()" aria-label="Close create PWO modal">x</button>
+    <div class="create-pwo-head">
+      <div>
+        <div class="create-pwo-title">Create PWO</div>
+        <div class="create-pwo-sub">Create a custom production work order for assignment planning.</div>
+      </div>
+      <span class="pill pill-orange">Custom</span>
+    </div>
+    <div class="create-pwo-note">This adds a PWO to the assignment queue. It does not start production or create a new batch.</div>
+    <div class="create-pwo-form">
+      <label>PWO number</label>
+      <input id="createPwoNumber" type="text" placeholder="PWO-4503400">
+      <label>SKU</label>
+      <input id="createPwoSku" type="text" placeholder="80-APX-50000">
+      <label>Description</label>
+      <input id="createPwoDesc" type="text" placeholder="20GA Catheter">
+      <div class="create-pwo-grid">
+        <div>
+          <label>Work Center</label>
+          <select id="createPwoWorkCenter">
+            <option value="AFA">AFA</option>
+            <option value="PKG">PKG</option>
+          </select>
+        </div>
+        <div>
+          <label>Batch</label>
+          <input id="createPwoBatch" type="text" placeholder="1856">
+        </div>
+      </div>
+      <div class="create-pwo-grid">
+        <div>
+          <label>Target Date</label>
+          <input id="createPwoTargetDate" type="text" placeholder="05/29/2026 - Shift A">
+        </div>
+        <div>
+          <label>Planned Quantity</label>
+          <input id="createPwoPlanned" type="number" min="1" placeholder="100000">
+        </div>
+      </div>
+    </div>
+    <div class="create-pwo-actions">
+      <button class="create-pwo-secondary" type="button" onclick="closeCreatePwoModal()">CANCEL</button>
+      <button class="create-pwo-primary" type="button" onclick="submitCreatePwoModal()">CREATE PWO</button>
+    </div>
+  </div>
+</div>
+
 <smart-factory-header active-screen="production"></smart-factory-header>
 <!-- Shared header extension: flag category picker used by Production Work Order -->
-<div id="flagCategoryRow" style="position:absolute;top:154px;left:0;right:0;z-index:80;background:#fff;border-bottom:1px solid var(--border);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
+<div id="flagCategoryRow" style="position:absolute;top:64px;left:40px;right:40px;height:94px;z-index:80;background:#f6f9fe;border-bottom:0;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
   <div class="flag-category-scroll">
     <div class="flag-category-panel" id="flagCategoryList" onmouseleave="clearFlagSubcategories()"></div>
   </div>
 </div>
 
-<div class="main-card-shell">
-
-<!-- ============ TABS ============ -->
-<div class="flex items-center gap-6 shrink-0" style="background:var(--main-card);">
-  <span id="tabProductionOverview" class="tab active" onclick="switchMainTab('production')">PRODUCTION OVERVIEW</span>
-  <span id="tabWorkOrderAssignment" class="tab" onclick="switchMainTab('assignment')">WORK ORDER ASSIGNMENT</span>
+<div class="page-titlebar">
+  <div class="page-titlegroup">
+    <div class="page-title-copy">
+      <div class="page-title" id="pageTitle">Production Overview</div>
+      <div class="page-breadcrumb" id="pageBreadcrumb">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h4v4H6zM14 4h4v4h-4zM14 14h4v4h-4zM10 8h2a2 2 0 012 2v4"/>
+        </svg>
+        <span>Sandy USA &gt; Unit 1 &gt; <span class="breadcrumb-line-list" tabindex="0" data-full="AFA10, AFA11, AFA12, AFA13, AFA14">AFA10, AFA11 +3</span></span>
+      </div>
+    </div>
+    <div class="page-flow">
+      <div class="page-flow-block page-flow-product">
+        <div class="page-flow-title">NEXIVA 20 GA X 1 IN SINGLE PORT</div>
+        <div class="page-flow-copy">SKU: 80-APX-50000 | Lot: L2075-0245</div>
+      </div>
+      <div class="page-flow-divider"></div>
+      <div class="page-flow-block">
+        <div class="page-flow-copy">Bottleneck</div>
+        <div class="page-flow-copy">Autoguard 13 Zone #5</div>
+      </div>
+      <div class="page-flow-divider"></div>
+      <div class="page-active-category" id="pageActiveCategory">
+        <div class="page-active-category-label" id="pageActiveCategoryLabel">Production</div>
+        <div class="page-active-category-sub">Active Category</div>
+      </div>
+      <div class="page-status-control">
+        <span class="page-flow-copy">Status Control</span>
+        <div class="page-status-buttons">
+          <button class="page-header-action primary" type="button" onclick="openBadgeAuthModal()" title="Assign & Run a Work Order" aria-label="Assign and run a Work Order"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button>
+          <button class="page-header-action outline" type="button" onclick="openControlPanel()" title="Open Work Order Control Panel" aria-label="Open Work Order Control Panel"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+          <div class="page-button-divider"></div>
+          <button class="page-header-action outline" type="button" onclick="toggleFlagCategories()" title="Flag Category" aria-label="Flag Category"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 4C20.33 4 21 4.67 21 5.5V18.5C21 19.33 20.33 20 19.5 20C18.67 20 18 19.33 18 18.5V5.5C18 4.67 18.67 4 19.5 4ZM4.5 13C5.33 13 6 13.67 6 14.5V18.5C6 19.33 5.33 20 4.5 20C3.67 20 3 19.33 3 18.5V14.5C3 13.67 3.67 13 4.5 13ZM15.5 4C16.33 4 17 4.67 17 5.5C17 6.33 16.33 7 15.5 7C14.67 7 14 6.33 14 5.5C14 4.67 14.67 4 15.5 4ZM11.5 5C12.33 5 13 5.67 13 6.5V7.5C13 8.33 12.33 9 11.5 9C10.67 9 10 8.33 10 7.5V6.5C10 5.67 10.67 5 11.5 5ZM8.5 10C9.33 10 10 10.67 10 11.5V12.5C10 13.33 9.33 14 8.5 14C7.67 14 7 13.33 7 12.5V11.5C7 10.67 7.67 10 8.5 10Z"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="main-card-shell">
+  <nav class="app-side-nav" id="appSideNav" aria-label="Production navigation" onmouseenter="this.classList.remove('is-collapsed')" onmouseleave="this.classList.remove('is-collapsed')">
+    <button id="sideProductionOverview" class="app-side-btn active" type="button" onclick="switchMainTab('production')" aria-label="Overview" title="Overview">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 9.2c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v8.6c0 .66-.54 1.2-1.2 1.2H6.2c-.66 0-1.2-.54-1.2-1.2V9.2Zm5-4c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v12.6c0 .66-.54 1.2-1.2 1.2h-1.6c-.66 0-1.2-.54-1.2-1.2V5.2Zm5 7c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v5.6c0 .66-.54 1.2-1.2 1.2h-1.6c-.66 0-1.2-.54-1.2-1.2v-5.6Z"/>
+      </svg>
+      <span class="app-side-label">Overview</span>
+    </button>
+    <button id="sideWorkOrderAssignment" class="app-side-btn" type="button" onclick="switchMainTab('assignment')" aria-label="PWO Assignment" title="PWO Assignment">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14.06 9.02 15 9.96l-5.6 5.6H8.46v-.94l5.6-5.6Zm3.69-.56c.33-.33.33-.86 0-1.19l-1.02-1.02a.84.84 0 0 0-1.19 0l-.8.8 2.21 2.21.8-.8ZM5 4h10c1.1 0 2 .9 2 2v.68l-2 2V6H5v12h12v-2.68l2-2V18c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Zm2 4h5v2H7V8Zm0 4h3v2H7v-2Z"/>
+      </svg>
+      <span class="app-side-label">PWO Assignment</span>
+    </button>
+  </nav>
+  <main class="app-content">
 
 <!-- ============ MAIN SCROLL AREA ============ -->
 <div id="productionOverviewView" class="view-panel active pt-5">
@@ -307,7 +518,6 @@
       <div id="ganttBody" class="relative"></div>
     </div>
   </div>
-
 </div>
 
 <div id="woTimelineTooltip" class="wo-tooltip"></div>
@@ -315,31 +525,54 @@
 <!-- ============ WORK ORDER ASSIGNMENT VIEW ============ -->
 <div id="workOrderAssignmentView" class="view-panel pt-5">
   <div class="wo-assignment-shell">
+    <div class="assignment-page-head">
+      <div>
+        <div class="assignment-page-title">PWO Assignment</div>
+        <div class="assignment-page-subtitle">Select a production work order, choose compatible resources, and review the assignment.</div>
+      </div>
+    </div>
     <div class="assignment-workbench">
       <div class="assignment-column">
         <div class="assignment-column-head">
           <div class="assignment-title-row">
             <div>
-              <div class="card-title">Step 1: Select Work Order</div>
-              <div id="woScopeLabel" class="text-[11px] mt-0.5" style="color:var(--text-muted);">Select an order to filter eligible resources.</div>
+              <div class="col-header">Production Work Order</div>
+              <div id="woScopeLabel" class="text-[11px] mt-0.5" style="color:var(--text-muted);">Select a PWO to filter eligible resources.</div>
+            </div>
+          </div>
+          <div class="assignment-search-row">
+            <div class="relative">
+              <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
+              <input class="search-input" placeholder="Search PWO, SKU, batch, material..." oninput="filterWOs(this.value)">
             </div>
             <div class="hamburger-wrap">
-              <button class="hamburger-btn" onclick="toggleWoMenu(event)" aria-label="Work Orders menu">☰</button>
-              <div id="woActionMenu" class="hamburger-menu">
-                <button class="hamburger-item" onclick="createWOFromMenu()">Create WO</button>
+              <button class="hamburger-btn" onclick="openCreatePwoModal()" aria-label="Create Production Work Order" title="Create Production Work Order">+</button>
+            </div>
+            <div class="assignment-filter-wrap">
+              <button id="woFilterButton" class="assignment-filter-btn" type="button" aria-label="Filter Production Work Orders" title="Filter Production Work Orders" onclick="toggleAssignmentFilter('wo')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </button>
+              <div id="woFilterPanel" class="assignment-filter-panel">
+                <div class="filter-panel-head"><div class="filter-panel-title">Production Work Order Filters</div><button class="filter-panel-close" type="button" onclick="toggleAssignmentFilter('wo', false)">×</button></div>
+                <div class="filter-logic"><button id="woLogicAnd" type="button" class="active" onclick="setAssignmentFilterLogic('wo','and')">Match all</button><button id="woLogicOr" type="button" onclick="setAssignmentFilterLogic('wo','or')">Match any</button></div>
+                <div class="filter-fieldset"><div class="filter-label">SKU</div><input class="filter-input" data-wo-filter="sku" placeholder="80-APX..." oninput="applyAssignmentFilters()"></div>
+                <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                  <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Released" onchange="applyAssignmentFilters()">Released</label>
+                  <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Created" onchange="applyAssignmentFilters()">Created</label>
+                </div></div>
+                <div class="filter-fieldset"><div class="filter-label">Type</div><div class="filter-check-grid">
+                  <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="standard" onchange="applyAssignmentFilters()">Standard</label>
+                  <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="custom" onchange="applyAssignmentFilters()">Custom</label>
+                </div></div>
+                <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
+                  <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
+                  <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
+                </div></div>
+                <div class="filter-fieldset"><div class="filter-label">Target Date</div><input class="filter-input" data-wo-filter="targetDate" placeholder="Shift / date" oninput="applyAssignmentFilters()"></div>
+                <div class="filter-fieldset"><div class="filter-label">Planned Quantity</div><div class="filter-input-row"><input class="filter-input" data-wo-filter="plannedMin" type="number" placeholder="Min" oninput="applyAssignmentFilters()"><input class="filter-input" data-wo-filter="plannedMax" type="number" placeholder="Max" oninput="applyAssignmentFilters()"></div></div>
+                <div class="filter-panel-actions"><button class="filter-clear" type="button" onclick="clearAssignmentFilters('wo')">Clear</button><button class="filter-apply" type="button" onclick="toggleAssignmentFilter('wo', false)">Apply</button></div>
               </div>
             </div>
-          </div>
-          <div class="relative mb-2">
-            <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
-            <input class="search-input" placeholder="Search WO, SKU, batch, material..." oninput="filterWOs(this.value)">
-          </div>
-          <div class="flex gap-1.5 overflow-x-auto pb-1" id="woFilterRow">
-            <span class="filter-chip active" data-f="all" onclick="setWoFilter('all',this)">All</span>
-            <span class="filter-chip" data-f="created" onclick="setWoFilter('created',this)">Created</span>
-            <span class="filter-chip" data-f="assigned" onclick="setWoFilter('assigned',this)">Assigned</span>
-            <span class="filter-chip" data-f="auto" onclick="setWoFilter('auto',this)">Auto Assigned</span>
-            <span class="filter-chip" data-f="custom" onclick="setWoFilter('custom',this)">Custom WO</span>
           </div>
         </div>
         <div id="woList" class="assignment-list"></div>
@@ -349,19 +582,41 @@
         <div class="assignment-column-head">
           <div class="assignment-title-row">
             <div>
-              <div class="card-title">Step 2: Select Resource</div>
+              <div class="col-header">Resources</div>
               <div id="resScopeLabel" class="text-[11px] mt-0.5" style="color:var(--text-muted);">All work centers</div>
             </div>
           </div>
-          <div class="relative mb-2">
-            <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
-            <input class="search-input" placeholder="Search resource, equipment, work center..." oninput="filterResources(this.value)">
-          </div>
-          <div class="flex gap-1.5 overflow-x-auto pb-1" id="resFilterRow">
-            <span class="filter-chip active" data-f="all" onclick="setResFilter('all',this)">All</span>
-            <span class="filter-chip" data-f="available" onclick="setResFilter('available',this)">Available</span>
-            <span class="filter-chip" data-f="running" onclick="setResFilter('running',this)">Running</span>
-            <span class="filter-chip" data-f="down" onclick="setResFilter('down',this)">Down</span>
+          <div class="assignment-search-row">
+            <div class="relative">
+              <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
+              <input class="search-input" placeholder="Search resource, PWO, work center..." oninput="filterResources(this.value)">
+            </div>
+            <div class="assignment-filter-wrap">
+              <button id="resFilterButton" class="assignment-filter-btn" type="button" aria-label="Filter Resources" title="Filter Resources" onclick="toggleAssignmentFilter('res')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </button>
+              <div id="resFilterPanel" class="assignment-filter-panel">
+                <div class="filter-panel-head"><div class="filter-panel-title">Resource Filters</div><button class="filter-panel-close" type="button" onclick="toggleAssignmentFilter('res', false)">×</button></div>
+                <div class="filter-logic"><button id="resLogicAnd" type="button" class="active" onclick="setAssignmentFilterLogic('res','and')">Match all</button><button id="resLogicOr" type="button" onclick="setAssignmentFilterLogic('res','or')">Match any</button></div>
+                <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="production" onchange="applyAssignmentFilters()">Production</label>
+                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="starved" onchange="applyAssignmentFilters()">Starved</label>
+                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="blocked" onchange="applyAssignmentFilters()">Blocked</label>
+                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="down" onchange="applyAssignmentFilters()">Down</label>
+                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="stopped" onchange="applyAssignmentFilters()">Stopped</label>
+                </div></div>
+                <div class="filter-fieldset"><div class="filter-label">Quick Availability</div><div class="filter-check-grid">
+                  <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyCurrent" onchange="applyAssignmentFilters()">No current PWO</label>
+                  <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyNext" onchange="applyAssignmentFilters()">No next PWO</label>
+                </div></div>
+                <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
+                  <label class="filter-check"><input type="checkbox" data-res-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
+                  <label class="filter-check"><input type="checkbox" data-res-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
+                </div></div>
+                <div class="filter-fieldset"><div class="filter-label">Location</div><input class="filter-input" data-res-filter="location" placeholder="Sandy / Unit..." oninput="applyAssignmentFilters()"></div>
+                <div class="filter-panel-actions"><button class="filter-clear" type="button" onclick="clearAssignmentFilters('res')">Clear</button><button class="filter-apply" type="button" onclick="toggleAssignmentFilter('res', false)">Apply</button></div>
+              </div>
+            </div>
           </div>
         </div>
         <div id="resList" class="assignment-list"></div>
@@ -371,7 +626,7 @@
         <div class="assignment-column-head">
           <div class="assignment-title-row">
             <div>
-              <div class="card-title">Step 3: Review &amp; Confirm</div>
+              <div class="col-header">Review &amp; Confirm</div>
               <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Final actions appear here once the assignment is valid to review.</div>
             </div>
           </div>
@@ -385,6 +640,7 @@
 <!-- ===================================================================
      WORK ORDER CONTROL PANEL (rebuilt inline as a modal — Josh's panel)
 ==================================================================== -->
+</main>
 </div>
 
 <div id="controlPanelModal" class="scrim" style="display:none;">
@@ -593,8 +849,8 @@
   .sku-alert:hover:after{opacity:1;transform:translateY(0);}
   .auto-resume-help:hover:after{opacity:1;transform:translateY(0);}
 
-  .flag-category-scroll{overflow:visible;background:#fff;}
-  .flag-category-panel{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;padding:10px 16px;background:#fff;overflow:visible;min-height:100px;position:relative;z-index:80;min-width:max-content;}
+  .flag-category-scroll{height:100%;overflow:visible;background:#f6f9fe;}
+  .flag-category-panel{height:100%;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0;background:#f6f9fe;overflow:visible;position:relative;z-index:80;min-width:max-content;}
   .flag-cat-wrap{position:relative;width:80px;flex:0 0 80px;}
   .flag-cat-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:7px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;}
   .flag-cat-btn .ic{width:20px;height:20px;flex-shrink:0;}
@@ -607,24 +863,84 @@
   .flag-sub-btn .ic{width:19px;height:19px;flex-shrink:0;}
   .flag-sub-btn:hover,.flag-sub-btn.selected{border-color:var(--flag-color);background:var(--flag-soft);color:var(--flag-color);}
   .badge-auth-scrim{z-index:260;}
-  .badge-auth-popup{width:430px;background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px 24px;display:flex;flex-direction:column;gap:14px;}
+  .badge-auth-popup{width:600px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px;display:flex;flex-direction:column;gap:12px;}
   .badge-auth-close{position:absolute;right:24px;top:16px;width:24px;height:24px;border:0;background:transparent;color:var(--accent);font-size:18px;font-weight:800;line-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
   .badge-auth-close:hover{color:var(--text);}
   .badge-auth-head{display:flex;align-items:center;gap:14px;padding-right:28px;}
   .badge-auth-title{font-family:Roboto, var(--ix-font);font-size:18px;font-weight:700;color:var(--text);line-height:1.2;}
-  .badge-auth-body{border:1px solid var(--border);border-radius:14px;background:var(--gray-bg);padding:24px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;min-height:188px;}
-  .badge-auth-reader{width:96px;height:96px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);color:var(--accent);flex-shrink:0;}
-  .badge-auth-reader svg{width:46px;height:46px;}
-  .badge-auth-message{font-size:15px;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:6px;}
-  .badge-auth-sub{font-size:12px;color:var(--text-muted);line-height:1.4;max-width:310px;}
-  .badge-auth-role{margin-top:0;display:flex;align-items:center;justify-content:flex-start;gap:8px;padding:0;font-size:13px;}
-  .badge-auth-role > span:first-child{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);}
-  #badgeAuthRole{font-size:13px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text);}
+  .badge-auth-content{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;}
+  .badge-auth-pane{border:1px solid var(--border);border-radius:14px;background:#fff;padding:12px;min-height:246px;display:flex;flex-direction:column;}
+  .badge-pane{background:var(--gray-bg);}
+  .login-pane{gap:9px;border:0;border-radius:0;background:transparent;padding:2px 0 12px;min-height:0;justify-content:flex-start;}
+  .badge-auth-pane-kicker{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:10px;}
+  .badge-auth-body{border:0;border-radius:14px;background:transparent;padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:160px;flex:1;}
+  .badge-auth-reader{width:78px;height:78px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);color:var(--accent);flex-shrink:0;}
+  .badge-auth-reader svg{width:38px;height:38px;}
+  .badge-auth-message{font-size:14px;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:5px;text-align:center;}
+  .badge-auth-sub{font-size:11px;color:var(--text-muted);line-height:1.35;width:190px;max-width:100%;text-align:center;margin:0 auto;}
+  .badge-auth-role{margin-top:auto;display:flex;align-items:baseline;justify-content:flex-start;gap:6px;padding:0;font-size:11px;line-height:1.2;}
+  .badge-auth-role > span:first-child{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--blue);line-height:1.2;}
+  #badgeAuthRole{font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text);line-height:1.2;}
   .badge-auth-cycle{position:absolute;right:0;bottom:-44px;width:36px;height:36px;border-radius:999px;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 18px rgba(10,16,32,.12);}
   .badge-auth-cycle:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
+  .badge-auth-sso,.badge-auth-submit{height:32px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;cursor:pointer;text-transform:uppercase;}
+  .badge-auth-sso:hover,.badge-auth-submit:hover{filter:brightness(.94);}
+  .badge-auth-sso{background:#fff;color:var(--accent);}
+  .badge-auth-form{display:grid;grid-template-columns:1fr;gap:6px;}
+  .badge-auth-form label{font-size:11px;font-weight:800;color:var(--text-muted);}
+  .badge-auth-form input{height:30px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;padding:0 9px;font-size:12px;color:var(--text);min-width:0;}
+  .badge-auth-form input:focus{outline:none;border-color:var(--accent);}
+  .badge-auth-submit{margin-top:3px;}
   .badge-auth-popup.state-reading .badge-auth-reader{background:var(--amber-bg);border-color:var(--amber-bd);color:var(--amber);}
   .badge-auth-popup.state-approved .badge-auth-reader{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
   .badge-auth-popup.state-rejected .badge-auth-reader{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+  .badge-auth-popup.state-sso .badge-auth-sso,.badge-auth-popup.state-password .badge-auth-submit{box-shadow:0 0 0 2px rgba(37,99,235,.18);}
+  .badge-auth-review{display:flex;flex-direction:column;gap:12px;min-height:246px;}
+  .badge-review-card{border:0;border-radius:0;background:transparent;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .badge-review-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .badge-review-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.2;}
+  .badge-review-sub{font-size:11px;color:var(--text-muted);line-height:1.35;margin-top:2px;}
+  .badge-review-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;}
+  .badge-review-row{font-size:11.5px;color:var(--text-muted);min-width:0;}
+  .badge-review-row b{display:block;font-size:12.5px;color:var(--text);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+  .badge-review-resource-list{display:flex;flex-wrap:wrap;gap:6px;}
+  .badge-review-resource{border:1px solid var(--border-strong);border-radius:8px;background:#fff;color:var(--text-soft);font-size:11px;font-weight:800;padding:4px 8px;}
+  .badge-resource-carousel{border:1px solid var(--border);border-radius:12px;background:var(--main-card);padding:10px;display:flex;flex-direction:column;gap:8px;}
+  .badge-resource-carousel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .badge-resource-carousel-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);}
+  .badge-resource-controls{display:flex;align-items:center;gap:6px;}
+  .badge-resource-controls button{width:24px;height:24px;border:1px solid rgba(37,99,235,.38);border-radius:8px;background:#fff;color:var(--accent);font-size:14px;font-weight:900;line-height:1;cursor:pointer;}
+  .badge-resource-controls button:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .badge-resource-counter{font-size:11px;font-weight:800;color:var(--text-muted);min-width:34px;text-align:center;}
+  .badge-resource-name-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .badge-resource-name{font-size:14px;font-weight:800;color:var(--text);line-height:1.2;}
+  .badge-review-note{border:1px solid var(--blue-bd);border-radius:10px;background:var(--blue-bg);color:var(--text-soft);font-size:11.5px;line-height:1.35;padding:9px 10px;}
+  .badge-review-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:0;padding-top:0;margin-top:auto;}
+  .badge-review-actions button{height:32px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;padding:0 14px;}
+  .badge-review-cancel{border:1px solid rgba(37,99,235,.38);background:#fff;color:var(--accent);}
+  .badge-review-confirm{border:1px solid var(--accent);background:var(--accent);color:#fff;}
+  .badge-review-confirm:hover{filter:brightness(.94);}
+  @media (max-width:760px){
+    .badge-auth-popup{width:min(430px,calc(100vw - 32px));padding:16px;}
+    .badge-auth-content{grid-template-columns:1fr;}
+  }
+  .create-pwo-scrim{z-index:255;}
+  .create-pwo-popup{width:480px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+  .create-pwo-close{position:absolute;right:20px;top:16px;width:24px;height:24px;border:0;background:transparent;color:var(--accent);font-size:18px;font-weight:800;line-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .create-pwo-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-right:28px;}
+  .create-pwo-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
+  .create-pwo-sub{font-size:12px;color:var(--text-muted);line-height:1.35;margin-top:2px;}
+  .create-pwo-note{border:1px solid var(--blue-bd);background:var(--blue-bg);border-radius:10px;padding:9px 10px;font-size:11.5px;line-height:1.35;color:var(--text-soft);}
+  .create-pwo-form{display:grid;grid-template-columns:1fr;gap:7px;}
+  .create-pwo-form label{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:4px;}
+  .create-pwo-form input,.create-pwo-form select{width:100%;height:32px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;padding:0 9px;font-size:12.5px;color:var(--text);}
+  .create-pwo-form input:focus,.create-pwo-form select:focus{outline:none;border-color:var(--accent);}
+  .create-pwo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .create-pwo-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);padding-top:12px;margin-top:2px;}
+  .create-pwo-actions button{height:32px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;padding:0 14px;}
+  .create-pwo-secondary{border:1px solid rgba(37,99,235,.38);background:#fff;color:var(--accent);}
+  .create-pwo-primary{border:1px solid var(--accent);background:var(--accent);color:#fff;}
+  .create-pwo-primary:hover{filter:brightness(.94);}
 </style>
 
 <script>
@@ -1256,6 +1572,13 @@ function cpSyncOuterHeader(){
   if(header && typeof header.setActiveCategory === 'function'){
     header.setActiveCategory(cat.label, cpResolveColor(cat.color), cpResolveColor(cat.bg));
   }
+  const pageCategory = document.getElementById('pageActiveCategory');
+  const pageCategoryLabel = document.getElementById('pageActiveCategoryLabel');
+  if(pageCategory){
+    pageCategory.style.setProperty('--cat-accent', cpResolveColor(cat.color));
+    pageCategory.style.setProperty('--cat-bg', cpResolveColor(cat.bg));
+  }
+  if(pageCategoryLabel) pageCategoryLabel.textContent = cat.label;
   const currentUnit = UNITS.find(u=>u.name==='AFA10');
   if(currentUnit){
     currentUnit.status = p.label.toUpperCase();
@@ -1423,8 +1746,8 @@ const BADGE_AUTH_STATES = [
   {
     key:'waiting',
     title:'Authentication Required',
-    message:'Scan your operator badge to continue.',
-    sub:'This confirms who is performing the action on the shared station.',
+    message:'Scan your badge or',
+    sub:'Use another sign-in method to confirm this action.',
     role:'Production Supervisor',
     icon:'badge'
   },
@@ -1437,9 +1760,25 @@ const BADGE_AUTH_STATES = [
     icon:'scan'
   },
   {
+    key:'sso',
+    title:'Authentication Required',
+    message:'Badge sign-in is still available.',
+    sub:'You can scan your badge instead of using SSO.',
+    role:'Production Supervisor',
+    icon:'badge'
+  },
+  {
+    key:'password',
+    title:'Authentication Required',
+    message:'Badge sign-in is still available.',
+    sub:'You can scan your badge instead of entering credentials.',
+    role:'Production Supervisor',
+    icon:'badge'
+  },
+  {
     key:'approved',
     title:'Authentication Required',
-    message:'Badge accepted. Action can continue.',
+    message:'Badge accepted',
     sub:'Operator identity and required role were confirmed.',
     role:'Production Supervisor',
     icon:'check'
@@ -1447,13 +1786,14 @@ const BADGE_AUTH_STATES = [
   {
     key:'rejected',
     title:'Authentication Required',
-    message:'Badge does not have permission for this action.',
+    message:"You don't have permission for this action",
     sub:'Ask a Production Supervisor to authenticate or cancel the action.',
     role:'Production Supervisor',
     icon:'x'
   }
 ];
 let badgeAuthStateIndex = 0;
+let badgeReviewResourceIndex = 0;
 
 function badgeAuthSvg(type){
   const icons = {
@@ -1469,6 +1809,11 @@ function renderBadgeAuthState(){
   const modal = document.getElementById('badgeAuthModal');
   const popup = modal ? modal.querySelector('.badge-auth-popup') : null;
   if(!popup) return;
+  popup.classList.remove('review-mode');
+  const authContent = document.querySelector('#badgeAuthModal .badge-auth-content');
+  const reviewContent = document.getElementById('badgeAuthReview');
+  if(authContent) authContent.style.display = 'grid';
+  if(reviewContent) reviewContent.style.display = 'none';
   const state = BADGE_AUTH_STATES[badgeAuthStateIndex];
   popup.className = `badge-auth-popup state-${state.key}`;
   document.getElementById('badgeAuthTitle').textContent = state.title;
@@ -1476,6 +1821,97 @@ function renderBadgeAuthState(){
   document.getElementById('badgeAuthSub').textContent = state.sub;
   document.getElementById('badgeAuthRole').textContent = state.role;
   document.getElementById('badgeAuthReaderIcon').innerHTML = badgeAuthSvg(state.icon);
+}
+
+function renderPwoAuthReview(){
+  const review = document.getElementById('badgeAuthReview');
+  if(!review || !selectedWo || !selectedResources.length) return;
+  badgeReviewResourceIndex = Math.max(0, Math.min(badgeReviewResourceIndex, selectedResources.length - 1));
+  const activeResource = selectedResources[badgeReviewResourceIndex];
+  const estimatedStart = activeResource.currentWo ? activeResource.eta : 'Now + 30 min';
+  const currentPwo = activeResource.currentWo ? assignmentPwo(activeResource.currentWo) : 'None';
+  const nextPwo = activeResource.nextAssignedWo ? assignmentPwo(activeResource.nextAssignedWo) : 'None';
+  review.innerHTML = `
+    <div class="badge-review-card">
+      <div class="badge-review-head">
+        <div>
+          <div class="badge-review-title">${assignmentPwo(selectedWo.wo)}</div>
+          <div class="badge-review-sub">${selectedWo.sku} · Batch ${selectedWo.batch} · ${selectedWo.workCenter}</div>
+        </div>
+        <span class="pill ${selectedWo.custom ? 'pill-orange' : 'pill-blue'}">${selectedWo.custom ? 'Custom' : selectedWo.status}</span>
+      </div>
+      <div class="badge-review-grid">
+        <div class="badge-review-row">Planned quantity<b>${selectedWo.planned.toLocaleString('en-US')}</b></div>
+        <div class="badge-review-row">Target Date<b>${selectedWo.targetDate}</b></div>
+        <div class="badge-review-row">Material<b>${selectedWo.material}</b></div>
+        <div class="badge-review-row">Assignments<b>${selectedResources.length}</b></div>
+      </div>
+      <div class="badge-resource-carousel">
+        <div class="badge-resource-carousel-head">
+          <div class="badge-resource-carousel-title">Resource assignment</div>
+          <div class="badge-resource-controls">
+            <button type="button" onclick="moveBadgeReviewResource(-1)" aria-label="Previous resource">‹</button>
+            <span class="badge-resource-counter">${badgeReviewResourceIndex + 1}/${selectedResources.length}</span>
+            <button type="button" onclick="moveBadgeReviewResource(1)" aria-label="Next resource">›</button>
+          </div>
+        </div>
+        <div class="badge-resource-name-row">
+          <div class="badge-resource-name">${activeResource.name}</div>
+          ${assignmentResStatePill(activeResource.state)}
+        </div>
+        <div class="badge-review-grid">
+          <div class="badge-review-row">Estimated start<b>${estimatedStart}</b></div>
+          <div class="badge-review-row">Work Center<b>${activeResource.workCenter}</b></div>
+          <div class="badge-review-row">Current PWO<b>${currentPwo}</b></div>
+          <div class="badge-review-row">Next Assigned PWO<b>${nextPwo}</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="badge-review-note">Confirming creates one assignment record per selected resource. Production will not start from this action.</div>
+    <div class="badge-review-actions">
+      <button class="badge-review-cancel" type="button" onclick="closeBadgeAuthModal()">CANCEL</button>
+      <button class="badge-review-confirm" type="button" onclick="confirmAssignmentFromAuthReview()">CONFIRM</button>
+    </div>`;
+}
+
+function moveBadgeReviewResource(direction){
+  if(!selectedResources.length) return;
+  badgeReviewResourceIndex = (badgeReviewResourceIndex + direction + selectedResources.length) % selectedResources.length;
+  renderPwoAuthReview();
+}
+
+function showPwoAuthReview(){
+  if(!selectedWo || !selectedResources.length){
+    setBadgeAuthState('password');
+    return;
+  }
+  const validation = assignmentValidation();
+  if(!validation.valid){
+    showToast(validation.reason);
+    return;
+  }
+  const popup = document.querySelector('#badgeAuthModal .badge-auth-popup');
+  const authContent = document.querySelector('#badgeAuthModal .badge-auth-content');
+  const reviewContent = document.getElementById('badgeAuthReview');
+  if(popup) popup.className = 'badge-auth-popup review-mode';
+  document.getElementById('badgeAuthTitle').textContent = 'Review PWO';
+  if(authContent) authContent.style.display = 'none';
+  if(reviewContent) reviewContent.style.display = 'flex';
+  badgeReviewResourceIndex = 0;
+  renderPwoAuthReview();
+}
+
+function confirmAssignmentFromAuthReview(){
+  confirmAssignment();
+  closeBadgeAuthModal();
+}
+
+function setBadgeAuthState(key){
+  const nextIndex = BADGE_AUTH_STATES.findIndex(state => state.key === key);
+  if(nextIndex >= 0){
+    badgeAuthStateIndex = nextIndex;
+    renderBadgeAuthState();
+  }
 }
 
 let badgeAuthOnClose = null;
@@ -1544,31 +1980,39 @@ const MONTH_START_DAYS = MONTHS.reduce((starts, month, index) => {
 const UNIT_ROWS = UNITS.slice(0, 8).map(u => u.name);
 
 const WORK_ORDERS = [
-  { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'started', equipment:'AFA10', custom:false, planned:100000, canAddEquipment:true },
-  { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', batch:'1851', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:120000, canAddEquipment:false },
-  { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', batch:'1852', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:90000, canAddEquipment:false },
-  { wo:'WO-4503305', sku:'80-BLD-22010', desc:'Blister Pack Assembly', batch:'2210', material:'PETG Blister Sheet', workCenter:'PKG20', status:'created', equipment:null, custom:false, planned:45000, canAddEquipment:false },
-  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack - Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG20', status:'auto', equipment:'PKG20', custom:false, planned:38000, canAddEquipment:false },
-  { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study - tip retention', batch:'-', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:true, planned:500, canAddEquipment:false },
-  { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA10', status:'created', equipment:null, custom:false, planned:60000, canAddEquipment:false }
+  { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Released', planned:100000, targetDate:'05/23/2026 - Shift B', custom:false },
+  { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', batch:'1851', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Created', planned:120000, targetDate:'05/24/2026 - Shift A', custom:false },
+  { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', batch:'1852', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Created', planned:90000, targetDate:'05/24/2026 - Shift B', custom:false },
+  { wo:'WO-4503305', sku:'80-BLD-22010', desc:'Blister Pack Assembly', batch:'2210', material:'PETG Blister Sheet', workCenter:'PKG', status:'Released', planned:45000, targetDate:'05/26/2026 - Shift A', custom:false },
+  { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack - Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG', status:'Created', planned:38000, targetDate:'05/26/2026 - Shift C', custom:false },
+  { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study - tip retention', batch:'-', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Created', planned:500, targetDate:'05/27/2026 - Shift A', custom:true },
+  { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Released', planned:60000, targetDate:'05/27/2026 - Shift B', custom:false }
 ];
 
 const RESOURCES = [
-  { id:'AFA10', name:'AFA10', workCenter:'AFA10', state:'running', currentWo:'WO-4503287' },
-  { id:'AFA11', name:'AFA11', workCenter:'AFA11', state:'available', currentWo:null },
-  { id:'AFA12', name:'AFA12', workCenter:'AFA12', state:'down', currentWo:null },
-  { id:'PKG20', name:'PKG20', workCenter:'PKG20', state:'running', currentWo:'WO-4503312' },
-  { id:'PKG21', name:'PKG21', workCenter:'PKG21', state:'available', currentWo:null },
-  { id:'AFA10-Bench-1', name:'AFA10 - Eng. Bench 1', workCenter:'AFA10', state:'available', currentWo:null }
+  { id:'AFA10', name:'AFA10', workCenter:'AFA', state:'production', currentWo:'WO-4503288', nextAssignedWo:'WO-4503290', location:'Sandy USA / Unit 1', eta:'05/23/2026 - Shift B' },
+  { id:'AFA11', name:'AFA11', workCenter:'AFA', state:'down', currentWo:'WO-4503294', location:'Sandy USA / Unit 1', eta:'05/23/2026 - Shift C' },
+  { id:'AFA12', name:'AFA12', workCenter:'AFA', state:'production', currentWo:'WO-4503301', location:'Sandy USA / Unit 1', eta:'05/24/2026 - Shift A' },
+  { id:'AFA13', name:'AFA13', workCenter:'AFA', state:'production', currentWo:'WO-4503308', location:'Sandy USA / Unit 1', eta:'05/24/2026 - Shift B' },
+  { id:'AFA14', name:'AFA14', workCenter:'AFA', state:'production', currentWo:'WO-4503316', nextAssignedWo:'WO-4503320', location:'Sandy USA / Unit 1', eta:'05/25/2026 - Shift A' },
+  { id:'AFA15', name:'AFA15', workCenter:'AFA', state:'stopped', currentWo:'WO-4503322', location:'Sandy USA / Unit 1', eta:'05/25/2026 - Shift B' },
+  { id:'PKG20', name:'PKG20', workCenter:'PKG', state:'production', currentWo:'WO-4503335', nextAssignedWo:'WO-4503312', location:'Sandy USA / Unit 1', eta:'05/26/2026 - Shift A' },
+  { id:'PKG21', name:'PKG21', workCenter:'PKG', state:'starved', currentWo:'WO-4503341', location:'Sandy USA / Unit 1', eta:'05/26/2026 - Shift C' },
+  { id:'AFA16', name:'AFA16', workCenter:'AFA', state:'production', currentWo:'WO-4503349', location:'Sandy USA / Unit 1', eta:'05/27/2026 - Shift A' },
+  { id:'AFA17', name:'AFA17', workCenter:'AFA', state:'blocked', currentWo:'WO-4503357', location:'Sandy USA / Unit 1', eta:'05/27/2026 - Shift B' },
+  { id:'PKG22', name:'PKG22', workCenter:'PKG', state:'production', currentWo:'WO-4503364', location:'Sandy USA / Unit 1', eta:'05/28/2026 - Shift A' },
+  { id:'PKG23', name:'PKG23', workCenter:'PKG', state:'stopped', currentWo:'WO-4503372', location:'Sandy USA / Unit 1', eta:'05/28/2026 - Shift C' }
 ];
 
 let selectedWo = null;
-let selectedRes = null;
-let woFilter = 'all';
-let resFilter = 'all';
+let selectedResources = [];
 let woSearch = '';
 let resSearch = '';
 let lastAssigned = null;
+const assignmentFilters = {
+  wo: { logic:'and' },
+  res: { logic:'and' }
+};
 let unitCarouselPage = 0;
 const UNIT_CARDS_PER_PAGE = 4;
 const UNIT_CARD_MIN_WIDTH = 255;
@@ -1944,7 +2388,7 @@ function toggleFlagCategories(){
   if(!row) return;
   row.style.opacity = flagCategoryOpen ? '1' : '0';
   row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
-  row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-6px)';
+  row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-4px)';
   const legacyButton = document.getElementById('flagCategoryBtn');
   if(legacyButton) legacyButton.classList.toggle('active', flagCategoryOpen);
   if(!flagCategoryOpen) hoveredFlagCategory = null;
@@ -1963,91 +2407,246 @@ window.clearFlagSubcategories = clearFlagSubcategories;
 window.selectFlagSubcategory = selectFlagSubcategory;
 window.addEventListener('smart-factory:toggle-flag-categories', toggleFlagCategories);
 
-function switchMainTab(tab){
+function switchMainTab(tab, options = {}){
   const isAssignment = tab === 'assignment';
   document.getElementById('productionOverviewView').classList.toggle('active', !isAssignment);
   document.getElementById('workOrderAssignmentView').classList.toggle('active', isAssignment);
-  document.getElementById('tabProductionOverview').classList.toggle('active', !isAssignment);
-  document.getElementById('tabWorkOrderAssignment').classList.toggle('active', isAssignment);
+  document.getElementById('sideProductionOverview')?.classList.toggle('active', !isAssignment);
+  document.getElementById('sideWorkOrderAssignment')?.classList.toggle('active', isAssignment);
+  document.getElementById('tabProductionOverview')?.classList.toggle('active', !isAssignment);
+  document.getElementById('tabWorkOrderAssignment')?.classList.toggle('active', isAssignment);
+  const title = document.getElementById('pageTitle');
+  const breadcrumb = document.getElementById('pageBreadcrumb');
+  if(title) title.textContent = 'Production Overview';
+  if(breadcrumb){
+    breadcrumb.querySelector('span').innerHTML = 'Sandy USA &gt; Unit 1 &gt; <span class="breadcrumb-line-list" tabindex="0" data-full="AFA10, AFA11, AFA12, AFA13, AFA14">AFA10, AFA11 +3</span>';
+  }
+  if(!options.skipHistory){
+    const targetHash = isAssignment ? '#pwo-assignment' : '#overview';
+    if(window.location.hash !== targetHash) window.location.hash = targetHash;
+  }
+  document.getElementById('appSideNav')?.classList.add('is-collapsed');
   if(isAssignment) renderAssignmentAll();
 }
 
-function assignmentStatusPill(status){
-  const map = {
-    created:  ['pill-gray','Created'],
-    assigned: ['pill-blue','Assigned'],
-    auto:     ['pill-purple','Auto Assigned'],
-    started:  ['pill-amber','Started / Locked']
-  };
-  const [cls,label] = map[status] || map.created;
-  return `<span class="pill ${cls}">${label}</span>`;
+function routeFromLocation(){
+  const route = window.location.hash === '#pwo-assignment' ? 'assignment' : 'production';
+  switchMainTab(route, { skipHistory:true });
 }
 
 function assignmentResStatePill(state){
   const map = {
-    running:   ['pill-green','Running'],
-    available: ['pill-blue','Available'],
-    down:      ['pill-red','Down']
+    production: ['pill-green','Production'],
+    starved:    ['pill-amber','Starved'],
+    blocked:    ['pill-orange','Blocked'],
+    down:       ['pill-red','Down'],
+    stopped:    ['pill-gray','Stopped']
   };
-  const [cls,label] = map[state] || map.available;
+  const [cls,label] = map[state] || map.stopped;
   return `<span class="pill ${cls}">${label}</span>`;
 }
 
+function assignmentLineFamily(value){
+  return String(value || '').trim().toUpperCase();
+}
+
 function woEligibleForSelectedRes(wo){
-  if(!selectedRes) return true;
-  return wo.workCenter === selectedRes.workCenter;
+  if(!selectedResources.length) return true;
+  return selectedResources.some(res => assignmentLineFamily(wo.workCenter) === assignmentLineFamily(res.workCenter));
 }
 
 function resEligibleForSelectedWo(res){
   if(!selectedWo) return true;
-  return res.workCenter === selectedWo.workCenter;
+  return assignmentLineFamily(res.workCenter) === assignmentLineFamily(selectedWo.workCenter);
 }
 
 function eligibleResourcesForWo(wo){
   if(!wo) return [];
-  return RESOURCES.filter(r => r.workCenter === wo.workCenter && r.state === 'available');
+  return RESOURCES.filter(r => assignmentLineFamily(r.workCenter) === assignmentLineFamily(wo.workCenter));
 }
 
 function eligibleWosForResource(res){
   if(!res) return [];
-  return WORK_ORDERS.filter(w => w.workCenter === res.workCenter);
+  return WORK_ORDERS.filter(w => assignmentLineFamily(w.workCenter) === assignmentLineFamily(res.workCenter));
 }
 
 function isWoAssignable(wo, res){
   if(!wo || !res) return false;
-  if(wo.status === 'created' || wo.status === 'auto') return true;
-  if(wo.status === 'assigned') return !wo.equipment || wo.equipment === res.id;
-  if(wo.status === 'started') return wo.canAddEquipment && wo.equipment !== res.id;
-  return false;
+  return resEligibleForSelectedWo(res);
+}
+
+function assignmentPwo(id){
+  if(!id) return '';
+  return String(id).replace(/^WO-/, 'PWO-').replace(/^MWO-/, 'PWO-');
+}
+
+function filterSelector(kind, name){
+  return `[data-${kind}-filter="${name}"]`;
+}
+
+function getFilterValues(kind, name){
+  return [...document.querySelectorAll(`${filterSelector(kind, name)}:checked`)].map(input => input.value || 'true');
+}
+
+function getFilterText(kind, name){
+  const input = document.querySelector(filterSelector(kind, name));
+  return input ? input.value.trim().toLowerCase() : '';
+}
+
+function hasAdvancedFilters(kind){
+  return [...document.querySelectorAll(`[data-${kind}-filter]`)].some(input => {
+    if(input.type === 'checkbox') return input.checked;
+    return input.value.trim() !== '';
+  });
+}
+
+function matchesFilterLogic(results, logic){
+  const active = results.filter(Boolean);
+  if(!active.length) return true;
+  return logic === 'or' ? active.some(item => item.pass) : active.every(item => item.pass);
+}
+
+function filterResult(active, pass){
+  return active ? { pass } : null;
+}
+
+function woMatchesAdvancedFilters(w){
+  const statuses = getFilterValues('wo', 'status');
+  const types = getFilterValues('wo', 'type');
+  const workCenters = getFilterValues('wo', 'workCenter');
+  const sku = getFilterText('wo', 'sku');
+  const targetDate = getFilterText('wo', 'targetDate');
+  const plannedMin = getFilterText('wo', 'plannedMin');
+  const plannedMax = getFilterText('wo', 'plannedMax');
+  const results = [
+    filterResult(Boolean(sku), w.sku.toLowerCase().includes(sku)),
+    filterResult(statuses.length, statuses.includes(w.status)),
+    filterResult(types.length, types.includes(w.custom ? 'custom' : 'standard')),
+    filterResult(workCenters.length, workCenters.includes(w.workCenter)),
+    filterResult(Boolean(targetDate), w.targetDate.toLowerCase().includes(targetDate)),
+    filterResult(Boolean(plannedMin), w.planned >= Number(plannedMin || 0)),
+    filterResult(Boolean(plannedMax), w.planned <= Number(plannedMax || Number.MAX_SAFE_INTEGER))
+  ];
+  return matchesFilterLogic(results, assignmentFilters.wo.logic);
+}
+
+function resourceMatchesAdvancedFilters(r){
+  const states = getFilterValues('res', 'state');
+  const quick = getFilterValues('res', 'quick');
+  const workCenters = getFilterValues('res', 'workCenter');
+  const location = getFilterText('res', 'location');
+  const results = [
+    filterResult(states.length, states.includes(r.state)),
+    filterResult(quick.includes('emptyCurrent'), !r.currentWo),
+    filterResult(quick.includes('emptyNext'), !r.nextAssignedWo),
+    filterResult(workCenters.length, workCenters.includes(r.workCenter)),
+    filterResult(Boolean(location), r.location.toLowerCase().includes(location))
+  ];
+  return matchesFilterLogic(results, assignmentFilters.res.logic);
+}
+
+function toggleAssignmentFilter(kind, forceOpen){
+  const panel = document.getElementById(`${kind}FilterPanel`);
+  if(!panel) return;
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
+  document.querySelectorAll('.assignment-filter-panel').forEach(other => {
+    if(other !== panel) other.classList.remove('open');
+  });
+  panel.classList.toggle('open', shouldOpen);
+}
+
+function setAssignmentFilterLogic(kind, logic){
+  assignmentFilters[kind].logic = logic;
+  document.getElementById(`${kind}LogicAnd`)?.classList.toggle('active', logic === 'and');
+  document.getElementById(`${kind}LogicOr`)?.classList.toggle('active', logic === 'or');
+  applyAssignmentFilters();
+}
+
+function clearAssignmentFilters(kind){
+  document.querySelectorAll(`[data-${kind}-filter]`).forEach(input => {
+    if(input.type === 'checkbox') input.checked = false;
+    else input.value = '';
+  });
+  assignmentFilters[kind].logic = 'and';
+  setAssignmentFilterLogic(kind, 'and');
+}
+
+function updateAssignmentFilterButtons(){
+  document.getElementById('woFilterButton')?.classList.toggle('active', hasAdvancedFilters('wo'));
+  document.getElementById('resFilterButton')?.classList.toggle('active', hasAdvancedFilters('res'));
+}
+
+function applyAssignmentFilters(){
+  updateAssignmentFilterButtons();
+  renderWOs();
+  renderResources();
 }
 
 function assignmentValidation(){
-  const checks = [
+  const invalidResources = selectedResources.filter(res => !resEligibleForSelectedWo(res));
+  const selectedDownOrBlocked = selectedResources.filter(res => ['down','blocked'].includes(res.state));
+  const selectedInUse = selectedResources.filter(res => Boolean(res.currentWo));
+  const blockers = [
     {
-      label:'Same Work Center',
-      ok:Boolean(selectedWo && selectedRes && selectedWo.workCenter === selectedRes.workCenter),
-      reason:'Cannot assign this Work Order to this Resource because they belong to different Work Centers.'
+      label:'Work Center match',
+      ok:Boolean(selectedWo && selectedResources.length && invalidResources.length === 0),
+      text:selectedWo && selectedResources.length
+        ? `PWO ${selectedWo.workCenter} matches ${selectedResources.length} selected resource${selectedResources.length > 1 ? 's' : ''}.`
+        : 'Select a PWO and at least one Resource.',
+      reason:'One or more selected resources do not belong to the Work Center required by this PWO.'
     },
     {
-      label:'Resource available',
-      ok:Boolean(selectedRes && selectedRes.state === 'available'),
-      reason:'Cannot assign to a Resource that is not available.'
+      label:'User permission',
+      ok:true,
+      text:'Current user can confirm assignments.'
+    }
+  ];
+  const warnings = [
+    {
+      label:'Resource availability',
+      ok:selectedDownOrBlocked.length === 0,
+      text:selectedDownOrBlocked.length
+        ? `${selectedDownOrBlocked.map(r => r.name).join(', ')} ${selectedDownOrBlocked.length > 1 ? 'are' : 'is'} currently unavailable or blocked.`
+        : 'Selected resources do not report Down or Blocked status.'
     },
     {
-      label:'Work Order can be assigned',
-      ok:Boolean(selectedWo && selectedRes && isWoAssignable(selectedWo, selectedRes)),
-      reason:'This Work Order is not in a state that can be assigned to the selected Resource.'
+      label:'Current assignment',
+      ok:selectedInUse.length === 0,
+      text:selectedInUse.length
+        ? `${selectedInUse.map(r => `${r.name} (${r.currentWo})`).join(', ')} already has current production activity.`
+        : 'No current assignment conflict detected.'
     },
     {
-      label:'Equipment not locked by started production',
-      ok:Boolean(selectedRes && !(selectedRes.state === 'running' && selectedRes.currentWo && (!selectedWo || selectedRes.currentWo !== selectedWo.wo))),
-      reason:'Equipment is locked by started production and cannot be reassigned here.'
+      label:'Multi-resource rule',
+      ok:selectedResources.length <= 1,
+      text:selectedResources.length > 1
+        ? `${selectedResources.length} resources selected. The system will create one assignment per resource.`
+        : 'Single resource assignment.'
+    }
+  ];
+  const passes = [
+    {
+      label:'PWO status eligible',
+      ok:Boolean(selectedWo && ['Released','Created'].includes(selectedWo.status)),
+      text:selectedWo ? `${selectedWo.status} is eligible for assignment.` : 'Select a PWO.'
+    },
+    {
+      label:'Batch available',
+      ok:Boolean(selectedWo && selectedWo.batch && selectedWo.batch !== '-'),
+      text:selectedWo?.batch && selectedWo.batch !== '-' ? `Batch ${selectedWo.batch} is present.` : 'Batch is missing.'
+    },
+    {
+      label:'Planned quantity available',
+      ok:Boolean(selectedWo && selectedWo.planned),
+      text:selectedWo?.planned ? `${selectedWo.planned.toLocaleString('en-US')} planned quantity available.` : 'Planned quantity is missing.'
     }
   ];
   return {
-    checks,
-    valid: checks.every(c => c.ok),
-    reason: checks.find(c => !c.ok)?.reason || ''
+    passes,
+    warnings,
+    blockers,
+    valid: blockers.every(c => c.ok),
+    reason: blockers.find(c => !c.ok)?.reason || ''
   };
 }
 
@@ -2056,45 +2655,41 @@ function renderWOs(){
   const scopeLabel = document.getElementById('woScopeLabel');
   if(!list) return;
   if(scopeLabel){
-    scopeLabel.textContent = selectedRes ? `Showing Work Orders compatible with ${selectedRes.name}.` : 'Select an order to filter eligible resources.';
+    scopeLabel.textContent = selectedResources.length ? `Showing PWOs compatible with selected resources.` : 'Select a PWO to filter eligible resources.';
   }
   const q = woSearch.toLowerCase();
   const filtered = WORK_ORDERS.filter(w=>{
-    if(woFilter==='created' && w.status!=='created') return false;
-    if(woFilter==='assigned' && w.status!=='assigned') return false;
-    if(woFilter==='auto' && w.status!=='auto') return false;
-    if(woFilter==='custom' && !w.custom) return false;
-    if(q && !(`${w.wo} ${w.sku} ${w.batch} ${w.material} ${w.desc}`.toLowerCase().includes(q))) return false;
+    if(!woMatchesAdvancedFilters(w)) return false;
+    if(q && !(`${assignmentPwo(w.wo)} ${w.wo} ${w.sku} ${w.batch} ${w.material} ${w.desc} ${w.status} ${w.workCenter}`.toLowerCase().includes(q))) return false;
     return true;
   });
 
   if(filtered.length===0){
-    list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Work Orders match this filter.</div>`;
+    list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Production Work Orders match this filter.</div>`;
     return;
   }
 
   list.innerHTML = filtered.map(w=>{
     const isSel = selectedWo && selectedWo.wo === w.wo;
     const eligible = woEligibleForSelectedRes(w);
-    const locked = w.status==='started' && w.equipment;
-    const suggested = selectedRes && eligibleWosForResource(selectedRes).length === 1 && eligible;
+    const suggested = selectedResources.length === 1 && eligibleWosForResource(selectedResources[0]).length === 1 && eligible;
     let cls = 'wo-card';
     if(isSel) cls += ' selected';
     else if(suggested) cls += ' suggested';
-    else if(selectedRes && eligible) cls += ' eligible';
-    else if(selectedRes && !eligible) cls += ' dimmed';
+    else if(selectedResources.length && eligible) cls += ' eligible';
+    else if(selectedResources.length && !eligible) cls += ' dimmed';
     return `
     <div class="${cls}" onclick="selectWo('${w.wo}')">
       <div class="flex items-start justify-between gap-2">
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-bold text-[13px]">${w.wo}</span>
-            ${w.custom ? '<span class="pill pill-orange">Custom WO</span>' : ''}
+            <span class="font-bold text-[13px]">${assignmentPwo(w.wo)}</span>
+            ${w.custom ? '<span class="pill pill-orange">Custom PWO</span>' : ''}
             ${suggested ? '<span class="pill pill-green">Suggested</span>' : ''}
           </div>
           <div class="text-[11.5px] mt-0.5" style="color:var(--text-soft);">${w.desc}</div>
         </div>
-        ${assignmentStatusPill(w.status)}
+        <span class="pill pill-blue">${w.status}</span>
       </div>
       <div class="flex items-center gap-3 mt-2 text-[11px]" style="color:var(--text-muted);">
         <span>SKU <b style="color:var(--text-soft);">${w.sku}</b></span>
@@ -2102,7 +2697,7 @@ function renderWOs(){
         <span>WC <b style="color:var(--text-soft);">${w.workCenter}</b></span>
         <span>Planned <b style="color:var(--text-soft);">${w.planned.toLocaleString('en-US')}</b></span>
       </div>
-      ${w.equipment ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Equipment: <span class="isa-tag">${w.equipment}</span>${locked ? ' <span style="color:var(--amber);font-weight:700;">· locked (started)</span>' : ''}</div>` : ''}
+      <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Target Date: <b style="color:var(--text-soft);">${w.targetDate}</b></div>
     </div>`;
   }).join('');
 }
@@ -2111,14 +2706,12 @@ function renderResources(){
   const list = document.getElementById('resList');
   const scopeLabel = document.getElementById('resScopeLabel');
   if(!list || !scopeLabel) return;
-  scopeLabel.textContent = selectedWo ? `Showing resources eligible for ${selectedWo.wo}.` : 'All work centers';
+  scopeLabel.textContent = selectedWo ? `Showing resources compatible with ${assignmentPwo(selectedWo.wo)}.` : 'All resources';
 
   const q = resSearch.toLowerCase();
   const filtered = RESOURCES.filter(r=>{
-    if(resFilter==='available' && r.state!=='available') return false;
-    if(resFilter==='running' && r.state!=='running') return false;
-    if(resFilter==='down' && r.state!=='down') return false;
-    if(q && !(`${r.id} ${r.name} ${r.workCenter} ${r.state} ${r.currentWo || ''}`.toLowerCase().includes(q))) return false;
+    if(!resourceMatchesAdvancedFilters(r)) return false;
+    if(q && !(`${r.id} ${r.name} ${r.workCenter} ${r.state} ${assignmentPwo(r.currentWo || '')} ${assignmentPwo(r.nextAssignedWo || '')} ${r.location}`.toLowerCase().includes(q))) return false;
     return true;
   });
 
@@ -2128,63 +2721,58 @@ function renderResources(){
   }
 
   list.innerHTML = filtered.map(r=>{
-    const isSel = selectedRes && selectedRes.id === r.id;
+    const isSel = selectedResources.some(x => x.id === r.id);
     const eligible = resEligibleForSelectedWo(r);
-    const suggested = selectedWo && eligibleResourcesForWo(selectedWo).length === 1 && eligible && r.state !== 'down';
     let cls = 'res-card';
     if(isSel) cls += ' selected';
-    else if(suggested) cls += ' suggested';
-    else if(selectedWo && eligible && r.state!=='down') cls += ' eligible';
+    else if(selectedWo && eligible) cls += ' eligible';
     else if(selectedWo && !eligible) cls += ' dimmed';
-    if(r.state==='down') cls += ' locked';
     return `
     <div class="${cls}" onclick="selectRes('${r.id}')" style="${isSel?'border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;':''}">
       <div class="flex items-start justify-between gap-2">
         <div>
           <div class="font-bold text-[13px]">${r.name}</div>
+          <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Resource ID <b style="color:var(--text-soft);">${r.id}</b></div>
           <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Work Center <b style="color:var(--text-soft);">${r.workCenter}</b></div>
-          ${suggested ? '<div class="text-[11px] mt-1 font-bold" style="color:var(--green);">Suggested match</div>' : ''}
         </div>
         ${assignmentResStatePill(r.state)}
       </div>
-      ${r.currentWo ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Currently running: <span class="isa-tag">${r.currentWo}</span></div>` : ''}
-      ${r.state==='down' ? `<div class="mt-2 text-[11px] font-semibold" style="color:var(--red);">Equipment unavailable</div>` : ''}
+      ${r.currentWo ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Current PWO: <span class="isa-tag">${assignmentPwo(r.currentWo)}</span></div>` : '<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Current PWO: <span class="isa-tag">None</span></div>'}
+      <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Next Assigned PWO: <span class="isa-tag">${r.nextAssignedWo ? assignmentPwo(r.nextAssignedWo) : 'None'}</span></div>
+      ${r.assignmentStatus ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Assignment: <span class="isa-tag">${r.assignmentStatus}</span></div>` : ''}
+      <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Location: <b style="color:var(--text-soft);">${r.location}</b></div>
     </div>`;
   }).join('');
 }
 
 function selectWo(woId){
   const w = WORK_ORDERS.find(x=>x.wo===woId);
+  if(selectedResources.length && !woEligibleForSelectedRes(w)){
+    showToast(`${assignmentPwo(w.wo)} is not compatible with the selected resource Work Center.`);
+    return;
+  }
   selectedWo = (selectedWo && selectedWo.wo===woId) ? null : w;
   renderAssignmentAll();
 }
 
 function selectRes(resId){
   const r = RESOURCES.find(x=>x.id===resId);
-  if(r.state==='down') return;
-  selectedRes = (selectedRes && selectedRes.id===resId) ? null : r;
+  if(selectedWo && !resEligibleForSelectedWo(r)){
+    showToast(`${r.name} is not compatible with Work Center ${selectedWo.workCenter}.`);
+    return;
+  }
+  const alreadySelected = selectedResources.some(x => x.id === resId);
+  selectedResources = alreadySelected
+    ? selectedResources.filter(x => x.id !== resId)
+    : [...selectedResources, r];
   renderAssignmentAll();
 }
 
 function clearSelection(){
   selectedWo = null;
-  selectedRes = null;
+  selectedResources = [];
   lastAssigned = null;
   renderAssignmentAll();
-}
-
-function setWoFilter(f, el){
-  woFilter = f;
-  document.querySelectorAll('#woFilterRow .filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderWOs();
-}
-
-function setResFilter(f, el){
-  resFilter = f;
-  document.querySelectorAll('#resFilterRow .filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderResources();
 }
 
 function filterWOs(v){
@@ -2198,13 +2786,12 @@ function filterResources(v){
 }
 
 function toggleWoMenu(event){
-  event.stopPropagation();
-  document.getElementById('woActionMenu').classList.toggle('open');
+  if(event) event.stopPropagation();
+  openCreatePwoModal();
 }
 
 function createWOFromMenu(){
-  document.getElementById('woActionMenu').classList.remove('open');
-  showToast('Create WO selected');
+  openCreatePwoModal();
 }
 
 document.addEventListener('click', () => {
@@ -2212,69 +2799,196 @@ document.addEventListener('click', () => {
   if(menu) menu.classList.remove('open');
 });
 
+function nextCustomPwoNumber(){
+  const customCount = WORK_ORDERS.filter(w => w.custom).length + 1;
+  return `PWO-CUSTOM-${String(customCount).padStart(3, '0')}`;
+}
+
+function openCreatePwoModal(){
+  const modal = document.getElementById('createPwoModal');
+  if(!modal) return;
+  document.getElementById('createPwoNumber').value = nextCustomPwoNumber();
+  document.getElementById('createPwoSku').value = '';
+  document.getElementById('createPwoDesc').value = '';
+  document.getElementById('createPwoWorkCenter').value = selectedResources[0]?.workCenter || selectedWo?.workCenter || 'AFA';
+  document.getElementById('createPwoBatch').value = '';
+  document.getElementById('createPwoTargetDate').value = '';
+  document.getElementById('createPwoPlanned').value = '';
+  modal.style.display = 'flex';
+}
+
+function closeCreatePwoModal(){
+  const modal = document.getElementById('createPwoModal');
+  if(modal) modal.style.display = 'none';
+}
+
+function submitCreatePwoModal(){
+  const woNumber = document.getElementById('createPwoNumber').value.trim();
+  const sku = document.getElementById('createPwoSku').value.trim();
+  const desc = document.getElementById('createPwoDesc').value.trim();
+  const workCenter = document.getElementById('createPwoWorkCenter').value;
+  const batch = document.getElementById('createPwoBatch').value.trim() || '-';
+  const targetDate = document.getElementById('createPwoTargetDate').value.trim() || 'Unscheduled';
+  const planned = Number(document.getElementById('createPwoPlanned').value || 0);
+  if(!woNumber || !sku || !desc || !planned){
+    showToast('PWO number, SKU, description, and planned quantity are required.');
+    return;
+  }
+  if(WORK_ORDERS.some(w => assignmentPwo(w.wo).toLowerCase() === woNumber.toLowerCase() || w.wo.toLowerCase() === woNumber.toLowerCase())){
+    showToast('A PWO with this number already exists.');
+    return;
+  }
+  const newPwo = {
+    wo: woNumber.replace(/^PWO-/, 'WO-'),
+    sku,
+    desc,
+    batch,
+    material: desc,
+    workCenter,
+    status:'Created',
+    planned,
+    targetDate,
+    custom:true
+  };
+  WORK_ORDERS.unshift(newPwo);
+  selectedWo = newPwo;
+  closeCreatePwoModal();
+  showToast(`${assignmentPwo(newPwo.wo)} created.`);
+  renderAssignmentAll();
+}
+
 function renderReviewPanel(){
   const panel = document.getElementById('reviewPanel');
+  const summary = document.getElementById('assignSummary');
+  const assignBtn = document.getElementById('assignBtn');
+
+  if(summary && assignBtn){
+    if(lastAssigned){
+      summary.innerHTML = `Assignment created for <b style="color:var(--text);">${assignmentPwo(lastAssigned.wo)}</b>.`;
+      assignBtn.textContent = 'Assign Another';
+      assignBtn.classList.remove('btn-disabled');
+      assignBtn.onclick = assignAnotherWorkOrder;
+    }else if(selectedWo && selectedResources.length){
+      const validation = assignmentValidation();
+      summary.innerHTML = validation.valid
+        ? `Ready to create ${selectedResources.length} assignment${selectedResources.length > 1 ? 's' : ''} for <b style="color:var(--text);">${assignmentPwo(selectedWo.wo)}</b>.`
+        : validation.reason;
+      assignBtn.textContent = validation.valid ? 'ASSIGN' : 'Show Reason';
+      assignBtn.classList.remove('btn-disabled');
+      assignBtn.onclick = validation.valid ? requestAssignmentBadgeAuth : showInvalidAssignmentReason;
+    }else if(selectedWo){
+      summary.innerHTML = `Choose an eligible Resource for <b style="color:var(--text);">${assignmentPwo(selectedWo.wo)}</b>.`;
+      assignBtn.textContent = 'ASSIGN';
+      assignBtn.classList.add('btn-disabled');
+      assignBtn.onclick = requestAssignmentBadgeAuth;
+    }else if(selectedResources.length){
+      summary.innerHTML = `Choose a compatible PWO for selected resource${selectedResources.length > 1 ? 's' : ''}.`;
+      assignBtn.textContent = 'ASSIGN';
+      assignBtn.classList.add('btn-disabled');
+      assignBtn.onclick = requestAssignmentBadgeAuth;
+    }else{
+      summary.textContent = 'Select a PWO and a Resource to assign.';
+      assignBtn.textContent = 'ASSIGN';
+      assignBtn.classList.add('btn-disabled');
+      assignBtn.onclick = requestAssignmentBadgeAuth;
+    }
+  }
+
   if(!panel) return;
 
   if(lastAssigned){
     panel.innerHTML = `
       <div class="review-content">
         <div class="success-panel">
-          <div class="success-title">Work Order ${lastAssigned.wo} assigned to ${lastAssigned.resource}.</div>
-          <div class="helper-note">The Work Order is now pending start. Continue to the control panel or assign another order.</div>
+          <div class="success-title">${lastAssigned.count} assignment${lastAssigned.count > 1 ? 's' : ''} created for ${assignmentPwo(lastAssigned.wo)}.</div>
+          <div class="helper-note">The PWO was not duplicated and no new batch was created. Batch ${lastAssigned.batch} remains associated with the original PWO.</div>
         </div>
       </div>
       <div class="review-actions">
-        <button class="review-clear-btn" onclick="assignAnotherWorkOrder()">Assign Another Work Order</button>
+        <button class="review-clear-btn" onclick="assignAnotherWorkOrder()">Assign Another PWO</button>
         <button class="review-primary-btn" onclick="goToControlPanelFromSuccess()">Go to Control Panel</button>
       </div>`;
     return;
   }
 
-  if(!selectedWo || !selectedRes){
+  if(!selectedWo || !selectedResources.length){
     const hint = selectedWo
-      ? `Choose an eligible Resource for ${selectedWo.wo} to review the assignment.`
-      : selectedRes
-        ? `Choose a compatible Work Order for ${selectedRes.name} to review the assignment.`
-        : 'Select a Work Order and a Resource to review the assignment.';
+      ? `Choose one or more eligible Resources for ${assignmentPwo(selectedWo.wo)} to review the assignment.`
+      : selectedResources.length
+        ? `Choose a compatible PWO for the selected Resource${selectedResources.length > 1 ? 's' : ''}.`
+        : 'Select a PWO and a Resource to review the assignment.';
     panel.innerHTML = `<div class="review-content"><div class="review-empty">${hint}</div></div>`;
     return;
   }
 
   const validation = assignmentValidation();
+  const resourceRows = selectedResources.map(res => `
+    <div class="review-resource-line">
+      <span class="review-resource-name">${res.name}</span>
+      <span class="review-resource-muted">${res.workCenter}</span>
+      <span>${assignmentResStatePill(res.state)}</span>
+      <span class="review-resource-strong">${res.currentWo ? assignmentPwo(res.currentWo) : 'No current PWO'}</span>
+      <span class="review-resource-strong">${res.nextAssignedWo ? assignmentPwo(res.nextAssignedWo) : 'No next PWO'}</span>
+    </div>
+  `).join('');
+  const renderValidationGroup = (label, cls, rows, emptyText) => `
+    <div class="validation-group-label ${cls}">${label}</div>
+    ${
+      rows.length
+        ? rows.map(check => `
+          <div class="validation-row ${check.ok ? 'ok' : cls === 'warning' ? 'warn' : 'block'}">
+            <span class="validation-dot">${check.ok ? '✓' : cls === 'warning' ? '!' : '×'}</span>
+            <span><b>${check.label}:</b> ${check.text}</span>
+          </div>
+        `).join('')
+        : `<div class="helper-note">${emptyText}</div>`
+    }`;
+  const warningRows = validation.warnings.filter(check => !check.ok);
+  const blockerRows = validation.blockers.filter(check => !check.ok);
+  const validationHtml = [...validation.passes.filter(check => check.ok).map(check => `
+      <div class="validation-row ok">
+        <span class="validation-dot">✓</span>
+        <span><b>${check.label}:</b> ${check.text}</span>
+      </div>
+    `),
+    warningRows.length ? renderValidationGroup('Warning', 'warning', warningRows, '') : '',
+    blockerRows.length ? renderValidationGroup('Blocker', 'blocker', blockerRows, '') : ''
+  ].join('');
   panel.innerHTML = `
     <div class="review-content">
       <div class="review-section">
-        <div class="review-section-title">Assignment Summary</div>
-        <div class="review-grid">
-          <div class="review-row"><span>Work Order</span><b>${selectedWo.wo}</b></div>
-          <div class="review-row"><span>SKU / material</span><b>${selectedWo.sku}<br>${selectedWo.material}</b></div>
-          <div class="review-row"><span>Batch</span><b>${selectedWo.batch}</b></div>
+        <div class="review-combined-head">
+          <div>
+            <div class="review-combined-title">${assignmentPwo(selectedWo.wo)}</div>
+            <div class="review-combined-sub">${selectedWo.sku} · Batch ${selectedWo.batch} · ${selectedWo.workCenter} · ${selectedWo.status}</div>
+          </div>
+          <div class="review-combined-sub" style="text-align:right;">${selectedResources.length} resource${selectedResources.length > 1 ? 's' : ''}<br>${selectedWo.custom ? 'Custom PWO' : 'SAP/ERP'}</div>
+        </div>
+        <div class="review-grid compact">
+          <div class="review-row"><span>Material</span><b>${selectedWo.material}</b></div>
           <div class="review-row"><span>Planned quantity</span><b>${selectedWo.planned.toLocaleString('en-US')}</b></div>
-          <div class="review-row"><span>Work Center</span><b>${selectedWo.workCenter}</b></div>
-          <div class="review-row"><span>Resource / line</span><b>${selectedRes.name}</b></div>
-          <div class="review-row"><span>Resource status</span><b>${selectedRes.state.toUpperCase()}</b></div>
+          <div class="review-row"><span>Target Date</span><b>${selectedWo.targetDate}</b></div>
+        </div>
+        <div class="review-section-title" style="margin-top:9px;">Resource Assignment Summary</div>
+        <div class="review-grid" style="gap:5px;">
+          ${resourceRows}
         </div>
       </div>
       <div class="review-section">
-        <div class="review-section-title">Validation Checklist</div>
-        ${validation.checks.map(check => `
-          <div class="validation-row ${check.ok ? 'ok' : 'bad'}">
-            <span class="validation-dot">${check.ok ? '?' : '!'}</span>
-            <span>${check.label}</span>
-          </div>
-        `).join('')}
+        <div class="review-section-title">Validation &amp; Warnings</div>
+        ${validationHtml}
         ${validation.valid ? '' : `<div class="helper-note" style="color:var(--red);font-weight:700;margin-top:6px;">${validation.reason}</div>`}
       </div>
     </div>
     <div class="review-actions">
-      <button class="review-clear-btn" onclick="clearSelection()">Clear selection</button>
+      <button class="review-clear-btn" onclick="clearSelection()">CLEAR</button>
       ${validation.valid
-        ? `<button class="review-primary-btn" onclick="confirmAssignment()">Confirm Assignment</button>`
-        : `<button class="review-primary-btn" onclick="showInvalidAssignmentReason()">Show reason</button>`}
+        ? `<button class="review-primary-btn" onclick="requestAssignmentBadgeAuth()">ASSIGN</button>`
+        : `<button class="review-primary-btn" disabled>ASSIGN</button>`}
     </div>`;
 }
 function renderAssignmentAll(){
+  updateAssignmentFilterButtons();
   renderWOs();
   renderResources();
   renderReviewPanel();
@@ -2288,37 +3002,45 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
+function requestAssignmentBadgeAuth(){
+  if(!selectedWo || !selectedResources.length) return;
+  const validation = assignmentValidation();
+  if(!validation.valid){
+    showToast(validation.reason);
+    return;
+  }
+  openBadgeAuthModal();
+}
+
 function confirmAssignment(){
-  if(!selectedWo || !selectedRes) return;
+  if(!selectedWo || !selectedResources.length) return;
   const validation = assignmentValidation();
   if(!validation.valid){
     showToast(validation.reason);
     return;
   }
   const assignedWo = selectedWo.wo;
-  const assignedResource = selectedRes.name;
-  selectedWo.status = 'assigned';
-  selectedWo.equipment = selectedRes.id;
-  if(!selectedRes.currentWo && selectedRes.state === 'available'){
-    selectedRes.currentWo = assignedWo;
-    selectedRes.state = 'running';
-  }
-  lastAssigned = { wo: assignedWo, resource: assignedResource };
+  selectedResources.forEach((res, index) => {
+    res.assignmentStatus = index === 0 ? 'Assigned' : 'Assigned';
+    res.assignedWo = assignedWo;
+    res.nextAssignedWo = assignedWo;
+  });
+  lastAssigned = { wo: assignedWo, batch: selectedWo.batch, count: selectedResources.length };
   selectedWo = null;
-  selectedRes = null;
-  showToast(`Work Order ${assignedWo} assigned to ${assignedResource}.`);
+  selectedResources = [];
+  showToast(`Assignment created for ${assignmentPwo(assignedWo)}.`);
   renderAssignmentAll();
 }
 
 function showInvalidAssignmentReason(){
   const validation = assignmentValidation();
-  showToast(validation.reason || 'Select a valid Work Order and Resource combination.');
+  showToast(validation.reason || 'Select a valid PWO and Resource combination.');
 }
 
 function assignAnotherWorkOrder(){
   lastAssigned = null;
   selectedWo = null;
-  selectedRes = null;
+  selectedResources = [];
   renderAssignmentAll();
 }
 
@@ -2333,6 +3055,7 @@ function consumePendingHeaderAction(){
   requestAnimationFrame(() => {
     if(action === 'control-panel') openControlPanel();
     if(action === 'badge-auth') openBadgeAuthModal();
+    if(action === 'flag-categories') toggleFlagCategories();
   });
 }
 
@@ -2341,7 +3064,9 @@ renderUnitCards();
 renderGanttHead();
 renderGanttBody();
 renderAssignmentAll();
+routeFromLocation();
 consumePendingHeaderAction();
+window.addEventListener('hashchange', routeFromLocation);
 window.addEventListener('resize', () => {
   unitCarouselPage = 0;
   renderUnitCards();

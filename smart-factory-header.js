@@ -8,83 +8,80 @@
         *{box-sizing:border-box;font-family:inherit;}
         .topbar{height:64px;background:var(--nav);color:#fff;display:flex;align-items:center;flex-shrink:0;}
         .screen-switcher{position:relative;z-index:200;}
-        .app-icon{width:52px;height:64px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;cursor:pointer;transition:background .15s ease;color:#fff;border:0;}
+        .app-icon{width:52px;height:64px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:background .15s ease;color:#fff;border:0;}
+        .app-icon svg{width:22px;height:22px;fill:currentColor;display:block;}
         .screen-switcher.open .app-icon,.app-icon:hover{background:rgba(255,255,255,.16);}
-        .screen-menu{position:absolute;left:8px;top:64px;width:238px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:12px;box-shadow:0 18px 48px rgba(8,16,38,.22);padding:8px;display:none;color:#1f2937;}
+        .screen-menu{position:absolute;left:8px;top:64px;width:272px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:12px;box-shadow:0 18px 48px rgba(8,16,38,.22);padding:10px;display:none;color:#1f2937;}
         .screen-switcher.open .screen-menu{display:block;}
-        .screen-menu-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(0,0,0,.52);padding:8px 10px 6px;}
-        .screen-menu-item{width:100%;border:0;background:#fff;border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;color:#1f2937;}
+        .screen-menu-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(0,0,0,.52);padding:8px 10px 8px;}
+        .screen-menu-item{width:100%;border:0;background:#fff;border-radius:9px;padding:12px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;color:#1f2937;}
         .screen-menu-item:hover{background:#eaf1ff;color:#115dff;}
         .screen-menu-item.active{background:#eef4ff;color:#115dff;}
-        .screen-menu-icon{width:30px;height:30px;border-radius:8px;background:#f3f6fb;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-        .screen-menu-label{display:block;font-size:13px;font-weight:800;line-height:1.15;}
-        .screen-menu-sub{display:block;font-size:11px;color:rgba(0,0,0,.55);margin-top:2px;}
-        .brand{display:flex;align-items:center;gap:8px;padding-left:16px;padding-right:20px;}
-        .bd-mark{width:36px;height:36px;border-radius:999px;background:#fff;color:var(--nav);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0;position:relative;}
-        .bd-mark:before{content:"";width:20px;height:20px;border-radius:50%;background:conic-gradient(from 0deg,var(--nav) 0 10%,transparent 10% 20%,var(--nav) 20% 30%,transparent 30% 40%,var(--nav) 40% 50%,transparent 50% 60%,var(--nav) 60% 70%,transparent 70% 80%,var(--nav) 80% 90%,transparent 90% 100%);position:absolute;}
-        .bd-text{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1;}
-        .factory-text{font-size:20px;font-weight:800;line-height:1;margin-left:4px;}
-        .search-wrap{flex:1;display:flex;justify-content:center;}
-        .search{position:relative;width:260px;}
-        .search input{height:40px;width:100%;border:0;border-radius:10px;padding:0 44px 0 16px;font-size:14px;color:#1f2937;background:#fff;}
-        .search-dot{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;}
+        .screen-menu-icon{width:34px;height:34px;border-radius:9px;background:#f3f6fb;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:currentColor;}
+        .screen-menu-icon svg{width:22px;height:22px;fill:currentColor;display:block;}
+        .screen-menu-label{display:block;font-size:14px;font-weight:800;line-height:1.15;}
+        .brand{display:flex;align-items:center;gap:14px;padding-left:16px;padding-right:20px;}
+        .bd-logotype{width:84px;height:32px;display:block;flex-shrink:0;}
+        .factory-text{font-size:24px;font-weight:700;line-height:1;white-space:nowrap;}
+        .header-spacer{flex:1;min-width:24px;}
+        .search{position:relative;width:320px;flex-shrink:0;}
+        .search input{height:36px;width:100%;border:0;border-radius:10px;padding:0 14px 0 40px;font-size:14px;color:#fff;background:rgba(255,255,255,.12);}
+        .search input::placeholder{color:#fff;opacity:1;}
+        .search-dot{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);pointer-events:none;}
+        .search-dot svg{width:18px;height:18px;fill:currentColor;display:block;}
         .top-actions{display:flex;align-items:center;gap:12px;padding-right:20px;}
-        .location{font-size:12px;white-space:nowrap;}
-        .line-pill{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:800;white-space:nowrap;}
-        .line-pill span{opacity:.6;margin-left:4px;}
         .top-divider{width:1px;height:24px;background:rgba(255,255,255,.16);}
-        .topbar-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;position:relative;}
-        .notify-dot{position:absolute;right:0;top:0;width:8px;height:8px;border-radius:999px;background:#ff6b2c;}
-        .shift-btn{height:40px;border:0;border-radius:10px;padding:0 16px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;}
+        .topbar-icon-btn{width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:background .15s ease;}
+        .topbar-icon-btn:hover{background:rgba(255,255,255,.12);}
+        .topbar-icon-btn svg{width:24px;height:24px;fill:currentColor;display:block;}
+        .notify-dot{position:absolute;right:8px;top:8px;width:8px;height:8px;border-radius:999px;background:#ff6b2c;}
+        .shift-btn{height:36px;border:0;border-radius:12px;padding:0 16px;background:var(--accent);color:#fff;font-size:14px;font-weight:500;line-height:1;display:flex;align-items:center;gap:8px;text-transform:uppercase;cursor:pointer;}
+        .shift-btn svg{width:20px;height:20px;fill:currentColor;display:block;}
         .avatar{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#d6b08b,#6f8a66);border:2px solid rgba(255,255,255,.18);}
-        .flow-header{height:90px;background:#fff;position:relative;z-index:30;}
-        .flow-inner{height:72px;margin-top:9px;display:flex;align-items:stretch;padding:0 40px;min-width:0;}
-        .title-block{display:flex;flex-direction:column;justify-content:center;flex-shrink:0;}
-        .flow-title{font-size:20px;font-weight:800;white-space:nowrap;}
-        .product-block{display:flex;flex-direction:column;justify-content:center;flex-shrink:0;margin-left:100px;}
-        .product-name{font-size:14px;font-weight:400;white-space:nowrap;}
-        .flow-copy{font-size:12px;color:rgba(0,0,0,.6);white-space:nowrap;}
-        .flow-divider{width:1px;height:46px;align-self:center;background:var(--line);flex-shrink:0;margin-left:12px;}
-        .bottleneck{display:flex;flex-direction:column;justify-content:center;gap:2px;flex-shrink:0;margin-left:12px;}
-        .active-category{flex:1;border-radius:8px;padding:0 16px;margin-left:12px;display:flex;flex-direction:column;justify-content:center;min-width:0;position:relative;overflow:hidden;background:var(--cat-bg, var(--green-bg));transition:background .15s ease;}
-        .active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat-accent, var(--green));transition:background .15s ease;}
-        .active-category-label{font-size:20px;font-weight:400;color:var(--cat-accent, var(--green));transition:color .15s ease;}
-        .active-category-sub{font-size:10px;color:rgba(0,0,0,.72);}
-        .status-control{padding-left:16px;display:flex;flex-direction:column;justify-content:center;gap:6px;flex-shrink:0;}
-        .status-buttons{display:flex;align-items:center;gap:8px;}
-        .header-action{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;background:#fff;color:var(--accent);}
-        .header-action.primary{background:var(--accent);color:#fff;}
-        .header-action.outline{border-color:rgba(37,99,235,.4);}
-        .header-action:hover{filter:brightness(.96);background:#e9f0fe;}
-        .header-action.primary:hover{background:var(--accent);filter:brightness(.94);}
-        .button-divider{width:1px;height:32px;background:var(--line);}
       </style>
       <div class="topbar">
         <div class="screen-switcher" id="switcher">
-          <button class="app-icon" type="button" aria-label="Switch screens" id="switchButton">&#9638;</button>
+          <button class="app-icon" type="button" aria-label="Switch screens" id="switchButton">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 4h4v4H4V4Zm6 0h4v4h-4V4Zm6 0h4v4h-4V4ZM4 10h4v4H4v-4Zm6 0h4v4h-4v-4Zm6 0h4v4h-4v-4ZM4 16h4v4H4v-4Zm6 0h4v4h-4v-4Zm6 0h4v4h-4v-4Z"/>
+            </svg>
+          </button>
           <div class="screen-menu" id="screenMenu">
-            <div class="screen-menu-title">Screens</div>
-            <button class="screen-menu-item ${isMonitoring ? '' : 'active'}" type="button" data-path="production-work-order-v1.html">
-              <span class="screen-menu-icon">&#9636;</span><span><span class="screen-menu-label">Production Work Order</span><span class="screen-menu-sub">Current flow</span></span>
+            <div class="screen-menu-title">Use Cases</div>
+            <button class="screen-menu-item ${isMonitoring ? '' : 'active'}" type="button" data-path="index.html">
+              <span class="screen-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h12v-2H3v2Zm0 5h18v-2H3v2ZM3 6v2h18V6H3Z"/></svg></span><span><span class="screen-menu-label">Production Overview</span></span>
             </button>
-            <button class="screen-menu-item ${isMonitoring ? 'active' : ''}" type="button" data-path="figma-3d-line-monitoring.html">
-              <span class="screen-menu-icon">&#9723;</span><span><span class="screen-menu-label">3D Line Monitoring</span><span class="screen-menu-sub">Figma screen</span></span>
+            <button class="screen-menu-item ${isMonitoring ? 'active' : ''}" type="button" data-path="line-monitoring.html">
+              <span class="screen-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6Z"/></svg></span><span><span class="screen-menu-label">Digital OEE</span></span>
             </button>
           </div>
         </div>
-        <div class="brand"><div class="bd-mark"><span>BD</span></div><div class="bd-text">BD</div><div class="factory-text">Smart Factory</div></div>
-        <div class="search-wrap"><div class="search"><input placeholder="Search ..."><span class="search-dot">&#128269;</span></div></div>
-        <div class="top-actions"><span class="location">&#9679; Tijuana / Assembly Room / Unit A /</span><span class="line-pill">Line 1 <span>+2</span></span><div class="top-divider"></div><span class="topbar-icon">&#10022;</span><span class="topbar-icon">&#8962;</span><span class="topbar-icon">&#9635;</span><span class="topbar-icon">&#9679;<span class="notify-dot"></span></span><button class="shift-btn" type="button">SHIFT ENTRY <span>v</span></button><div class="avatar"></div></div>
-      </div>
-      <div class="flow-header">
-        <div class="flow-inner">
-          <div class="title-block"><div class="flow-title">Digital OEE</div></div>
-          <div class="product-block"><div class="product-name">NEXIVA 20 GA X 1 IN SINGLE PORT</div><div class="flow-copy">SKU: 80-APX-50000 | Lot: L2075-0245</div></div>
-          <div class="flow-divider"></div>
-          <div class="bottleneck"><div class="flow-copy">Bottleneck</div><div class="flow-copy">Autoguard 13 Zone #5</div></div>
-          <div class="flow-divider"></div>
-          <div class="active-category"><div class="active-category-label">Production</div><div class="active-category-sub">Active Category</div></div>
-          <div class="status-control"><span class="flow-copy">Status Control</span><div class="status-buttons"><button class="header-action primary" type="button" data-action="badge-auth" title="Assign & Run a Work Order"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button><button class="header-action outline" type="button" data-action="control-panel" title="Open Work Order Control Panel"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button><div class="button-divider"></div><button class="header-action outline" type="button" data-action="flag" title="Flag Category"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h13l-2.5 3.5L18 11H5"/></svg></button></div></div>
+        <div class="brand">
+          <svg class="bd-logotype" viewBox="0 0 84 32" fill="none" aria-label="BD">
+            <g clip-path="url(#bdLogotypeClip)">
+              <path d="M52.0588 27.9199H43.2239C42.1572 27.9199 41.334 27.0619 41.334 25.9953V6.00658C41.334 4.9283 42.1572 4.1167 43.2239 4.1167H51.4791C56.024 4.1167 58.7371 6.76021 58.7371 10.1921C58.7371 13.6589 56.6154 14.8995 55.8733 15.1661C57.0212 15.456 60.1285 16.7662 60.1285 21.114C60.14 24.8126 57.1371 27.9199 52.0588 27.9199ZM51.3167 7.6066C51.3167 7.6066 51.7341 7.6066 45.1485 7.6066V13.6125C48.8703 13.6125 51.3167 13.6125 51.3167 13.6125C53.7631 13.6125 54.911 12.2559 54.911 10.6095C54.911 8.92836 53.8327 7.6066 51.3167 7.6066ZM52.1979 17.0792H45.1601V24.3721C45.1601 24.3721 47.1196 24.3721 52.1979 24.3721C55.0153 24.3721 56.3139 22.5517 56.3139 20.7198C56.3139 18.9111 55.0385 17.0792 52.1979 17.0792ZM71.1431 27.9199C71.1431 27.9199 70.03 27.9199 65.2764 27.9199C64.2097 27.9199 63.3517 27.1083 63.3517 25.9953V6.00658C63.3517 4.9283 64.2097 4.1167 65.2764 4.1167H71.1431C79.0852 4.1167 83.4795 9.43851 83.4795 16.0241C83.4795 22.5865 79.0389 27.9199 71.1431 27.9199ZM70.8996 7.6066H67.2126V24.4068H70.8996C76.5229 24.4068 79.6534 21.0793 79.6534 16.0125C79.6534 10.8994 76.5693 7.6066 70.8996 7.6066Z" fill="white"/>
+              <path d="M16 18.0182C18.3421 18.0182 20.2324 19.9201 20.2324 22.2506C20.2322 23.9198 19.2583 25.3687 17.8558 26.0527C21.554 25.3802 24.5333 22.7601 25.7159 19.3169C25.7391 19.2475 25.7741 19.2007 25.8665 19.189L31.8268 18.3545C30.6673 26.0531 24.0233 31.9541 16 31.9541C7.98843 31.954 1.34456 26.053 0.161914 18.3545L6.13346 19.189C6.22622 19.2006 6.26087 19.2474 6.28406 19.3169C7.46672 22.7604 10.4468 25.3803 14.1454 26.0527C12.7426 25.3688 11.7689 23.92 11.7687 22.2506C11.7687 19.9086 13.6696 18.0183 16 18.0182Z" fill="white"/>
+              <path d="M9.22907 14.9113C9.27532 14.946 9.29814 14.9807 9.29814 15.0155C9.29799 15.0732 9.25185 15.0965 9.19397 15.1196C9.10766 15.1524 0.150591 18.2039 0.150591 18.2039C0.0462416 17.4735 0 16.7193 0 15.9541C3.20101e-05 13.6121 0.498542 11.3857 1.40287 9.39151C1.40287 9.39151 9.18269 14.8765 9.22907 14.9113Z" fill="white"/>
+              <path d="M30.5971 9.39151C31.5015 11.3857 32 13.6121 32 15.9541C32 16.7193 31.9538 17.4735 31.8494 18.2039C31.8003 18.1872 22.8638 15.1427 22.806 15.1196C22.7597 15.0965 22.702 15.0732 22.7019 15.0155C22.7019 14.9808 22.7249 14.9459 22.7709 14.9113C22.8172 14.8766 30.5684 9.41178 30.5971 9.39151Z" fill="white"/>
+              <path d="M10.8867 11.4092C10.9099 11.444 10.9105 11.4675 10.9105 11.4907C10.9104 11.5485 10.8639 11.5835 10.8176 11.5836C10.7944 11.5836 10.7593 11.5827 10.7361 11.5711C10.6378 11.5409 1.46051 9.27878 1.4493 9.27602C2.72468 6.50496 4.75401 4.17413 7.28158 2.52773C7.28158 2.52773 10.8529 11.3367 10.8867 11.4092Z" fill="white"/>
+              <path d="M24.7309 2.52773C27.2584 4.17413 29.2878 6.51656 30.5632 9.27602C30.5632 9.27602 21.3448 11.5479 21.2752 11.5711C21.2521 11.5826 21.218 11.5836 21.1948 11.5836C21.1369 11.5836 21.1021 11.5486 21.102 11.4907C21.102 11.4675 21.113 11.444 21.1246 11.4092C21.1478 11.3628 24.7309 2.52773 24.7309 2.52773Z" fill="white"/>
+              <path d="M14.168 9.39151C14.1564 9.47267 14.1099 9.49681 14.0752 9.49681C14.029 9.49667 14.0059 9.47285 13.9597 9.42661C13.7391 9.19449 7.39855 2.48354 7.38575 2.46999C9.85532 0.881615 12.7886 -0.0343043 15.9423 -0.0458984C15.9423 -0.0458984 14.25 8.9467 14.168 9.39151Z" fill="white"/>
+              <path d="M16.0702 -0.0458984C19.2121 -0.0342265 22.1572 0.881629 24.6267 2.46999C24.6267 2.46999 18.2656 9.20193 18.0528 9.42661C18.0064 9.47299 17.9709 9.49681 17.9362 9.49681C17.9014 9.4966 17.8549 9.46086 17.8433 9.39151C17.7495 8.94502 16.0586 -0.0458984 16.0702 -0.0458984Z" fill="white"/>
+            </g>
+            <defs><clipPath id="bdLogotypeClip"><rect width="83.4286" height="32" fill="white"/></clipPath></defs>
+          </svg>
+          <div class="factory-text">Smart Factory</div>
+        </div>
+        <div class="header-spacer"></div>
+        <div class="top-actions">
+          <div class="search"><span class="search-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 3C5.91 3 3 5.91 3 9.5S5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57L19.29 20 20 19.29l-5.56-5.56C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3Zm0 1C12.54 4 15 6.46 15 9.5S12.54 15 9.5 15 4 12.54 4 9.5 6.46 4 9.5 4Z"/></svg></span><input placeholder="Search (Ctrl + K)"></div>
+          <div class="top-divider"></div>
+          <button class="topbar-icon-btn" type="button" aria-label="AI insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 1l1.26 2.74L23 5l-2.74 1.26L19 9l-1.26-2.74L15 5l2.74-1.26L19 1ZM9 4l2.5 5.5L17 12l-5.5 2.5L9 20l-2.5-5.5L1 12l5.5-2.5L9 4Zm10 11l1.26 2.74L23 19l-2.74 1.26L19 23l-1.26-2.74L15 19l2.74-1.26L19 15Z"/></svg></button>
+          <button class="topbar-icon-btn" type="button" aria-label="Today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm0 16H5V8h14v11ZM7 10h5v5H7v-5Z"/></svg></button>
+          <button class="topbar-icon-btn" type="button" aria-label="Files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6Zm-1 7V3.5L18.5 9H13Z"/></svg></button>
+          <button class="topbar-icon-btn" type="button" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2Zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2Z"/></svg><span class="notify-dot"></span></button>
+          <button class="shift-btn" type="button">SHIFT ENTRY <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41Z"/></svg></button>
+          <div class="avatar"></div>
         </div>
       </div>
     `;
@@ -96,42 +93,6 @@
     this.shadowRoot.querySelectorAll('[data-path]').forEach((button) => {
       button.addEventListener('click', () => { window.location.href = button.getAttribute('data-path'); });
     });
-    const flagButton = this.shadowRoot.querySelector('[data-action="flag"]');
-    const badgeAuthButton = this.shadowRoot.querySelector('[data-action="badge-auth"]');
-    const controlPanelButton = this.shadowRoot.querySelector('[data-action="control-panel"]');
-    if (badgeAuthButton) {
-      badgeAuthButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        window.dispatchEvent(new Event('smart-factory:open-badge-auth'));
-      });
-    }
-    if (controlPanelButton) {
-      controlPanelButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        window.dispatchEvent(new Event('smart-factory:open-control-panel'));
-      });
-    }
-    if (flagButton) {
-      flagButton.addEventListener('click', () => {
-        const row = document.getElementById('flagCategoryRow');
-        if (row) {
-          const isOpen = row.style.visibility === 'visible';
-          row.style.opacity = isOpen ? '0' : '1';
-          row.style.visibility = isOpen ? 'hidden' : 'visible';
-          row.style.transform = isOpen ? 'translateY(-6px)' : 'translateY(0)';
-          return;
-        }
-        if (typeof window.toggleFlagCategories === 'function') {
-          window.toggleFlagCategories();
-          return;
-        }
-        if (typeof window.Event === 'function') {
-          window.dispatchEvent(new Event('smart-factory:toggle-flag-categories'));
-        }
-      });
-    }
     document.addEventListener('click', () => switcher.classList.remove('open'));
   }
 
