@@ -1,0 +1,1993 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital OEE - 3D Line Monitoring</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#2563eb;
+    --nav:#020043;
+    --surface:#FBFCFC;
+    --line:rgba(0,0,0,.14);
+    --line-soft:rgba(0,0,0,.10);
+    --text:#242424;
+    --muted:rgba(0,0,0,.62);
+    --green:#16a34a;
+    --green-soft:#eaf8ee;
+    --red:#f9423a;
+    --red-soft:#ffd2d6;
+    --amber:#f59e0b;
+    --amber-soft:#fff3df;
+    --navy:#0c1430;
+    --cyan:#13c4d6;
+    --main-card:#FBFCFC;
+    --card:#FBFCFC;
+    --border:rgba(0,0,0,.12);
+    --border-strong:rgba(0,0,0,.18);
+    --text-soft:rgba(0,0,0,.72);
+    --text-muted:rgba(0,0,0,.6);
+    --green-bg:#e9f8ef; --green-bd:#bfe6cd;
+    --red-bg:#fdecec;   --red-bd:#f6c4c4;
+    --amber-bg:#fef3e0; --amber-bd:#f6dba9;
+    --blue:#2563eb;  --blue-bg:#e9f0fe;  --blue-bd:#bcd1fb;
+    --orange:#ea580c; --orange-bg:#fef0e6; --orange-bd:#fbd2b0;
+    --purple:#7e3af2; --purple-bg:#f1eafe; --purple-bd:#dac5fb;
+    --darkred:#991b1b; --darkred-bg:#fbe2e2; --darkred-bd:#f0b8b8;
+    --gray-bg:#FBFCFC;
+    --ix-font:'Roboto','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;font-family:'Roboto','Segoe UI',system-ui,sans-serif;}
+  html,body{margin:0;min-height:100%;background:#f6f9fe;color:var(--text);overflow:hidden;}
+  body{overflow:hidden;}
+  .topbar{height:64px;background:var(--nav);color:#fff;display:flex;align-items:center;flex-shrink:0;}
+  .topbar-app-icon{width:52px;height:64px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .bd-mark{width:36px;height:36px;border-radius:999px;background:#fff;color:var(--nav);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0;position:relative;}
+  .bd-mark:before{content:"";width:20px;height:20px;border-radius:50%;background:conic-gradient(from 0deg,var(--nav) 0 10%,transparent 10% 20%,var(--nav) 20% 30%,transparent 30% 40%,var(--nav) 40% 50%,transparent 50% 60%,var(--nav) 60% 70%,transparent 70% 80%,var(--nav) 80% 90%,transparent 90% 100%);position:absolute;}
+  .topbar input{height:40px;width:260px;border:0;border-radius:10px;padding:0 44px 0 16px;font-size:14px;color:#1f2937;}
+  .search-dot{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;}
+  .line-pill{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:800;white-space:nowrap;}
+  .topbar-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;}
+  .avatar{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#d6b08b,#6f8a66);border:2px solid rgba(255,255,255,.18);}
+
+  .flow-header{height:90px;background:#fff;position:relative;z-index:30;}
+  .flow-header-inner{height:72px;margin-top:9px;display:flex;align-items:stretch;padding:0 40px;min-width:0;}
+  .flow-title{font-size:20px;font-weight:800;white-space:nowrap;}
+  .flow-copy{font-size:12px;color:rgba(0,0,0,.6);white-space:nowrap;}
+  .flow-divider{width:1px;height:46px;align-self:center;background:var(--line);flex-shrink:0;}
+  .active-category{flex:1;border-radius:8px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;min-width:0;position:relative;overflow:hidden;background:#e9f8ef;}
+  .active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--green);}
+  .active-category-label{font-size:20px;font-weight:400;color:var(--green);}
+  .active-category-sub{font-size:10px;color:rgba(0,0,0,.72);}
+  .hdr-action-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;}
+  .hdr-action-btn.primary{background:var(--accent);color:#fff;}
+  .hdr-action-btn.primary:hover{filter:brightness(.94);}
+  .gear-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;background:#fff;border:1px solid rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);transition:.12s;}
+  .gear-btn:hover{background:#e9f0fe;border-color:var(--accent);}
+
+  .page-titlebar{margin:0 40px;padding:16px 0 12px;display:flex;align-items:stretch;justify-content:space-between;gap:18px;min-width:0;}
+  .page-titlegroup{display:flex;align-items:stretch;gap:86px;min-width:0;flex:1;}
+  .page-title-copy{display:flex;flex-direction:column;justify-content:center;flex:0 0 auto;}
+  .page-title{font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-size:20px;font-weight:700;line-height:1.6;letter-spacing:.15px;color:#0c1430;}
+  .page-breadcrumb{display:flex;align-items:center;gap:4px;margin-top:1px;color:rgba(0,0,0,.6);font-size:13px;line-height:18px;letter-spacing:.16px;}
+  .page-breadcrumb svg{width:16px;height:16px;color:var(--accent);flex-shrink:0;}
+  .breadcrumb-line-list{position:relative;display:inline-flex;align-items:center;color:rgba(0,0,0,.6);cursor:default;}
+  .breadcrumb-line-list:after{content:attr(data-full);position:absolute;left:0;top:22px;min-width:max-content;max-width:420px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:rgba(0,0,0,.6);font-size:12px;line-height:16px;box-shadow:0 10px 24px rgba(15,23,42,.14);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .12s ease,transform .12s ease,visibility .12s ease;z-index:80;white-space:nowrap;pointer-events:none;}
+  .breadcrumb-line-list:hover:after,.breadcrumb-line-list:focus-visible:after{opacity:1;visibility:visible;transform:translateY(0);}
+  .page-flow{display:flex;align-items:stretch;gap:12px;min-width:0;flex:1;}
+  .page-flow-block{display:flex;flex-direction:column;justify-content:center;gap:2px;flex:0 0 auto;min-width:0;}
+  .page-flow-product{max-width:230px;}
+  .page-flow-title{font-size:14px;font-weight:400;color:var(--text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .page-flow-copy{font-size:12px;color:rgba(0,0,0,.6);line-height:1.25;white-space:nowrap;}
+  .page-flow-divider{width:1px;height:46px;align-self:center;background:var(--line);}
+  .page-active-category{flex:1;border-radius:8px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;min-width:160px;position:relative;overflow:hidden;background:var(--cat-bg,#e9f0fe);transition:background .15s ease;}
+  .page-active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat-accent,var(--accent));transition:background .15s ease;}
+  .page-active-category-label{font-size:20px;font-weight:400;line-height:1.2;color:var(--cat-accent,var(--accent));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s ease;}
+  .page-active-category-sub{font-size:10px;color:rgba(0,0,0,.72);line-height:1.2;}
+  .page-header-stepper{display:flex;align-items:flex-start;flex-shrink:0;align-self:center;}
+  .hdr-step{display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;flex-shrink:0;}
+  .hdr-step-circle{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff;flex-shrink:0;position:relative;}
+  .hdr-step-circle.active-pulse::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--ring-color,var(--orange));opacity:.5;animation:hdr-step-pulse 1.6s ease-in-out infinite;}
+  @keyframes hdr-step-pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.15;transform:scale(1.18);}}
+  .hdr-step-label{font-size:12px;font-weight:700;text-align:center;line-height:1.2;}
+  .hdr-step-line{height:2px;flex:1;margin-top:10px;background:var(--border-strong);min-width:20px;}
+  .hdr-step-line.done{background:var(--green);}
+  .page-status-control{display:flex;flex-direction:column;justify-content:center;gap:6px;flex:0 0 auto;}
+  .page-status-buttons{display:flex;align-items:center;gap:8px;}
+  .page-header-action{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;background:#fff;color:var(--accent);box-shadow:none;outline:0;}
+  .page-header-action.primary{background:var(--accent);color:#fff;}
+  .page-header-action.outline{border-color:rgba(37,99,235,.4);}
+  .page-header-action:hover{filter:brightness(.96);background:#e9f0fe;}
+  .page-header-action.primary:hover{background:var(--accent);filter:brightness(.94);}
+  .page-button-divider{width:1px;height:32px;background:var(--line);}
+  .main-card-shell{margin:0 40px 40px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:56px minmax(0,1fr);padding:0;height:calc(100vh - 158px);position:relative;}
+  .app-side-nav{position:relative;z-index:25;width:56px;height:100%;background:linear-gradient(90deg,rgba(31,99,234,.08),rgba(31,99,234,.08)),#fff;border-right:1px solid var(--line);padding:8px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;overflow:hidden;transition:width .18s ease,box-shadow .18s ease;}
+  .app-side-nav:hover,.app-side-nav:focus-within{width:272px;box-shadow:12px 0 28px rgba(15,23,42,.12);}
+  .app-side-btn{width:100%;height:40px;border:0;border-radius:7px;background:transparent;color:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:flex-start;gap:12px;cursor:pointer;transition:background .15s,color .15s;padding:0 8px;white-space:nowrap;position:relative;}
+  .app-side-btn:before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:999px;background:transparent;}
+  .app-side-btn:hover{background:rgba(31,99,234,.08);color:rgba(0,0,0,.62);}
+  .app-side-btn:hover:before{background:var(--accent);}
+  .app-side-btn.active{background:rgba(31,99,234,.12);color:var(--accent);}
+  .app-side-btn.active:before{background:transparent;}
+  .app-side-btn.active:hover:before{background:var(--accent);}
+  .app-side-btn svg{width:24px;height:24px;fill:currentColor;flex:0 0 24px;}
+  .app-side-label{font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-size:16px;font-weight:400;color:currentColor;opacity:0;transition:opacity .12s ease;}
+  .app-side-nav:hover .app-side-label,.app-side-nav:focus-within .app-side-label{opacity:1;}
+  .app-content{min-width:0;min-height:0;height:100%;padding:24px;background:var(--surface);overflow:hidden;}
+  .monitoring-view{height:100%;min-height:0;display:flex;flex-direction:column;padding-top:0;gap:24px;}
+  .page-shell{background:transparent;border:0;border-radius:0;padding:0;margin:0;min-width:0;height:100%;min-height:0;display:flex;flex-direction:column;}
+  .calc-icon{fill:#115dff;cursor:pointer;}
+
+  .dashboard{display:grid;grid-template-columns:minmax(0,1fr) 500px;gap:24px;margin-top:0;align-items:stretch;min-height:0;flex:1;overflow:hidden;}
+  .map-card,.panel-card{border:1px solid var(--line);border-radius:8px;background:var(--surface);}
+  .map-card{min-height:0;height:100%;position:relative;overflow:hidden;background:#FEFEFE url("img1.png") center center/cover no-repeat;}
+  .zone-card{position:absolute;background:rgba(255,255,255,.96);border:1px solid rgba(70,100,150,.22);border-radius:8px;box-shadow:0 4px 18px rgba(29,49,86,.14);z-index:1;}
+
+  /* ---- Zone accordion (KPI panel) ---- */
+  .zone-acc{position:absolute;width:300px;background:#fff;border:1px solid rgba(70,100,150,.22);border-radius:8px;box-shadow:0 4px 18px rgba(29,49,86,.14);z-index:1;overflow:hidden;}
+  .zone-acc-head{height:48px;display:flex;align-items:center;gap:10px;padding:0 16px;}
+  .zone-acc-title{font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-weight:400;font-size:16px;line-height:150%;letter-spacing:.15px;color:#000;white-space:nowrap;}
+  .status-chip{display:inline-flex;align-items:center;border:1px solid;border-radius:999px;padding:2px 10px;background:#fff;font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-weight:500;font-size:10px;line-height:10px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;flex:0 0 auto;}
+  .status-chip.success{color:var(--green);border-color:var(--green);}
+  .status-chip.warn{color:#ed7d00;border-color:#ed7d00;}
+  .status-chip.critical{color:#fff;border-color:var(--red);background:var(--red);}
+  .zone-acc-body{padding:0 16px;}
+  .kpi-row{display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:10px;row-gap:2px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.12);}
+  .kpi-row:last-child{border-bottom:0;}
+  .kpi-row.optional{display:none;}
+  .zone-acc.open .kpi-row.optional{display:grid;}
+  .kpi-icon{grid-column:1;grid-row:1;width:20px;height:20px;margin-top:2px;}
+  .kpi-icon.success{color:var(--green);}
+  .kpi-icon.critical{color:var(--red);}
+  .kpi-icon svg{width:20px;height:20px;fill:currentColor;display:block;}
+  .kpi-head{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;}
+  .kpi-name{font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-weight:500;font-size:14px;line-height:157%;letter-spacing:.1px;color:#000;}
+  .kpi-sub{grid-column:1/-1;grid-row:2;font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-weight:400;font-size:12px;line-height:130%;letter-spacing:.4px;color:rgba(0,0,0,.6);}
+  .kpi-sub b{font-weight:400;color:#000;}
+  .zone-acc-toggle{display:flex;align-items:center;gap:4px;border:0;background:none;cursor:pointer;color:#115dff;font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-weight:500;font-size:13px;line-height:22px;letter-spacing:.46px;padding:0;}
+  .zone-acc-toggle svg{width:18px;height:18px;fill:currentColor;transition:transform .15s ease;}
+  .zone-acc.open .zone-acc-toggle svg{transform:rotate(180deg);}
+  .zone-acc-toggle-inline{margin-left:auto;flex:0 0 auto;}
+  .zone-acc.open .zone-acc-toggle-inline,.zone-acc.has-critical .zone-acc-toggle-inline{display:none;}
+  .zone-acc-toggle-footer{display:none;width:100%;height:42px;justify-content:center;border-top:1px solid var(--line-soft);}
+  .zone-acc.has-critical .zone-acc-toggle-footer,.zone-acc.open .zone-acc-toggle-footer{display:flex;}
+  .zone-acc:not(.open):not(.has-critical) .zone-acc-body{display:none;}
+
+  .right-column{display:flex;flex-direction:column;gap:24px;min-width:0;overflow:hidden;padding-right:0;}
+  .line-overview-card{height:100%;min-height:0;border:1px solid var(--line);border-radius:8px;background:#fff;display:flex;flex-direction:column;overflow:hidden;}
+  .line-overview-head{height:48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line-soft);padding:0 24px;background:#F5F7F8;}
+  .line-overview-title{font-family:Roboto,'Segoe UI',system-ui,sans-serif;font-size:16px;font-weight:700;line-height:1.2;color:#000;}
+  .line-overview-actions{display:flex;align-items:center;gap:12px;color:var(--accent);}
+  .line-overview-actions svg{width:24px;height:24px;fill:currentColor;display:block;}
+  .line-overview-body{padding:24px;display:grid;grid-template-columns:auto auto;column-gap:12px;row-gap:8px;align-items:start;justify-content:start;min-height:0;flex:1;}
+  .placeholder-card{background:#d8d8d8;border:1px solid #e8edf5;border-radius:12px;box-shadow:0 2px 6px rgba(32,48,74,.12);}
+  .placeholder-stack{display:flex;flex-direction:column;gap:2px;width:196px;}
+  .placeholder-stack .line-overview-img{width:196px;height:auto;}
+  .line-overview-img{display:block;width:auto;height:auto;max-width:none;max-height:none;}
+  .line-overview-img.top-losses{grid-column:1 / -1;}
+  .panel-card{padding:16px;overflow:hidden;}
+  .panel-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .panel-title{font-size:20px;font-weight:800;line-height:1.15;}
+  .shift-chip{height:26px;padding:0 14px;border-radius:999px;background:#eee;color:#444;font-size:12px;display:flex;align-items:center;}
+  .overview-grid{display:grid;grid-template-columns:minmax(220px,315px) minmax(190px,1fr);gap:14px;}
+  .oee-card{height:260px;border:1px solid var(--line-soft);border-radius:8px;background:var(--surface);padding:16px 18px 10px;overflow:hidden;position:relative;}
+  .oee-spark{position:absolute;right:16px;top:14px;color:#a8c9ff;font-size:22px;line-height:1;}
+  .oee-gauge{width:176px;height:82px;margin:2px auto 2px;position:relative;}
+  .oee-gauge svg{width:100%;height:100%;display:block;overflow:visible;}
+  .gauge-scale-red,.gauge-scale-green,.gauge-value-arc{fill:none;stroke-linecap:round;}
+  .gauge-scale-red,.gauge-scale-green{stroke-width:4;}
+  .gauge-scale-red{stroke:#ef8b91;stroke-dasharray:196 260;}
+  .gauge-scale-green{stroke:#8dc59b;stroke-dasharray:48 260;stroke-dashoffset:-197;}
+  .gauge-value-arc{stroke:#edf0f3;stroke-width:8;stroke-dasharray:102 260;}
+  .gauge-tip{fill:#eb4650;}
+  .gauge-value{position:absolute;left:0;right:0;top:42px;text-align:center;font-size:32px;line-height:1;color:#2b2b2b;}
+  .gauge-value span{font-size:16px;margin-left:3px;vertical-align:super;}
+  .gauge-target{text-align:center;color:#ff1f1f;font-size:12px;margin-top:-4px;}
+  .oee-divider{height:1px;background:var(--line-soft);margin:7px 0 8px;}
+  .wo-progress{height:9px;border-radius:999px;background:#eef0f1;position:relative;overflow:visible;margin-top:7px;}
+  .wo-progress-fill{height:100%;width:52%;border-radius:999px;background:#62bd6d;}
+  .wo-progress-marker{position:absolute;left:52%;top:50%;width:2px;height:10px;border-radius:999px;background:#1c6dff;transform:translate(-1px,-50%);}
+  .metric-stack{display:flex;flex-direction:column;gap:14px;}
+  .metric-tile{height:63px;border:1px solid var(--line-soft);border-left:6px solid #35ad54;border-radius:8px;background:#fff;padding:9px 12px;box-shadow:0 2px 7px rgba(40,64,100,.08);position:relative;overflow:hidden;}
+  .metric-tile.red{border-left-color:var(--red);}
+  .metric-main{font-size:22px;line-height:1;}
+  .metric-label{font-size:11px;color:#555;margin-top:4px;}
+  .target-badge{position:absolute;right:10px;top:10px;font-size:9px;text-align:right;color:#555;}
+  .target-badge b{display:block;background:#eee;border-radius:999px;padding:3px 8px;color:#333;margin-top:3px;}
+  .loss-card{min-height:292px;}
+  .loss-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
+  .loss-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+  .loss-actions button{height:26px;border-radius:999px;border:1px solid #6d9dff;background:#fff;color:#115dff;font-size:12px;padding:0 10px;font-weight:700;}
+  .loss-actions button.primary{background:#115dff;color:#fff;box-shadow:0 2px 6px rgba(17,93,255,.24);}
+  .loss-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:5px;overflow:hidden;font-size:13px;}
+  .loss-table th{background:#eef1f1;padding:10px;text-align:left;font-weight:700;}
+  .loss-table td{padding:9px 10px;border-top:1px solid var(--line-soft);}
+  .loss-table tr.hot td{background:#ffcfd4;}
+  .loss-table tr.hot-strong td{background:#ff443c;color:#fff;}
+  .blu-card{min-height:134px;background:#f5f8f9;}
+  .blu-title{font-size:20px;font-weight:800;margin-bottom:12px;}
+  .blu-title span{color:#ff7900;}
+  .blu-sub{font-weight:800;font-size:14px;margin-bottom:6px;}
+  .blu-text{font-size:14px;line-height:1.35;color:rgba(0,0,0,.62);}
+  .screen-switcher{position:relative;z-index:200;}
+  .screen-switcher .topbar-app-icon{cursor:pointer;transition:background .15s ease;}
+  .screen-switcher .topbar-app-icon:hover,.screen-switcher.open .topbar-app-icon{background:rgba(255,255,255,.16);}
+  .screen-menu{position:absolute;left:8px;top:64px;width:238px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:12px;box-shadow:0 18px 48px rgba(8,16,38,.22);padding:8px;display:none;color:#1f2937;}
+  .screen-switcher.open .screen-menu{display:block;}
+  .screen-menu-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(0,0,0,.52);padding:8px 10px 6px;}
+  .screen-menu-item{width:100%;border:0;background:#fff;border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;color:#1f2937;}
+  .screen-menu-item:hover{background:#eaf1ff;color:#115dff;}
+  .screen-menu-item.active{background:#eef4ff;color:#115dff;}
+  .screen-menu-icon{width:30px;height:30px;border-radius:8px;background:#f3f6fb;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+  .screen-menu-label{font-size:13px;font-weight:800;line-height:1.15;}
+  .screen-menu-sub{font-size:11px;color:rgba(0,0,0,.55);margin-top:2px;}
+  /* ---- control panel modal styles (ported from Josh's prototype) ---- */
+  .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:200;overflow-y:auto;padding:24px 0;}
+  .popup{position:relative;background:#fff;border-radius:16px;width:500px;height:548px;max-height:calc(100vh - 48px);overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
+  .cp-modal-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.2;color:var(--text);}
+  .cp-modal-close{width:32px;height:32px;border:0;border-radius:999px;background:transparent;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
+  .cp-modal-close:hover{background:var(--blue-bg);color:var(--accent);}
+  .cp-schedule-text{display:flex;align-items:center;gap:4px;min-width:0;}
+  .cp-schedule-help{position:relative;width:14px;height:14px;border-radius:50%;border:1px solid var(--border-strong);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--text-muted);cursor:help;flex-shrink:0;}
+  .cp-schedule-help:after{content:attr(data-tip);position:absolute;left:0;bottom:20px;width:210px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:11px;font-weight:500;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(4px);transition:.12s;z-index:30;}
+  .cp-schedule-help:hover:after{opacity:1;transform:translateY(0);}
+  .cp-debug-tools{position:absolute;right:0;bottom:-44px;display:flex;flex-direction:row;gap:8px;}
+  .cp-debug-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);box-shadow:0 8px 18px rgba(10,16,32,.12);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;line-height:1;cursor:pointer;}
+  .cp-debug-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
+  .end-debug-circle{display:none;}
+  .cp-inline-log-btn{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:46px;border-radius:8px;border:1px solid var(--border-strong);background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;line-height:1;cursor:pointer;z-index:6;box-shadow:0 8px 18px rgba(10,16,32,.12);}
+  .cp-inline-log-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .cp-panel-body{position:relative;display:block;}
+  .cp-main-pane{border-right:0;padding:16px 24px 24px;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+  #cp-dynamicArea{flex:1 1 auto;min-height:0;overflow-y:auto;}
+  #cp-statusHero,#cp-progressWrap{flex-shrink:0;}
+  .cp-activity-pane{position:absolute;left:calc(100% + 14px);top:0;width:320px;height:100%;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 18px 42px rgba(10,16,32,.18);opacity:1;transform:translateX(0);transition:opacity .15s ease,transform .15s ease;}
+  .cp-panel-body.log-collapsed .cp-activity-pane{opacity:0;pointer-events:none;transform:translateX(-8px);}
+  .status-hero{border-radius:12px;padding:10px 12px;min-height:92px;display:flex;align-items:center;gap:10px;transition:background .2s;}
+  .status-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;transition:background .2s;}
+  .pulse{animation:cp-pulse 1.6s ease-in-out infinite;}
+  @keyframes cp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.45);}50%{box-shadow:0 0 0 6px rgba(22,163,74,0);}}
+  .spin{animation:cp-spin 1s linear infinite;}
+  @keyframes cp-spin{to{transform:rotate(360deg);}}
+  .ic{width:16px;height:16px;flex-shrink:0;}
+  .action-btn{display:flex;align-items:center;justify-content:flex-start;gap:10px;border-radius:10px;border:1px solid var(--border);background:#fff;padding:9px 10px;cursor:pointer;font-weight:700;font-size:14px;line-height:1.2;letter-spacing:0;transition:border-color .12s ease,background .12s ease,box-shadow .12s ease,transform .1s,opacity .15s;min-height:56px;text-align:left;color:var(--text);}
+  .action-btn:hover{border-color:var(--action-color);background:var(--action-bg);box-shadow:0 8px 20px rgba(10,16,32,.08);}
+  .action-btn:active{transform:scale(.98);}
+  .action-btn.disabled{opacity:.4;pointer-events:none;}
+  .action-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--action-bg);color:var(--action-color);flex-shrink:0;}
+  .action-icon .ic{width:16px;height:16px;}
+  .action-label{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .reason-btn{border:1px solid var(--border-strong);border-radius:9px;padding:9px 5px;text-align:center;font-size:10.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.12s;}
+  .reason-btn:hover{border-color:var(--accent);background:var(--blue-bg);color:var(--accent);}
+  .reason-btn .ic{width:20px;height:20px;}
+  .btn-icon-row{display:flex;align-items:center;justify-content:center;gap:7px;}
+  .progress-track{height:7px;border-radius:99px;background:#e6eaf0;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
+  .step{display:flex;flex-direction:column;align-items:center;gap:4px;width:84px;}
+  .step-circle{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+  .step-label{font-size:12px;font-weight:700;text-align:center;color:var(--text-soft);line-height:1.2;}
+  .step-sub{font-size:10px;color:var(--text-muted);}
+  .step-line{flex:1;height:2px;background:var(--border-strong);margin-top:11px;min-width:18px;}
+  .step-line.done{background:var(--green);}
+  .changeover-route{font-size:11px;font-weight:700;color:var(--text-muted);white-space:nowrap;}
+  .changeover-progress-section{display:flex;flex-direction:column;}
+  .ckbox{width:18px;height:18px;border-radius:5px;border:2px solid var(--border-strong);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
+  .ckbox.done{background:var(--accent);border-color:var(--accent);}
+  .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+  .task-row:last-child{border-bottom:none;}
+  .slide{margin-top:-12px;transition:max-height .25s ease, opacity .2s ease, margin-top .2s ease;overflow:hidden;flex-shrink:0;}
+  .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;height:100%;}
+  .end-order-head{display:none;}
+  .end-order-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.25;}
+  .end-order-copy{font-size:12px;line-height:1.35;color:var(--text-muted);margin-top:1px;}
+  .end-next-section{display:flex;flex-direction:column;gap:7px;border:1px solid var(--blue-bd);border-radius:12px;background:linear-gradient(180deg,rgba(37,99,235,.11),rgba(37,99,235,.07));padding:9px 10px;}
+  .end-next-section.unconfirmed{border-color:var(--amber-bd);background:var(--amber-bg);}
+  .end-next-header{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:18px;}
+  .end-next-heading{display:flex;align-items:center;gap:8px;min-width:0;}
+  .end-next-card{border:1px solid rgba(37,99,235,.16);border-radius:10px;background:rgba(255,255,255,.68);padding:7px 9px;color:var(--text);}
+  .end-next-card.unconfirmed{border-color:rgba(245,158,11,.26);background:rgba(255,255,255,.58);}
+  .end-next-section.amber{border-color:var(--amber-bd);background:linear-gradient(180deg,rgba(245,158,11,.14),rgba(245,158,11,.07));}
+  .end-next-section.amber .end-next-title{color:var(--amber);}
+  .end-next-section.amber .end-next-card{border-color:rgba(245,158,11,.3);}
+  .end-next-card.empty{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:14px 9px;}
+  .end-next-assign-cta{height:32px;padding:0 16px;border:1px solid var(--amber);border-radius:10px;background:var(--amber);color:#fff;font-size:12px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;white-space:nowrap;}
+  .end-next-assign-cta:hover{filter:brightness(.96);}
+  .end-next-title{font-size:14px;font-weight:700;color:var(--blue);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .end-next-title.unconfirmed{color:var(--amber);}
+  .end-next-grid{display:flex;align-items:flex-start;justify-content:space-between;gap:0;min-width:0;white-space:nowrap;overflow:hidden;}
+  .end-next-field{min-width:0;flex:0 0 auto;}
+  .end-next-field span{display:block;font-size:10px;color:var(--text-muted);line-height:1.15;overflow:hidden;text-overflow:ellipsis;}
+  .end-next-field b{display:block;font-size:14px;font-weight:700;color:var(--text);line-height:1.2;margin-top:1px;overflow:hidden;text-overflow:ellipsis;}
+  .end-next-footer{display:flex;justify-content:flex-end;margin-top:8px;}
+  .end-tertiary{border:0;background:transparent;color:var(--accent);font-size:12px;font-weight:800;line-height:1.2;cursor:pointer;padding:0;}
+  .end-tertiary:hover{text-decoration:underline;}
+  .end-next-primary{align-self:flex-end;width:auto;height:32px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;line-height:1.2;text-transform:uppercase;cursor:pointer;padding:0 8px;letter-spacing:.02em;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;}
+  .end-next-primary:hover{filter:brightness(.96);}
+  .end-option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .end-actions{display:flex;flex-direction:column;gap:6px;}
+  .end-actions-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.025em;color:var(--text-muted);}
+  .end-next-section + .end-option-grid{margin-top:12px;}
+  .end-progress{display:flex;flex-direction:column;gap:0;}
+  .end-progress-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-muted);}
+  .end-progress-row span:last-child{white-space:nowrap;}
+  .end-progress-track{height:7px;border-radius:99px;background:#e6eaf0;overflow:hidden;width:100%;flex:0 0 7px;}
+  .end-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
+  .end-option.full{grid-column:1 / -1;}
+  .end-option.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+  .end-order-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:auto;padding-top:0;}
+  .end-order-back{height:32px;border:1px solid rgba(37,99,235,.4);border-radius:12px;background:#fff;color:var(--accent);font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;padding:6px 16px;white-space:nowrap;text-transform:uppercase;transition:background .15s,border-color .15s;}
+  .end-order-back:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .changeover-next-footer{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-top:auto;}
+  .changeover-next-btn{height:32px;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--accent);border-radius:12px;background:var(--accent);color:#fff;font-size:14px;font-weight:500;line-height:1.2;cursor:pointer;padding:6px 16px;white-space:nowrap;text-transform:uppercase;transition:filter .15s,box-shadow .15s;}
+  .changeover-next-btn:hover{filter:brightness(.96);box-shadow:0 8px 18px rgba(37,99,235,.18);}
+  .changeover-cancel-btn{background:none;border:none;color:var(--text-muted);font-size:14px;font-weight:500;text-transform:uppercase;cursor:pointer;padding:6px 4px;white-space:nowrap;}
+  .changeover-cancel-btn:hover{color:var(--text-soft);}
+  .end-debug-toggle{display:none;}
+  .end-debug-toggle:hover{background:var(--blue-bg);border-color:var(--accent);color:var(--accent);}
+  .end-option{width:100%;height:56px;display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:#fff;border-radius:10px;padding:9px 10px;text-align:left;cursor:pointer;transition:border-color .12s ease,background .12s ease,box-shadow .12s ease;}
+  .end-option:focus-visible{outline:3px solid rgba(37,99,235,.32);outline-offset:3px;}
+  .end-option.primary{height:62px;border-color:var(--green);background:#fff;color:var(--text);justify-content:space-between;}
+  .end-option.primary:hover{border-color:var(--green);background:var(--green-bg);box-shadow:none;}
+  .end-option.primary .end-option-icon{width:36px;height:36px;border-radius:11px;background:var(--green);color:#fff;}
+  .end-option.primary .end-option-title{font-size:14px;color:var(--text);}
+  .end-option.primary .end-option-desc{font-size:12px;}
+  .end-primary-arrow{width:26px;height:26px;border-radius:999px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:900;line-height:1;flex-shrink:0;}
+  .end-option.secondary{background:#fff;}
+  .end-option:hover{border-color:var(--option-color);background:var(--option-bg);box-shadow:0 8px 20px rgba(10,16,32,.08);}
+  .end-option.secondary:hover{background:#fff;}
+  .end-option-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--option-bg);color:var(--option-color);flex-shrink:0;}
+  .end-option-icon .ic{width:16px;height:16px;}
+  .end-option-main{flex:1;min-width:0;}
+  .end-option-title{font-size:14px;font-weight:700;color:var(--text);display:block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .end-option-desc{font-size:12px;line-height:1.3;color:var(--text-muted);margin-top:1px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .demo-chip{font-size:10px;font-weight:700;padding:4px 9px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);}
+  .demo-chip:hover{border-color:var(--cyan);color:var(--text-soft);}
+  .auto-resume-row{display:flex;align-items:center;gap:10px;}
+  .auto-resume-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:.02em;}
+  .auto-resume-control{display:flex;align-items:center;gap:6px;color:var(--text-soft);}
+  .auto-resume-toggle{position:relative;width:30px;height:16px;border:0;border-radius:999px;background:var(--border-strong);cursor:pointer;transition:background .15s ease;flex-shrink:0;}
+  .auto-resume-toggle:before{content:"";position:absolute;width:12px;height:12px;border-radius:50%;left:2px;top:2px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22);transition:left .15s ease;}
+  .auto-resume-toggle.on{background:var(--green);}
+  .auto-resume-toggle.on:before{left:16px;}
+  .auto-resume-text{font-size:12px;font-weight:700;color:var(--green);min-width:20px;}
+  .auto-resume-text.off{color:var(--text-muted);}
+  .auto-resume-help{position:relative;width:14px;height:14px;border-radius:50%;border:1px solid var(--border-strong);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--text-muted);cursor:help;flex-shrink:0;}
+  .auto-resume-help:after{content:attr(data-tip);position:absolute;left:0;top:22px;width:220px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:11px;font-weight:500;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(-4px);transition:.12s;z-index:30;}
+  .dhr-help{position:relative;width:14px;height:14px;border-radius:50%;border:1px solid var(--border-strong);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--text-muted);cursor:help;flex-shrink:0;}
+  .dhr-help:after{content:attr(data-tip);position:absolute;right:0;top:20px;width:200px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:12px;font-weight:500;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(-4px);transition:.12s;z-index:30;}
+  .dhr-help:hover:after{opacity:1;transform:translateY(0);}
+  .sku-alert{position:relative;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;padding:2px 8px;border-radius:999px;background:var(--amber-bg);color:var(--amber);cursor:help;}
+  .sku-alert:after{content:attr(data-tip);position:absolute;left:0;top:22px;width:220px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:12px;font-weight:500;text-transform:none;letter-spacing:0;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(-4px);transition:.12s;z-index:30;}
+  .sku-alert:hover:after{opacity:1;transform:translateY(0);}
+  .auto-resume-help:hover:after{opacity:1;transform:translateY(0);}
+
+  .flag-category-scroll{height:100%;overflow:visible;background:transparent;}
+  .flag-category-panel{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:0;background:transparent;overflow:visible;position:relative;z-index:80;}
+  .flag-cat-wrap{position:relative;width:80px;flex:0 0 80px;}
+  .flag-cat-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:7px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;}
+  .flag-cat-btn .ic{width:20px;height:20px;flex-shrink:0;}
+  .flag-cat-label{font-size:9.5px;font-weight:800;line-height:1.12;color:var(--text-soft);text-align:center;max-width:68px;text-transform:uppercase;}
+  .flag-cat-wrap:hover .flag-cat-btn,.flag-cat-wrap.selected .flag-cat-btn{border-color:var(--flag-color);background:var(--flag-soft);box-shadow:0 4px 12px -8px var(--flag-color);}
+  .flag-cat-wrap:hover .flag-cat-label,.flag-cat-wrap.selected .flag-cat-label{color:var(--flag-color);}
+  .flag-submenu{display:none;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-template-columns:1fr;gap:6px;width:92px;padding:12px 6px;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.07);z-index:120;}
+  .flag-submenu::before{content:'';position:absolute;top:-8px;left:0;right:0;height:8px;background:transparent;}
+  .flag-cat-wrap:hover .flag-submenu{display:grid;}
+  .flag-sub-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-soft);font-size:9.5px;font-weight:800;line-height:1.12;text-align:center;text-transform:uppercase;cursor:pointer;transition:.12s;}
+  .flag-sub-btn .ic{width:19px;height:19px;flex-shrink:0;}
+  .flag-sub-btn:hover,.flag-sub-btn.selected{border-color:var(--flag-color);background:var(--flag-soft);color:var(--flag-color);}
+  .badge-auth-scrim{z-index:260;}
+  .badge-auth-popup{width:600px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .badge-auth-close{position:absolute;right:24px;top:16px;width:24px;height:24px;border:0;background:transparent;color:var(--accent);font-size:18px;font-weight:800;line-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .badge-auth-close:hover{color:var(--text);}
+  .badge-auth-head{display:flex;align-items:center;gap:14px;padding-right:28px;}
+  .badge-auth-title{font-family:Roboto, var(--ix-font);font-size:18px;font-weight:700;color:var(--text);line-height:1.2;}
+  .badge-auth-content{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;}
+  .badge-auth-pane{border:1px solid var(--border);border-radius:14px;background:#fff;padding:12px;min-height:246px;display:flex;flex-direction:column;}
+  .badge-pane{background:var(--gray-bg);}
+  .login-pane{gap:9px;border:0;border-radius:0;background:transparent;padding:2px 0 12px;min-height:0;justify-content:flex-start;}
+  .badge-auth-pane-kicker{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:10px;}
+  .badge-auth-body{border:0;border-radius:14px;background:transparent;padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:160px;flex:1;}
+  .badge-auth-reader{width:78px;height:78px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);color:var(--accent);flex-shrink:0;}
+  .badge-auth-reader svg{width:38px;height:38px;}
+  .badge-auth-message{font-size:14px;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:5px;text-align:center;}
+  .badge-auth-sub{font-size:11px;color:var(--text-muted);line-height:1.35;width:190px;max-width:100%;text-align:center;margin:0 auto;}
+  .badge-auth-role{margin-top:auto;display:flex;align-items:baseline;justify-content:flex-start;gap:6px;padding:0;font-size:11px;line-height:1.2;}
+  .badge-auth-role > span:first-child{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--blue);line-height:1.2;}
+  #badgeAuthRole{font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text);line-height:1.2;}
+  .badge-auth-cycle{position:absolute;right:0;bottom:-44px;width:36px;height:36px;border-radius:999px;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 18px rgba(10,16,32,.12);}
+  .badge-auth-cycle:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
+  .badge-auth-sso,.badge-auth-submit{height:32px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;cursor:pointer;text-transform:uppercase;}
+  .badge-auth-sso:hover,.badge-auth-submit:hover{filter:brightness(.94);}
+  .badge-auth-sso{background:#fff;color:var(--accent);}
+  .badge-auth-form{display:grid;grid-template-columns:1fr;gap:6px;}
+  .badge-auth-form label{font-size:11px;font-weight:800;color:var(--text-muted);}
+  .badge-auth-form input{height:30px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;padding:0 9px;font-size:12px;color:var(--text);min-width:0;}
+  .badge-auth-form input:focus{outline:none;border-color:var(--accent);}
+  .badge-auth-submit{margin-top:3px;}
+  .badge-auth-popup.state-reading .badge-auth-reader{background:var(--amber-bg);border-color:var(--amber-bd);color:var(--amber);}
+  .badge-auth-popup.state-approved .badge-auth-reader{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
+  .badge-auth-popup.state-rejected .badge-auth-reader{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+  .badge-auth-popup.state-sso .badge-auth-sso,.badge-auth-popup.state-password .badge-auth-submit{box-shadow:0 0 0 2px rgba(37,99,235,.18);}
+  .badge-auth-review{display:flex;flex-direction:column;gap:12px;min-height:246px;}
+  .badge-review-card{border:0;border-radius:0;background:transparent;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .badge-review-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .badge-review-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.2;}
+  .badge-review-sub{font-size:11px;color:var(--text-muted);line-height:1.35;margin-top:2px;}
+  .badge-review-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;}
+  .badge-review-row{font-size:11.5px;color:var(--text-muted);min-width:0;}
+  .badge-review-row b{display:block;font-size:12.5px;color:var(--text);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+  .badge-review-resource-list{display:flex;flex-wrap:wrap;gap:6px;}
+  .badge-review-resource{border:1px solid var(--border-strong);border-radius:8px;background:#fff;color:var(--text-soft);font-size:11px;font-weight:800;padding:4px 8px;}
+  .badge-resource-carousel{border:1px solid var(--border);border-radius:12px;background:var(--main-card);padding:10px;display:flex;flex-direction:column;gap:8px;}
+  .badge-resource-carousel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .badge-resource-carousel-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);}
+  .badge-resource-controls{display:flex;align-items:center;gap:6px;}
+  .badge-resource-controls button{width:24px;height:24px;border:1px solid rgba(37,99,235,.38);border-radius:8px;background:#fff;color:var(--accent);font-size:14px;font-weight:900;line-height:1;cursor:pointer;}
+  .badge-resource-controls button:hover{background:var(--blue-bg);border-color:var(--accent);}
+  .badge-resource-counter{font-size:11px;font-weight:800;color:var(--text-muted);min-width:34px;text-align:center;}
+  .badge-resource-name-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .badge-resource-name{font-size:14px;font-weight:800;color:var(--text);line-height:1.2;}
+  .badge-review-note{border:1px solid var(--blue-bd);border-radius:10px;background:var(--blue-bg);color:var(--text-soft);font-size:11.5px;line-height:1.35;padding:9px 10px;}
+  .badge-review-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:0;padding-top:0;margin-top:auto;}
+  .badge-review-actions button{height:32px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;padding:0 14px;}
+  .badge-review-cancel{border:1px solid rgba(37,99,235,.38);background:#fff;color:var(--accent);}
+  .badge-review-confirm{border:1px solid var(--accent);background:var(--accent);color:#fff;}
+  .badge-review-confirm:hover{filter:brightness(.94);}
+  @media (max-width:760px){
+    .badge-auth-popup{width:min(430px,calc(100vw - 32px));padding:16px;}
+    .badge-auth-content{grid-template-columns:1fr;}
+  }
+  .create-pwo-scrim{z-index:255;}
+  .create-pwo-popup{width:480px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+  .create-pwo-close{position:absolute;right:20px;top:16px;width:24px;height:24px;border:0;background:transparent;color:var(--accent);font-size:18px;font-weight:800;line-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .create-pwo-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-right:28px;}
+  .create-pwo-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
+  .create-pwo-sub{font-size:12px;color:var(--text-muted);line-height:1.35;margin-top:2px;}
+  .create-pwo-note{border:1px solid var(--blue-bd);background:var(--blue-bg);border-radius:10px;padding:9px 10px;font-size:11.5px;line-height:1.35;color:var(--text-soft);}
+  .create-pwo-form{display:grid;grid-template-columns:1fr;gap:7px;}
+  .create-pwo-form label{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:4px;}
+  .create-pwo-form input,.create-pwo-form select{width:100%;height:32px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;padding:0 9px;font-size:12.5px;color:var(--text);}
+  .create-pwo-form input:focus,.create-pwo-form select:focus{outline:none;border-color:var(--accent);}
+  .create-pwo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .create-pwo-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);padding-top:12px;margin-top:2px;}
+  .create-pwo-actions button{height:32px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;padding:0 14px;}
+  .create-pwo-secondary{border:1px solid rgba(37,99,235,.38);background:#fff;color:var(--accent);}
+  .create-pwo-primary{border:1px solid var(--accent);background:var(--accent);color:#fff;}
+  .create-pwo-primary:hover{filter:brightness(.94);}
+
+  /* ---- badge authentication modal (ported, generic on-success callback) ---- */
+  .badge-auth-scrim{z-index:260;}
+  .badge-auth-popup{width:600px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .badge-auth-close{position:absolute;right:24px;top:16px;width:24px;height:24px;border:0;background:transparent;color:var(--accent);font-size:18px;font-weight:800;line-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .badge-auth-close:hover{color:var(--text);}
+  .badge-auth-head{display:flex;align-items:center;gap:14px;padding-right:28px;}
+  .badge-auth-title{font-family:Roboto, var(--ix-font);font-size:18px;font-weight:700;color:var(--text);line-height:1.2;}
+  .badge-auth-content{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;}
+  .badge-auth-pane{border:1px solid var(--border);border-radius:14px;background:#fff;padding:12px;min-height:246px;display:flex;flex-direction:column;}
+  .badge-pane{background:var(--gray-bg);}
+  .login-pane{gap:9px;border:0;border-radius:0;background:transparent;padding:2px 0 12px;min-height:0;justify-content:flex-start;}
+  .badge-auth-pane-kicker{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:10px;}
+  .badge-auth-body{border:0;border-radius:14px;background:transparent;padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:160px;flex:1;}
+  .badge-auth-reader{width:78px;height:78px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);color:var(--accent);flex-shrink:0;}
+  .badge-auth-reader svg{width:38px;height:38px;}
+  .badge-auth-message{font-size:14px;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:5px;text-align:center;}
+  .badge-auth-sub{font-size:11px;color:var(--text-muted);line-height:1.35;width:190px;max-width:100%;text-align:center;margin:0 auto;}
+  .badge-auth-role{margin-top:auto;display:flex;align-items:baseline;justify-content:flex-start;gap:6px;padding:0;font-size:11px;line-height:1.2;}
+  .badge-auth-role > span:first-child{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--blue);line-height:1.2;}
+  #badgeAuthRole{font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text);line-height:1.2;}
+  .badge-auth-cycle{position:absolute;right:0;bottom:-44px;width:36px;height:36px;border-radius:999px;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 18px rgba(10,16,32,.12);}
+  .badge-auth-cycle:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
+  .badge-auth-sso,.badge-auth-submit{height:32px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;cursor:pointer;text-transform:uppercase;}
+  .badge-auth-sso:hover,.badge-auth-submit:hover{filter:brightness(.94);}
+  .badge-auth-sso{background:#fff;color:var(--accent);}
+  .badge-auth-form{display:grid;grid-template-columns:1fr;gap:6px;}
+  .badge-auth-form label{font-size:11px;font-weight:800;color:var(--text-muted);}
+  .badge-auth-form input{height:30px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;padding:0 9px;font-size:12px;color:var(--text);min-width:0;}
+  .badge-auth-form input:focus{outline:none;border-color:var(--accent);}
+  .badge-auth-submit{margin-top:3px;}
+  .badge-auth-popup.state-reading .badge-auth-reader{background:var(--amber-bg);border-color:var(--amber-bd);color:var(--amber);}
+  .badge-auth-popup.state-approved .badge-auth-reader{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
+  .badge-auth-popup.state-rejected .badge-auth-reader{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+  .badge-auth-popup.state-sso .badge-auth-sso,.badge-auth-popup.state-password .badge-auth-submit{box-shadow:0 0 0 2px rgba(37,99,235,.18);}
+
+  /* ---- generic confirm step (reused "confirm/cancel" footer pattern) ---- */
+  .cp-confirm-step{display:flex;flex-direction:column;gap:14px;height:100%;}
+  .cp-confirm-title{font-family:Roboto,var(--ix-font);font-size:16px;font-weight:700;color:var(--text);line-height:1.25;}
+  .cp-confirm-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:auto;}
+  .cp-confirm-actions button{height:32px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;padding:0 14px;text-transform:uppercase;}
+  .cp-confirm-cancel{border:1px solid rgba(37,99,235,.38);background:#fff;color:var(--accent);}
+  .cp-confirm-confirm{border:1px solid var(--accent);background:var(--accent);color:#fff;}
+  .cp-confirm-confirm:hover{filter:brightness(.94);}
+</style>
+<script src="smart-factory-header.js?v=11" defer></script>
+</head>
+<body>
+  <smart-factory-header active-screen="monitoring"></smart-factory-header>
+  <div id="flagCategoryRow" style="position:absolute;top:64px;right:40px;left:auto;width:max-content;height:auto;z-index:80;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;padding:12px 12px;box-shadow:0 4px 18px rgba(15,23,42,.07);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
+    <div class="flag-category-scroll">
+      <div class="flag-category-panel" id="flagCategoryList"></div>
+    </div>
+  </div>
+
+  <div class="page-titlebar">
+    <div class="page-titlegroup">
+      <div class="page-title-copy">
+        <div class="page-title">Digital OEE</div>
+        <div class="page-breadcrumb">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h4v4H6zM14 4h4v4h-4zM14 14h4v4h-4zM10 8h2a2 2 0 012 2v4"/>
+          </svg>
+          <span>Sandy USA &gt; Unit 1 &gt; AFA10</span>
+        </div>
+      </div>
+      <div class="page-flow">
+        <div class="page-flow-block page-flow-product">
+          <div class="page-flow-title">NEXIVA 20 GA X 1 IN SINGLE PORT</div>
+          <div class="page-flow-copy">SKU: 80-APX-50000 | Lot: L2075-0245</div>
+        </div>
+        <div class="page-flow-divider"></div>
+        <div class="page-flow-block">
+          <div class="page-flow-copy">Bottleneck</div>
+          <div class="page-flow-copy">Autoguard 13 Zone #5</div>
+        </div>
+        <div class="page-flow-divider"></div>
+        <div class="page-active-category" id="pageActiveCategory">
+          <div class="page-active-category-label" id="pageActiveCategoryLabel">Production</div>
+          <div class="page-active-category-sub" id="pageActiveCategorySub">Active Category</div>
+        </div>
+        <div id="headerChangeoverDivider" class="page-flow-divider" style="display:none;"></div>
+        <div id="headerChangeover" class="page-header-stepper" style="display:none;"></div>
+        <div class="page-status-control">
+          <span class="page-flow-copy">Status Control</span>
+          <div class="page-status-buttons">
+            <button id="headerActionBtn" class="page-header-action outline" type="button" title="Next Step" aria-label="Next Step"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button>
+            <button class="page-header-action outline" type="button" onclick="openControlPanel()" title="Open Work Order Control Panel" aria-label="Open Work Order Control Panel"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+            <div class="page-button-divider"></div>
+            <button class="page-header-action outline" type="button" onclick="toggleFlagCategories()" title="Flag Category" aria-label="Flag Category"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 4C20.33 4 21 4.67 21 5.5V18.5C21 19.33 20.33 20 19.5 20C18.67 20 18 19.33 18 18.5V5.5C18 4.67 18.67 4 19.5 4ZM4.5 13C5.33 13 6 13.67 6 14.5V18.5C6 19.33 5.33 20 4.5 20C3.67 20 3 19.33 3 18.5V14.5C3 13.67 3.67 13 4.5 13ZM15.5 4C16.33 4 17 4.67 17 5.5C17 6.33 16.33 7 15.5 7C14.67 7 14 6.33 14 5.5C14 4.67 14.67 4 15.5 4ZM11.5 5C12.33 5 13 5.67 13 6.5V7.5C13 8.33 12.33 9 11.5 9C10.67 9 10 8.33 10 7.5V6.5C10 5.67 10.67 5 11.5 5ZM8.5 10C9.33 10 10 10.67 10 11.5V12.5C10 13.33 9.33 14 8.5 14C7.67 14 7 13.33 7 12.5V11.5C7 10.67 7.67 10 8.5 10Z"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-card-shell">
+    <nav class="app-side-nav" aria-label="Digital OEE navigation">
+      <button class="app-side-btn active" type="button" aria-label="3D Monitoring" title="3D Monitoring">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9.2c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v8.6c0 .66-.54 1.2-1.2 1.2H6.2c-.66 0-1.2-.54-1.2-1.2V9.2Zm5-4c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v12.6c0 .66-.54 1.2-1.2 1.2h-1.6c-.66 0-1.2-.54-1.2-1.2V5.2Zm5 7c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v5.6c0 .66-.54 1.2-1.2 1.2h-1.6c-.66 0-1.2-.54-1.2-1.2v-5.6Z"/></svg>
+        <span class="app-side-label">3D Monitoring</span>
+      </button>
+      <button class="app-side-btn" type="button" aria-label="Dashboard" title="Dashboard">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h8V3H3v10Zm0 8h8v-6H3v6Zm10 0h8V11h-8v10Zm0-18v6h8V3h-8Z"/></svg>
+        <span class="app-side-label">Dashboard</span>
+      </button>
+      <button class="app-side-btn" type="button" aria-label="Top Losses" title="Top Losses">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+        <span class="app-side-label">Top Losses</span>
+      </button>
+      <button class="app-side-btn" type="button" aria-label="Shift Trends" title="Shift Trends">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6Z"/></svg>
+        <span class="app-side-label">Shift Trends</span>
+      </button>
+      <button class="app-side-btn" type="button" aria-label="Recontextualization" title="Recontextualization" onclick="window.open('https://www.figma.com/proto/bMicViKyVWNnBwiWL1edOG/-BD--Smart-Factory-Hub?node-id=36769-195811&t=ch9VrxiC7EdjbPDf-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=36742%3A170334&page-id=32545%3A103361', '_blank')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5 0 .85-.22 1.65-.6 2.35l1.46 1.46C18.58 15.7 19 14.4 19 13c0-3.86-3.14-7-7-7Zm-5.86.19C5.42 7.3 5 8.6 5 10c0 3.86 3.14 7 7 7v3l4-4-4-4v3c-2.76 0-5-2.24-5-5 0-.85.22-1.65.6-2.35L6.14 6.19Z"/></svg>
+        <span class="app-side-label">Recontextualization</span>
+      </button>
+      <button class="app-side-btn" type="button" aria-label="Scheduled Events" title="Scheduled Events">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6c0-1.1-.89-2-2-2Zm0 16H5V10h14v10ZM5 8V6h14v2H5Z"/></svg>
+        <span class="app-side-label">Scheduled Events</span>
+      </button>
+      <button class="app-side-btn" type="button" aria-label="Reports" title="Reports">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm2 16H8v-2h8v2Zm0-4H8v-2h8v2Zm-3-5V3.5L18.5 9H13Z"/></svg>
+        <span class="app-side-label">Reports</span>
+      </button>
+    </nav>
+
+    <main class="app-content">
+      <div class="monitoring-view">
+        <div class="page-shell">
+    <section class="dashboard">
+      <div class="map-card">
+        <div id="zoneAccRoot"></div>
+      </div>
+
+      <aside class="right-column">
+        <section class="line-overview-card" aria-label="Line Overview">
+          <div class="line-overview-head">
+            <div class="line-overview-title">Line Overview</div>
+            <div class="line-overview-actions">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 1l1.26 2.74L23 5l-2.74 1.26L19 9l-1.26-2.74L15 5l2.74-1.26L19 1ZM9 4l2.5 5.5L17 12l-5.5 2.5L9 20l-2.5-5.5L1 12l5.5-2.5L9 4Z"/></svg>
+              <svg class="calc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5.97 4.06L14.09 6l1.41 1.41L16.91 6l1.06 1.06-1.41 1.41 1.41 1.41-1.06 1.06-1.41-1.4-1.41 1.41-1.06-1.06 1.41-1.41zm-6.78.66h5v1.5h-5zM11.5 16h-2v2H8v-2H6v-1.5h2v-2h1.5v2h2zm6.5 1.25h-5v-1.5h5zm0-2.5h-5v-1.5h5z"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7h-2V6.41l-5.83 5.83-1.41-1.41L17.59 5H14V3ZM5 5h7v2H7v10h10v-5h2v7H5V5Z"/></svg>
+            </div>
+          </div>
+          <div class="line-overview-body">
+            <img class="line-overview-img oee" src="oee.png" alt="OEE">
+            <div class="placeholder-stack">
+              <img class="line-overview-img" src="yield.png" alt="Yield">
+              <img class="line-overview-img" src="speed.png" alt="Avg Line Speed">
+              <img class="line-overview-img" src="dt.png" alt="Total Line DT">
+            </div>
+            <img class="line-overview-img top-losses" src="top-losses_table.png" alt="Top Losses">
+          </div>
+        </section>
+      </aside>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+<div id="controlPanelModal" class="scrim" style="display:none;">
+  <div class="popup">
+
+    <!-- header -->
+    <div class="flex items-center justify-between px-6 pt-4 pb-0">
+      <div>
+        <div class="flex items-center gap-2">
+          <div id="cp-modalTitle" class="cp-modal-title">PWO Control Panel</div>
+        </div>
+        <div class="text-[12px] mt-0.5" style="color:var(--text-muted);" id="cp-hdrSub">PWO-4503287 · Batch 1847 · 80-APX-50000 · AFA10</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="cp-modal-close" type="button" onclick="closeControlPanel()" aria-label="Close control panel">✕</button>
+      </div>
+    </div>
+
+    <!-- body -->
+    <div id="cpPanelBody" class="cp-panel-body flex-1 min-h-0">
+
+      <!-- LEFT: CONTROL CONTENT -->
+      <div class="cp-main-pane flex flex-col gap-6">
+
+        <div id="cp-statusHero" class="status-hero" style="background:var(--green-bg);">
+          <span id="cp-statusDot" class="status-dot pulse" style="background:var(--green);"></span>
+          <div class="flex-1">
+            <div id="cp-statusTitle" class="font-extrabold text-[15px]" style="color:var(--green);">Running</div>
+            <div id="cp-statusDesc" class="text-[11.5px]" style="color:var(--text-soft);">Production is active — good counts are being recorded normally.</div>
+          </div>
+          <div class="text-right">
+            <div id="cp-statusSinceLabel" class="label-xs text-[13px] normal-case tracking-normal">Since</div>
+            <div id="cp-statusSince" class="text-[13px] font-bold">06:00 AM</div>
+          </div>
+        </div>
+
+        <div id="cp-progressWrap">
+          <div class="flex justify-between text-[11px] font-semibold mb-1.5 gap-2">
+            <span id="cp-progressLabel">Progress to Planned Quantity (PWO-4503287)</span>
+            <span><span id="cp-progActual" style="color:var(--accent);">82,450</span> / <span id="cp-progPlanned">100,000</span> pcs (<span id="cp-progPct">82%</span>)</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="cp-progFill" style="width:82%;"></div></div>
+        </div>
+
+        <div id="cp-dynamicArea" class="flex flex-col gap-3"></div>
+      </div>
+
+      <!-- RIGHT: ACTIVITY / STATE LOG -->
+      <div id="cpActivityPane" class="cp-activity-pane flex flex-col min-h-0" style="background:var(--gray-bg);">
+        <div class="px-4 py-3 border-b flex items-center justify-between shrink-0" style="border-color:var(--border);">
+          <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Activity Log</div>
+          <button class="text-[11px] font-bold" style="color:var(--accent);">Export</button>
+        </div>
+        <div id="cp-activityList" class="overflow-y-auto flex-1 px-3 py-3 flex flex-col gap-2 text-[12px]"></div>
+        <div class="px-4 py-2 border-t shrink-0" style="border-color:var(--border);">
+          <button class="text-[11px] font-bold" style="color:var(--accent);">See all Logs</button>
+        </div>
+      </div>
+    </div>
+    <div class="cp-debug-tools" aria-label="Control panel shortcuts">
+      <button class="cp-debug-btn" onclick="cpToggleNextWoConfirmed()" aria-label="Simulate no next PWO confirmed" title="Simulate: No Next PWO Confirmed">N</button>
+      <button class="cp-debug-btn" onclick="cpJumpTo('RUNNING_NEAR')" aria-label="Simulate less than 5 percent remaining" title="Simulate: <5% Remaining">%</button>
+      <button class="cp-debug-btn" onclick="cpJumpTo('HELD')" aria-label="Simulate engineering hold" title="Simulate: Engineering Hold">!</button>
+      <button class="cp-debug-btn" onclick="cpResetDemo()" aria-label="Reset demo" title="Reset">↺</button>
+      <button id="cpEndDebugToggle" class="cp-debug-btn end-debug-circle" onclick="cpToggleEndDebugState()" aria-label="Toggle End PWO debug state" title="Debug: Produced pieces">↔</button>
+    </div>
+    <button class="cp-inline-log-btn" onclick="cpToggleLog()" aria-label="Toggle activity log" title="Activity log">›</button>
+  </div>
+</div>
+
+<div id="badgeAuthModal" class="scrim badge-auth-scrim" style="display:none;">
+  <div class="badge-auth-popup">
+    <button class="badge-auth-close" type="button" onclick="closeBadgeAuthModal()" aria-label="Close badge authentication">x</button>
+    <div class="badge-auth-head">
+      <div>
+        <div class="badge-auth-title" id="badgeAuthTitle">Authentication Required</div>
+      </div>
+    </div>
+    <div class="badge-auth-content">
+      <div class="badge-auth-pane badge-pane">
+        <div class="badge-auth-pane-kicker">Badge</div>
+        <div class="badge-auth-body">
+          <div class="badge-auth-reader" id="badgeAuthReaderIcon"></div>
+          <div>
+            <div class="badge-auth-message" id="badgeAuthMessage">Scan your badge or</div>
+            <div class="badge-auth-sub" id="badgeAuthSub">Use another sign-in method to confirm this action.</div>
+          </div>
+        </div>
+        <div class="badge-auth-role">
+          <span>Required role</span>
+          <span id="badgeAuthRole">Production Supervisor</span>
+        </div>
+      </div>
+      <div class="badge-auth-pane login-pane">
+        <div class="badge-auth-form">
+          <label>Email</label>
+          <input id="badgeAuthEmail" type="email" placeholder="operator@bd.com">
+          <label>Password</label>
+          <input id="badgeAuthPassword" type="password" placeholder="Password">
+          <button class="badge-auth-submit" type="button" onclick="cpAuthSucceed()">SIGN IN</button>
+        </div>
+        <button class="badge-auth-sso" type="button" onclick="setBadgeAuthState('sso')">CONTINUE WITH SSO</button>
+      </div>
+    </div>
+    <button class="badge-auth-cycle" type="button" onclick="cycleBadgeAuthState()" title="Cycle modal state" aria-label="Cycle badge modal state">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-15.1 6.6M3 12a9 9 0 0115.1-6.6"/>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18 3v4h-4M6 21v-4h4"/>
+      </svg>
+    </button>
+  </div>
+</div>
+<script>
+/* =====================================================================
+   CONTROL PANEL LOGIC — ported from work-order-control-panel-v1.html
+   (namespaced with cp- prefix / cp function names to avoid clashing
+   with the Work Order Production page it's embedded in)
+===================================================================== */
+const CP_WO_CURRENT = { wo:'WO-4503287', sku:'80-APX-50000', desc:'L2075-0245', batch:'1847', planned:100000 };
+const CP_NEXT_WO_OPTIONS = [
+  { wo:'WO-4503290', sku:'80-APX-60100', desc:'22GA Catheter', planned:120000, sameSku:false },
+  { wo:'WO-4503291', sku:'80-APX-50000', desc:'20GA Catheter (same SKU)', planned:90000, sameSku:true }
+];
+
+let cpNextWoIndex = 0;
+let cpPhase = 'RUNNING';
+let cpPauseReturnPhase = 'RUNNING';
+let cpPauseReason = null;
+let cpLineClearanceRecorded = false;
+let cpAutoResumeEnabled = true;
+let cpLogCollapsed = true;
+let cpLastPhase = cpPhase;
+let cpPhaseSince = Date.now();
+let cpEndOrderFlowOpen = false;
+let cpNextWoConfirmed = true;
+let cpEndHasProducedPieces = true;
+
+function cpNextWo(){ return CP_NEXT_WO_OPTIONS[cpNextWoIndex]; }
+function cpPwo(id){ return String(id).replace(/^WO-/, 'PWO-'); }
+
+const CP_PHASES = {
+  IDLE:      { label:'Not Started', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'No active Work Order on this equipment yet.' },
+  RUNNING:   { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
+               desc:'Production is active — good counts are being recorded normally.' },
+  RUNNING_NEAR: { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
+               desc:'Approaching planned quantity — confirm the next Work Order.' },
+  RUNNING_CONFIRMED: { label:'Running', dot:'var(--green)', bg:'var(--green-bg)', text:'var(--green)', pulse:true,
+               desc:'Next Work Order confirmed — ready to complete.' },
+  CHG_RAMPDOWN: { label:'Changeover — Ramp Down', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Clearing current material from the line.' },
+  CHG_TOOLING:  { label:'Changeover — Tooling', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Tooling/recipe changeover in progress for the next Work Order.' },
+  CHG_READY:    { label:'Changeover Complete', dot:'var(--orange)', bg:'var(--orange-bg)', text:'var(--orange)', pulse:false,
+               desc:'Ready for Manufacturing Start.' },
+  CHG_SAME:     { label:'Changeover — Batch Closeout', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'Same SKU as next Work Order — no ramp down or tooling changeover required.' },
+  RAMP_UP:   { label:'Running — Ramp-Up', dot:'var(--purple)', bg:'var(--purple-bg)', text:'var(--purple)', pulse:true,
+               desc:'Manufacturing Start recorded — stabilizing to target speed.' },
+  PAUSED:    { label:'Paused', dot:'var(--amber)', bg:'var(--amber-bg)', text:'var(--amber)', pulse:false,
+               desc:'Production is paused — good counts and OEE clocks are on hold.' },
+  HELD:      { label:'On Hold — Engineering', dot:'var(--red)', bg:'var(--red-bg)', text:'var(--red)', pulse:false,
+               desc:'Production stopped pending engineering review.' },
+  ABORTED:   { label:'Aborted — Emergency Stop', dot:'var(--darkred)', bg:'var(--darkred-bg)', text:'var(--darkred)', pulse:false,
+               desc:'Order was emergency-aborted. Requires supervisor review.' },
+  STOPPED:   { label:'Stopped', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'This Work Order was stopped early and is closed.' },
+  COMPLETE:  { label:'Completed - Idle', dot:'var(--text-muted)', bg:'#f1f4f8', text:'var(--text-soft)', pulse:false,
+               desc:'This work order was closed before reaching its target.' }
+};
+
+const CP_BUSY_LABEL = {
+  STARTING:'Starting…', PAUSING:'Pausing…', RESUMING:'Resuming…', HOLDING:'Putting on engineering hold…',
+  STOPPING:'Closing order…', ABORTING:'Aborting…', RAMPING_DOWN:'Beginning ramp down…',
+  CHANGEOVER:'Switching to tooling changeover…', FINALIZING:'Finalizing changeover…',
+  CANCELLING:'Cancelling changeover…'
+};
+
+const cpIcons = {
+  pause:`<svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></svg>`,
+  resume:`<svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 4l14 8-14 8V4z"/></svg>`,
+  end:`<svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>`,
+  flag:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M5 4h11l-2 3 2 3H5"/></svg>`,
+  clear:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
+  start:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 4l14 8-14 8V4z"/></svg>`,
+  abort:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.86L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.86a2 2 0 00-3.4 0z"/></svg>`,
+  check:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  tool:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 11-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 015.4-5.4z"/></svg>`,
+  lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 018 0v3"/></svg>`,
+  forward:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg>`
+};
+
+function cpFmtTime(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+function cpFmtNum(n){ return n.toLocaleString('en-US'); }
+function cpFmtElapsed(ms){
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return [h,m,s].map(n => String(n).padStart(2,'0')).join(':');
+}
+
+function cpRenderHero(){
+  const p = CP_PHASES[cpPhase];
+  if(cpPhase !== cpLastPhase){ cpLastPhase = cpPhase; cpPhaseSince = Date.now(); }
+  const hero = document.getElementById('cp-statusHero');
+  hero.style.display = '';
+  hero.style.background = p.bg;
+  const dot = document.getElementById('cp-statusDot');
+  dot.className = 'status-dot' + (p.pulse ? ' pulse' : '');
+  dot.style.background = p.dot;
+  dot.style.border = 'none';
+  document.getElementById('cp-statusTitle').textContent = p.label;
+  document.getElementById('cp-statusTitle').style.color = p.text;
+  document.getElementById('cp-statusDesc').textContent = cpPhase === 'PAUSED' ? `Reason: ${cpPauseReason || '—'}` : p.desc;
+  const sinceLabel = document.getElementById('cp-statusSinceLabel');
+  const sinceVal = document.getElementById('cp-statusSince');
+  if(cpPhase === 'RUNNING'){
+    sinceLabel.textContent = 'Since';
+    sinceVal.textContent = '06:00 AM';
+  } else {
+    sinceLabel.textContent = 'Time Elapsed';
+    sinceVal.textContent = cpFmtElapsed(Date.now() - cpPhaseSince);
+  }
+}
+setInterval(()=>{
+  if(cpPhase !== 'RUNNING'){
+    const el = document.getElementById('cp-statusSince');
+    if(el) el.textContent = cpFmtElapsed(Date.now() - cpPhaseSince);
+    const changeoverElapsed = document.getElementById('cp-changeoverElapsed');
+    if(changeoverElapsed) changeoverElapsed.textContent = cpFmtElapsed(Date.now() - cpPhaseSince);
+  }
+}, 1000);
+
+function cpRenderBusy(key){
+  const hero = document.getElementById('cp-statusHero');
+  hero.style.background = 'var(--gray-bg)';
+  const dot = document.getElementById('cp-statusDot');
+  dot.className = 'status-dot spin';
+  dot.style.background = 'transparent';
+  dot.style.border = '2px solid var(--text-muted)';
+  dot.style.borderTopColor = 'transparent';
+  document.getElementById('cp-statusTitle').textContent = CP_BUSY_LABEL[key];
+  document.getElementById('cp-statusTitle').style.color = 'var(--text-soft)';
+  document.getElementById('cp-statusDesc').textContent = 'Updating work order / equipment status…';
+}
+
+function cpRenderProgress(){
+  const wrap = document.getElementById('cp-progressWrap');
+  const inChangeover = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase);
+  const inRampUp = cpPhase === 'RAMP_UP';
+
+  if(cpPhase === 'IDLE' || inChangeover){
+    wrap.style.display = 'none'; return;
+  }
+  wrap.style.display = '';
+
+  if(inChangeover){
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${cpNextWo().wo} — not yet started)`;
+    document.getElementById('cp-progActual').textContent = '0';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(cpNextWo().planned);
+    document.getElementById('cp-progPct').textContent = '0%';
+    document.getElementById('cp-progFill').style.width = '0%';
+  } else if(inRampUp){
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${cpNextWo().wo})`;
+    document.getElementById('cp-progActual').textContent = '8,950';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(cpNextWo().planned);
+    document.getElementById('cp-progPct').textContent = '7%';
+    document.getElementById('cp-progFill').style.width = '7%';
+  } else if(cpPhase === 'RUNNING_NEAR' || cpPhase === 'RUNNING_CONFIRMED'){
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${CP_WO_CURRENT.wo})`;
+    document.getElementById('cp-progActual').textContent = '99,200';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(CP_WO_CURRENT.planned);
+    document.getElementById('cp-progPct').textContent = '99%';
+    document.getElementById('cp-progFill').style.width = '99%';
+  } else if(cpPhase === 'COMPLETE'){
+    document.getElementById('cp-progressLabel').textContent = `Produced Quantity / Planned Quantity (${CP_WO_CURRENT.wo})`;
+    document.getElementById('cp-progActual').textContent = '64,900';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(CP_WO_CURRENT.planned);
+    document.getElementById('cp-progPct').textContent = '65%';
+    document.getElementById('cp-progFill').style.width = '65%';
+  } else {
+    document.getElementById('cp-progressLabel').textContent = `Progress to Planned Quantity (${CP_WO_CURRENT.wo})`;
+    document.getElementById('cp-progActual').textContent = '82,450';
+    document.getElementById('cp-progPlanned').textContent = cpFmtNum(CP_WO_CURRENT.planned);
+    document.getElementById('cp-progPct').textContent = '82%';
+    document.getElementById('cp-progFill').style.width = '82%';
+  }
+}
+
+function cpRenderHeader(){
+  let sub;
+  if(cpPhase === 'CHG_RAMPDOWN'){
+    sub = `${CP_WO_CURRENT.sku} → ${cpNextWo().sku}`;
+  } else if(['CHG_TOOLING','CHG_READY','CHG_SAME','RAMP_UP'].includes(cpPhase)){
+    sub = `${cpPwo(cpNextWo().wo)} · ${cpNextWo().sku} · AFA10  (was ${cpPwo(CP_WO_CURRENT.wo)})`;
+  } else if(cpPhase === 'IDLE'){
+    sub = `Next: ${cpPwo(cpNextWo().wo)} · ${cpNextWo().sku} · AFA10`;
+  } else {
+    sub = `${cpPwo(CP_WO_CURRENT.wo)} · Batch ${CP_WO_CURRENT.batch} · ${CP_WO_CURRENT.sku} · AFA10`;
+  }
+  document.getElementById('cp-hdrSub').textContent = sub;
+}
+
+function cpActionGrid(items){
+  return `<div class="flex gap-2.5 items-stretch">
+    ${items.map(([label,icon,bg,text,onclick,weight,disabled])=>`
+      <div class="action-btn${disabled?' disabled':''}" style="--action-bg:${bg};--action-color:${text};flex:${weight||1};" onclick="${disabled?'':onclick}">
+        <span class="action-icon">${icon}</span>
+        <span class="action-label">${label}</span>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function cpEndOrderFlow(){
+  const next = cpNextWo();
+  const nextPwo = cpPwo(next.wo);
+  const isNearComplete = cpPhase === 'RUNNING_NEAR' || cpPhase === 'RUNNING_CONFIRMED';
+  const cancelDisabled = cpEndHasProducedPieces;
+  const progressActual = cancelDisabled ? (isNearComplete ? '99,200' : '82,450') : '0';
+  const progressPct = cancelDisabled ? (isNearComplete ? '99%' : '82%') : '0%';
+  const progressWidth = cancelDisabled ? (isNearComplete ? '99%' : '82%') : '0%';
+  const nextSection = cpNextWoConfirmed
+    ? `<div class="end-next-section">
+        <div class="end-next-header">
+          <div class="end-next-heading">
+            <div class="end-next-title">Next Confirmed PWO</div>
+          </div>
+        </div>
+        <div class="end-next-card">
+          <div class="end-next-grid">
+            <div class="end-next-field"><span>SKU</span><b>${next.sku}</b></div>
+            <div class="end-next-field"><span>PWO</span><b>${nextPwo}</b></div>
+            <div class="end-next-field"><span>Batch</span><b>${next.batch || '1851'}</b></div>
+            <div class="end-next-field"><span>Planned Quantity</span><b>${cpFmtNum(next.planned)}</b></div>
+          </div>
+        </div>
+        <button type="button" class="end-next-primary" onclick="cpSwitchNextWo()">Change Next PWO</button>
+      </div>`
+    : `<div class="end-next-section unconfirmed">
+        <div class="end-next-header">
+          <div class="end-next-heading">
+            <div class="end-next-title unconfirmed">Next Confirmed PWO</div>
+          </div>
+        </div>
+        <div class="end-next-card unconfirmed empty">
+          <div class="end-order-copy">No PWO has been assigned to run next.</div>
+          <button type="button" class="end-next-assign-cta" onclick="cpConfirmNextWoForEndFlow()">Assign Next PWO</button>
+        </div>
+      </div>`;
+
+  return `
+    <div class="end-order-flow">
+      ${nextSection}
+      <div class="end-progress">
+        <div class="end-progress-row">
+          <span>Progress to Planned Quantity (${cpPwo(CP_WO_CURRENT.wo)})</span>
+          <span><span style="color:var(--accent);">${progressActual}</span> / ${cpFmtNum(CP_WO_CURRENT.planned)} pcs (${progressPct})</span>
+        </div>
+        <div class="end-progress-track"><div class="end-progress-fill" style="width:${progressWidth};"></div></div>
+      </div>
+
+      <div class="end-actions">
+        <div class="end-actions-label">Actions</div>
+        <div class="end-option-grid">
+          <button type="button" class="end-option primary full ${cpNextWoConfirmed ? '' : 'disabled'}" aria-label="${cpNextWoConfirmed ? `Start ${nextPwo} after completing current PWO` : 'Select next PWO to continue'}" style="--option-color:var(--green);--option-bg:var(--green-bg);" ${cpNextWoConfirmed ? "onclick=\"cpEndOrder('COMPLETE_START_NEXT')\"" : 'aria-disabled="true"'}>
+            <span class="end-option-icon" aria-hidden="true">${cpIcons.check}</span>
+            <span class="end-option-main">
+              <span class="end-option-title">${cpNextWoConfirmed ? `Start ${nextPwo} after completing current PWO` : 'Select next PWO to continue'}</span>
+            </span>
+            <span class="end-primary-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <button type="button" class="end-option secondary ${(cancelDisabled || !cpNextWoConfirmed) ? 'disabled' : ''}" style="--option-color:var(--red);--option-bg:var(--red-bg);" ${(cancelDisabled || !cpNextWoConfirmed) ? 'disabled aria-disabled="true"' : "onclick=\"cpEndOrder('CANCEL')\""}>
+            <span class="end-option-icon" aria-hidden="true">${cpIcons.end}</span>
+            <span class="end-option-main">
+              <span class="end-option-title">Cancel</span>
+              <span class="end-option-desc">${cancelDisabled ? 'Production Already Started' : 'Close as cancelled.'}</span>
+            </span>
+          </button>
+
+          <button type="button" class="end-option secondary" style="--option-color:var(--blue);--option-bg:var(--blue-bg);" onclick="cpRequestCompleteAndStop()">
+            <span class="end-option-icon">${cpIcons.lock}</span>
+            <span class="end-option-main">
+              <span class="end-option-title">Complete and Stop</span>
+              <span class="end-option-desc">Keep equipment stopped.</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="end-order-footer">
+        <button type="button" class="end-order-back" onclick="cpCloseEndOrderFlow()">Back</button>
+      </div>
+    </div>
+  `;
+}
+
+function cpOpenEndOrderFlow(){
+  cpEndOrderFlowOpen = true;
+  cpRenderDynamic();
+}
+
+function cpCloseEndOrderFlow(){
+  cpEndOrderFlowOpen = false;
+  cpRenderDynamic();
+}
+
+function cpToggleEndDebugState(){
+  cpEndHasProducedPieces = !cpEndHasProducedPieces;
+  cpRenderDynamic();
+}
+
+function cpConfirmNextWoForEndFlow(){
+  cpGoToAssignmentForResource('AFA10');
+}
+
+function cpGoToAssignmentForResource(resourceName){
+  sessionStorage.setItem('smartFactoryPendingHeaderAction', 'assignment-resource:' + resourceName);
+  window.location.href = 'index.html#pwo-assignment';
+}
+
+function cpToggleNextWoConfirmed(){
+  cpNextWoConfirmed = !cpNextWoConfirmed;
+  if(!cpEndOrderFlowOpen) cpOpenEndOrderFlow();
+  else cpRenderDynamic();
+}
+
+function cpSetEndOrderLayout(open){
+  const title = document.getElementById('cp-modalTitle');
+  const statusHero = document.getElementById('cp-statusHero');
+  const progressWrap = document.getElementById('cp-progressWrap');
+  const scheduleNote = document.getElementById('cp-scheduleNote');
+  const debugToggle = document.getElementById('cpEndDebugToggle');
+  if(title) title.textContent = open ? 'End PWO' : 'PWO Control Panel';
+  if(statusHero) statusHero.style.display = open ? 'none' : '';
+  if(progressWrap) progressWrap.style.display = (open || ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase)) ? 'none' : '';
+  if(scheduleNote) scheduleNote.style.display = '';
+  if(debugToggle){
+    debugToggle.style.display = open ? 'flex' : 'none';
+    debugToggle.title = `Debug: ${cpEndHasProducedPieces ? 'Produced pieces' : 'No produced pieces'}`;
+  }
+}
+
+const CP_DHR_ITEMS = ['Reconcile good / scrap counts','Sample collection closed','Operator sign-off'];
+let cpDhrChecked = [false,false,false];
+function cpDhrChecklist(){
+  return `<div class="rounded-xl border p-3" style="border-color:var(--border);">
+    <div class="flex items-center justify-between mb-2">
+      <div class="font-bold text-[13px]">DBR Batch Record Closeout</div>
+      <span class="dhr-help" data-tip="Required for record-keeping — does not block Manufacturing Start.">i</span>
+    </div>
+    ${CP_DHR_ITEMS.map((label,i)=>`
+      <div class="task-row"><div class="ckbox ${cpDhrChecked[i]?'done':''}" onclick="cpToggleDhrCk(${i})">${cpDhrChecked[i]?'✓':''}</div><div class="text-[12px]">${label}</div></div>
+    `).join('')}
+  </div>`;
+}
+function cpToggleDhrCk(i){
+  cpDhrChecked[i] = !cpDhrChecked[i];
+  cpRenderDynamic();
+}
+function cpDhrComplete(){ return cpDhrChecked.every(Boolean); }
+
+function cpNextWoCard(showSwitcher){
+  const n = cpNextWo();
+  return `<div class="rounded-xl border p-3" style="border-color:var(--border);background:#fff;">
+    <div class="font-bold text-[13px]">Next Work Order — ${n.wo} · ${n.sku}</div>
+    <div class="text-[12px] flex items-center gap-1.5 flex-wrap mt-0.5" style="color:var(--text-soft);">
+      <span>${n.desc} · Planned ${cpFmtNum(n.planned)} pcs</span>
+      ${n.sameSku ? '<span>· Same SKU — no changeover required</span>' : `<span class="sku-alert" data-tip="Ramp down + tooling changeover required before Manufacturing Start.">⚠ Different SKU</span>`}
+    </div>
+    ${showSwitcher ? `<button class="btn btn-outline mt-2" onclick="cpSwitchNextWo()">Select Different Work Order</button>` : ''}
+  </div>`;
+}
+
+function cpChangeoverProgressSection(activeIndex){
+  const n = cpNextWo();
+  const steps = [
+    {label:'Ramp Down', sub: activeIndex>0?'Complete':activeIndex===0?'In Progress':'Pending'},
+    {label:'Tooling Changeover', sub: activeIndex>1?'Complete':activeIndex===1?'In Progress':'Pending'},
+    {label:'Manufacturing Start', sub: activeIndex>2?'Complete':activeIndex===2?'Ready':'Pending'}
+  ];
+  const colors = i => i<activeIndex ? 'var(--green)' : (i===activeIndex ? 'var(--orange)' : 'var(--border-strong)');
+  return `<div class="changeover-progress-section">
+    <div class="font-bold text-[13px] mb-2">Progress</div>
+    <div class="flex items-center mb-3">
+      ${steps.map((st,i)=>`
+        ${i>0?`<div class="step-line ${i-1<activeIndex?'done':''}"></div>`:''}
+        <div class="step">
+          <div class="step-circle" style="background:${colors(i)};">${i<activeIndex?'✓':(i+1)}</div>
+          <div class="step-label" style="color:${i===activeIndex?'var(--orange)':'var(--text-soft)'};">${st.label}</div>
+          <div class="step-sub">${st.sub}</div>
+        </div>`).join('')}
+    </div>
+    <div>
+      <div class="font-bold text-[13px]">Next Work Order — ${n.wo} · ${n.sku}</div>
+      <div class="text-[12px] flex items-center gap-1.5 flex-wrap mt-0.5" style="color:var(--text-soft);">
+        <span>${n.desc} · Planned ${cpFmtNum(n.planned)} pcs</span>
+        ${n.sameSku ? '<span>· Same SKU — no changeover required</span>' : `<span class="sku-alert" data-tip="Ramp down + tooling changeover required before Manufacturing Start.">⚠ Different SKU</span>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+function cpRenderDynamic(){
+  const area = document.getElementById('cp-dynamicArea');
+  cpSetEndOrderLayout(cpEndOrderFlowOpen);
+
+  if(cpEndOrderFlowOpen){
+    area.innerHTML = cpEndOrderFlow();
+    return;
+  }
+
+  if(cpPhase === 'IDLE'){
+    area.innerHTML = `
+      ${cpNextWoCard(false)}
+      <div class="text-[11px]" style="color:var(--text-muted);">Production has not started on this equipment. Manufacturing Start will run the IDLE → STARTING → RUNNING transition for ${cpNextWo().wo}.</div>
+      ${cpActionGrid([['Manufacturing Start', cpIcons.start, 'var(--green-bg)','var(--green)','cpDoManufacturingStartCold()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'RUNNING'){
+    area.innerHTML = `
+      <div class="flex flex-col gap-1.5">
+        <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
+        ${cpActionGrid([
+          ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+          ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
+        ])}
+      </div>
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'RUNNING_NEAR'){
+    area.innerHTML = `
+      <div class="rounded-xl border p-2.5" style="border-color:var(--blue-bd);background:var(--blue-bg);">
+        <div class="font-bold text-[12px] mb-1" style="color:var(--blue);">Confirm Next Work Order</div>
+        <div class="text-[10.5px] mb-2" style="color:var(--text-soft);">Approaching planned quantity. Confirm what runs next.</div>
+        ${cpNextWoCard(true)}
+        <div class="flex gap-2 mt-3">
+          <button class="btn" style="background:var(--blue);color:#fff;" onclick="cpConfirmNextWo()">Confirm — ${cpNextWo().wo}</button>
+        </div>
+      </div>
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
+      ])}
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'RUNNING_CONFIRMED'){
+    area.innerHTML = `
+      ${cpNextWoCard(true)}
+      <div class="text-[11px]" style="color:var(--text-muted);">Next Work Order confirmed. Completing this Work Order will close the DHR batch record and move the equipment into Changeover.</div>
+      ${cpActionGrid([['Complete Work Order', cpIcons.end, 'var(--blue-bg)','var(--blue)','cpDoCompleteWO()',1]])}
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Other Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
+      ])}
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'CHG_RAMPDOWN'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
+    area.innerHTML = `
+      ${cpChangeoverProgressSection(0)}
+      <div class="changeover-next-footer">
+        <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
+        <button type="button" class="changeover-next-btn" onclick="cpDoMarkLineCleared()">Next ${cpIcons.forward}</button>
+      </div>
+    `;
+  }
+
+  else if(cpPhase === 'CHG_TOOLING'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
+    area.innerHTML = `
+      ${cpChangeoverProgressSection(1)}
+      <div class="changeover-next-footer">
+        <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
+        <button type="button" class="changeover-next-btn" onclick="cpRequestToolingComplete()">Next ${cpIcons.forward}</button>
+      </div>
+    `;
+  }
+
+  else if(cpPhase === 'CHG_READY'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
+    area.innerHTML = `
+      ${cpChangeoverProgressSection(2)}
+      <div class="changeover-next-footer">
+        <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
+        <button type="button" class="changeover-next-btn" onclick="cpDoManufacturingStartChangeover()">Start ${cpIcons.forward}</button>
+      </div>
+    `;
+  }
+
+  else if(cpPhase === 'CHG_SAME'){
+    document.getElementById('cp-progressWrap').style.display = 'none';
+    area.innerHTML = `
+      ${cpDhrChecklist()}
+      ${cpNextWoCard(false)}
+      <div class="text-[12px]" style="color:var(--text-muted);">Same SKU as next Work Order — no ramp down, tooling changeover, or line clearance required.</div>
+      ${cpActionGrid([['Manufacturing Start', cpIcons.start, 'var(--green-bg)','var(--green)','cpDoManufacturingStartChangeover()',1]])}
+    `;
+  }
+
+  else if(cpPhase === 'RAMP_UP'){
+    area.innerHTML = `
+      <div class="rounded-xl border p-3" style="border-color:var(--purple-bd);background:var(--purple-bg);">
+        <div class="font-bold text-[12.5px]" style="color:var(--purple);">Ramping to target speed</div>
+        <div class="text-[11px]" style="color:var(--text-soft);">${cpNextWo().wo} is running below target speed while the line stabilizes. This is tracked as a Performance loss, not a separate state.</div>
+      </div>
+      <div class="text-[11px] font-bold uppercase tracking-wide" style="color:var(--text-muted);">Actions</div>
+      ${cpActionGrid([
+        ['Pause', cpIcons.pause, 'var(--amber-bg)','var(--amber)',"cpOpenSlide('reasonPanel')"],
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()"]
+      ])}
+      ${cpSlidePanels()}
+    `;
+  }
+
+  else if(cpPhase === 'PAUSED'){
+    area.innerHTML = `
+      ${cpActionGrid([
+        ['Resume Production', cpIcons.resume, 'var(--green-bg)','var(--green)','cpDoResume()',2],
+        ['End Order', cpIcons.end, 'var(--red-bg)','var(--red)',"cpOpenEndOrderFlow()",1]
+      ])}
+      ${cpAutoResumeControl()}
+      ${cpSlidePanels(true)}
+    `;
+  }
+
+  else if(cpPhase === 'HELD'){
+    area.innerHTML = `
+      <div class="rounded-xl border p-3" style="border-color:var(--red-bd);background:var(--red-bg);">
+        <div class="font-bold text-[12.5px] mb-1" style="color:var(--red);">Engineering Hold</div>
+        <div class="text-[11.5px]" style="color:var(--text-soft);">"Z5C30 worn drive belt and broken slide for the prestop." — awaiting engineering clearance.</div>
+      </div>
+      ${cpActionGrid([
+        ['Cleared — Resume', cpIcons.clear, 'var(--green-bg)','var(--green)','cpDoResume()',1]
+        /* Emergency Stop disabled for now — keeping the flow commented so it can be restored later.
+        ,['Escalate — Abort', cpIcons.abort, 'var(--darkred-bg)','var(--darkred)','cpDoAbort()',1]
+        */
+      ])}
+    `;
+  }
+
+  else if(cpPhase === 'COMPLETE'){
+    area.innerHTML = `
+      <div class="end-option-grid" style="grid-template-columns:1fr;">
+        <button type="button" class="end-option primary full" style="--option-color:var(--green);--option-bg:var(--green-bg);" onclick="cpAssignNextWorkOrder()">
+          <span class="end-option-icon" aria-hidden="true">${cpIcons.check}</span>
+          <span class="end-option-main">
+            <span class="end-option-title">Assign Next Work Order</span>
+          </span>
+          <span class="end-primary-arrow" aria-hidden="true">›</span>
+        </button>
+      </div>`;
+  }
+
+  else if(['ABORTED','STOPPED'].includes(cpPhase)){
+    area.innerHTML = `${cpActionGrid([['Order Closed', cpIcons.lock, '#f1f4f8','var(--text-muted)','',1]])}`;
+    area.querySelectorAll('.action-btn').forEach(b=>b.classList.add('disabled'));
+  }
+}
+function cpAssignNextWorkOrder(){
+  cpNextWoConfirmed = true;
+  cpPhase = 'IDLE';
+  cpRender();
+  cpSyncOuterHeader();
+}
+
+function cpSlidePanels(endOnly){
+  return `
+  ${!endOnly ? `
+  <div id="reasonPanel" class="slide" style="max-height:0;opacity:0;">
+    <div class="rounded-xl border p-3" style="border-color:var(--border-strong);background:var(--gray-bg);">
+      <div class="font-bold text-[13px] mb-2">Why are you pausing?</div>
+      <div class="grid grid-cols-3 gap-2">
+        ${['Changeover / Setup','Break / Crew','Material Missing','Quality Check','Planned Maintenance','Other'].map(r=>`
+          <div class="reason-btn" onclick="cpConfirmPause('${r}')">${cpIcons.check}${r}</div>
+        `).join('')}
+      </div>
+    </div>
+  </div>
+  ` : ''}`;
+}
+function cpOpenSlide(id){
+  ['reasonPanel'].forEach(x=>{ const e=document.getElementById(x); if(e && x!==id){ e.style.maxHeight='0'; e.style.opacity='0'; e.style.marginTop='-12px'; }});
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.maxHeight = '320px'; el.style.opacity = '1'; el.style.marginTop = '0';
+}
+function cpCancelSlide(id){ const e=document.getElementById(id); e.style.maxHeight='0'; e.style.opacity='0'; e.style.marginTop='-12px'; }
+
+const cpActivity = [
+  {t:'06:00 AM', text:'PWO started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`}
+];
+function cpRenderActivity(){
+  document.getElementById('cp-activityList').innerHTML = cpActivity.slice(0,3).map(a => `
+    <div class="rounded-md px-2.5 py-2 bg-white border" style="border-color:var(--border);">
+      <div class="flex items-center justify-between mb-1">
+        <span class="font-semibold">${a.text}</span>
+        <span style="color:var(--text-muted);font-size:10.5px;">${a.t}</span>
+      </div>
+      <span class="isa-tag">${String(a.isa).replace(/WO-/g, 'PWO-')}</span>
+    </div>`).join('');
+}
+function cpLogActivity(text, isa){
+  cpActivity.unshift({t:cpFmtTime(), text, isa});
+  cpRenderActivity();
+}
+
+function cpRender(){
+  cpRenderHeader();
+  cpRenderHero();
+  cpRenderProgress();
+  cpRenderDynamic();
+  cpRenderAutoResumeControls();
+  cpRenderLogPanel();
+  cpSyncOuterHeader();
+}
+
+function cpToggleLog(){
+  cpLogCollapsed = !cpLogCollapsed;
+  cpRenderLogPanel();
+}
+
+function cpRenderLogPanel(){
+  const body = document.getElementById('cpPanelBody');
+  if(body) body.classList.toggle('log-collapsed', cpLogCollapsed);
+  document.querySelectorAll('.cp-inline-log-btn').forEach(btn => {
+    btn.textContent = cpLogCollapsed ? '›' : '‹';
+    btn.title = cpLogCollapsed ? 'Show activity log' : 'Hide activity log';
+  });
+}
+
+const CP_PILL_CLASS = {
+  RUNNING:'pill-green', RUNNING_NEAR:'pill-green', RUNNING_CONFIRMED:'pill-green',
+  RAMP_UP:'pill-blue',
+  CHG_RAMPDOWN:'pill-orange', CHG_TOOLING:'pill-orange', CHG_READY:'pill-orange', CHG_SAME:'pill-gray',
+  PAUSED:'pill-amber', HELD:'pill-red', ABORTED:'pill-red', STOPPED:'pill-gray', COMPLETE:'pill-gray', IDLE:'pill-gray'
+};
+
+/* "Active Category" reflects the actual OEE/downtime category — the
+   pause reason picked in the waterfall, not just the raw phase name. */
+function cpActiveCategory(){
+  if(cpPhase === 'PAUSED') return { label: cpPauseReason || 'Paused', bg:'var(--amber-bg)', color:'var(--amber)' };
+  if(cpPhase === 'HELD') return { label:'Engineering Hold', bg:'var(--red-bg)', color:'var(--red)' };
+  if(cpPhase === 'ABORTED') return { label:'Emergency Stop', bg:'var(--darkred-bg)', color:'var(--darkred)' };
+  if(['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY'].includes(cpPhase)) return { label:'Changeover', bg:'var(--orange-bg)', color:'var(--orange)' };
+  if(cpPhase === 'CHG_SAME') return { label:'Batch Closeout', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'RAMP_UP') return { label:'Ramp-Up', bg:'var(--purple-bg)', color:'var(--purple)' };
+  if(cpPhase === 'STOPPED') return { label:'Stopped', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'COMPLETE') return { label:'Completed - Idle', bg:'#f1f4f8', color:'var(--text-soft)' };
+  if(cpPhase === 'IDLE') return { label:'Not Started', bg:'#f1f4f8', color:'var(--text-soft)' };
+  return { label:'Production', bg:'var(--green-bg)', color:'var(--green)' }; // RUNNING / RUNNING_NEAR / RUNNING_CONFIRMED
+}
+
+function cpResolveColor(v){
+  const m = /^var\((--[\w-]+)\)$/.exec((v || '').trim());
+  if(!m) return v;
+  return getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim() || v;
+}
+
+function cpSyncOuterHeader(){
+  const p = CP_PHASES[cpPhase];
+  const cat = cpActiveCategory();
+  const header = document.querySelector('smart-factory-header');
+  if(header && typeof header.setActiveCategory === 'function'){
+    header.setActiveCategory(cat.label, cpResolveColor(cat.color), cpResolveColor(cat.bg));
+  }
+  const pageCategory = document.getElementById('pageActiveCategory');
+  const pageCategoryLabel = document.getElementById('pageActiveCategoryLabel');
+  if(pageCategory){
+    pageCategory.style.setProperty('--cat-accent', cpResolveColor(cat.color));
+    pageCategory.style.setProperty('--cat-bg', cpResolveColor(cat.bg));
+  }
+  if(pageCategoryLabel) pageCategoryLabel.textContent = cat.label;
+  const pageCategorySub = document.getElementById('pageActiveCategorySub');
+  if(pageCategorySub) pageCategorySub.textContent = p.desc;
+  cpRenderHeaderStepper();
+  cpUpdateHeaderActionBtn();
+  if(typeof UNITS !== 'undefined'){
+    const currentUnit = UNITS.find(u=>u.name==='AFA10');
+    if(currentUnit){
+      currentUnit.status = p.label.toUpperCase();
+      currentUnit.pillClass = CP_PILL_CLASS[cpPhase] || 'pill-gray';
+      if(typeof renderUnitCards === 'function') renderUnitCards();
+    }
+  }
+}
+
+const HDR_BTN_ICONS = {
+  stop:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`,
+  play:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14l11-7-11-7z"/></svg>`,
+  forward:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg>`,
+  check:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>`
+};
+function cpUpdateHeaderActionBtn(){
+  const btn = document.getElementById('headerActionBtn');
+  if(!btn) return;
+  const running = ['RUNNING','RUNNING_NEAR','RUNNING_CONFIRMED','RAMP_UP'].includes(cpPhase);
+  const paused  = ['PAUSED','HELD'].includes(cpPhase);
+  const chg     = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase);
+  const idle    = ['IDLE','COMPLETE','STOPPED','ABORTED'].includes(cpPhase);
+
+  let icon, title, action, color;
+  if(running){
+    icon='stop'; title='End Order'; action='cpHeaderEndOrder()';
+    color='var(--red)';
+  } else if(paused){
+    icon='play'; title='Resume Production'; action='cpDoResume()';
+    color='var(--green)';
+  } else if(chg){
+    if(cpPhase==='CHG_READY' || cpPhase==='CHG_SAME'){
+      icon='play'; title='Manufacturing Start'; action='cpDoManufacturingStartChangeover()';
+      color='var(--green)';
+    } else {
+      icon='forward'; title='Next Stage';
+      if(cpPhase==='CHG_RAMPDOWN')      action='cpDoMarkLineCleared()';
+      else                               action='cpRequestToolingComplete()';
+      color='var(--orange)';
+    }
+  } else if(idle){
+    icon='check'; title='Assign Next PWO'; action="cpGoToAssignmentForResource('AFA10')";
+    color='var(--orange)';
+  } else {
+    btn.style.display='none'; return;
+  }
+  btn.style.display='';
+  btn.style.background = '#fff';
+  btn.style.borderColor = cpResolveColor(color);
+  btn.style.color = cpResolveColor(color);
+  btn.title = title;
+  btn.setAttribute('aria-label', title);
+  btn.onclick = new Function(action);
+  btn.innerHTML = HDR_BTN_ICONS[icon];
+}
+function cpHeaderEndOrder(){
+  openControlPanel();
+  cpOpenEndOrderFlow();
+}
+
+function cpRenderHeaderStepper(){
+  const stepper = document.getElementById('headerChangeover');
+  const divider = document.getElementById('headerChangeoverDivider');
+  const inChangeover = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY'].includes(cpPhase);
+  if(!stepper) return;
+  if(!inChangeover){
+    stepper.style.display = 'none';
+    if(divider) divider.style.display = 'none';
+    return;
+  }
+  const activeIndex = cpPhase === 'CHG_RAMPDOWN' ? 0 : cpPhase === 'CHG_TOOLING' ? 1 : 2;
+  const steps = [
+    {label:'Ramp Down'},
+    {label:'Tooling'},
+    {label:'Mfg Start'}
+  ];
+  const bg = i => i < activeIndex ? cpResolveColor('var(--green)') : i === activeIndex ? cpResolveColor('var(--orange)') : cpResolveColor('var(--border-strong)');
+  const sub = i => i < activeIndex ? 'Done' : i === activeIndex ? 'Active' : '';
+  const textColor = i => i === activeIndex ? cpResolveColor('var(--orange)') : cpResolveColor('var(--text-soft)');
+  stepper.style.display = 'flex';
+  if(divider) divider.style.display = 'none';
+  stepper.innerHTML = steps.map((st, i) => `
+    ${i > 0 ? `<div class="hdr-step-line${i-1 < activeIndex ? ' done' : ''}"></div>` : ''}
+    <div class="hdr-step">
+      <div class="hdr-step-circle${i === activeIndex ? ' active-pulse' : ''}" style="background:${bg(i)};${i === activeIndex ? `--ring-color:${bg(i)};` : ''}">${i < activeIndex ? '✓' : i+1}</div>
+      <div class="hdr-step-label" style="color:${textColor(i)};">${st.label}</div>
+    </div>
+  `).join('');
+}
+
+function cpAutoResumeControl(){
+  return `<div class="auto-resume-row">
+    <div class="auto-resume-label">Auto-Resume<span class="auto-resume-help" data-tip="When enabled, the order automatically resumes when production restarts after a planned break or pause.">i</span></div>
+    <div class="auto-resume-control">
+      <button type="button" class="auto-resume-toggle ${cpAutoResumeEnabled ? 'on' : ''}" onclick="cpToggleAutoResume()" aria-label="Toggle auto resume"></button>
+      <span class="auto-resume-text ${cpAutoResumeEnabled ? '' : 'off'}">${cpAutoResumeEnabled ? 'On' : 'Off'}</span>
+    </div>
+  </div>`;
+}
+
+function cpRenderAutoResumeControls(){
+}
+
+function cpToggleAutoResume(){
+  cpAutoResumeEnabled = !cpAutoResumeEnabled;
+  cpRenderAutoResumeControls();
+  cpRenderDynamic();
+}
+
+function cpTransition(busyKey, toPhase, delay, after){
+  cpEndOrderFlowOpen = false;
+  cpRenderBusy(busyKey);
+  document.getElementById('cp-dynamicArea').querySelectorAll('.action-btn').forEach(b=>b.classList.add('disabled'));
+  setTimeout(()=>{
+    cpPhase = toPhase;
+    cpRender();
+    after && after();
+  }, delay || 550);
+}
+
+function cpDoManufacturingStartCold(){
+  openBadgeAuthModal(() => cpDoManufacturingStartColdConfirmed());
+}
+function cpDoManufacturingStartColdConfirmed(){
+  cpTransition('STARTING','RAMP_UP',550, ()=>{
+    cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, `Equipment: IDLE → STARTING → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING`);
+  });
+}
+
+function cpConfirmNextWo(){
+  cpPhase = 'RUNNING_CONFIRMED';
+  cpRender();
+  cpLogActivity(`Next Work Order confirmed — ${cpNextWo().wo}`, `No state change · sequencing checkpoint`);
+}
+function cpSwitchNextWo(){
+  cpGoToAssignmentForResource('AFA10');
+}
+function cpDoCompleteWO(){
+  openBadgeAuthModal(() => cpDoCompleteWOConfirmed());
+}
+function cpDoCompleteWOConfirmed(){
+  const sameSku = cpNextWo().sameSku;
+  cpDhrChecked = [false,false,false];
+  cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN', 600, ()=>{
+    cpLogActivity(`Order completed — ${CP_WO_CURRENT.wo}`, `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'} — from_sku=${CP_WO_CURRENT.sku}`);
+  });
+}
+
+function cpDoMarkLineCleared(){
+  cpTransition('CHANGEOVER','CHG_TOOLING',550, ()=>{
+    cpLogActivity('Line cleared — ramp down complete', `Equipment: CHANGEOVER (Ramp Down) → CHANGEOVER (Tooling Changeover)`);
+  });
+}
+function cpDoCancelChangeover(){
+  const fromStep = cpPhase === 'CHG_TOOLING' ? 'Tooling Changeover' : cpPhase === 'CHG_READY' ? 'Ready' : 'Ramp Down';
+  cpTransition('CANCELLING','RUNNING',500, ()=>{
+    cpLogActivity('Changeover cancelled', `Equipment: CHANGEOVER (${fromStep}) → RUNNING`);
+  });
+}
+function cpDoToolingComplete(){
+  cpTransition('FINALIZING','CHG_READY',550, ()=>{
+    cpLogActivity(`Tooling changeover complete — recipe sent to PLC for ${cpNextWo().wo}`, `Equipment: CHANGEOVER (Tooling Changeover) → CHANGEOVER (Ready)  ·  to_sku=${cpNextWo().sku}`);
+  });
+}
+function cpDoManufacturingStartChangeover(){
+  openBadgeAuthModal(() => cpDoManufacturingStartChangeoverConfirmed());
+}
+function cpDoManufacturingStartChangeoverConfirmed(){
+  const wasSame = cpPhase === 'CHG_SAME';
+  cpTransition('STARTING','RAMP_UP',550, ()=>{
+    const co = wasSame
+      ? `Equipment: CHANGEOVER (Batch Closeout) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — no ramp down / tooling required (same SKU)`
+      : `Equipment: CHANGEOVER (Ready) → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING — changeover record closed (from_sku=${CP_WO_CURRENT.sku}, to_sku=${cpNextWo().sku})`;
+    cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, co);
+    cpLineClearanceRecorded = false;
+  });
+}
+
+function cpConfirmPause(reason){
+  openBadgeAuthModal(() => cpDoConfirmPause(reason));
+}
+function cpDoConfirmPause(reason){
+  cpPauseReason = reason;
+  cpPauseReturnPhase = cpPhase;
+  cpCancelSlide('reasonPanel');
+  cpTransition('PAUSING','PAUSED',500, ()=>{
+    cpLogActivity(`Paused — ${reason}`, `${CP_WO_CURRENT.wo}: RUNNING → PAUSING → PAUSED  ·  Category: ${reason}`);
+  });
+}
+function cpDoResume(){
+  openBadgeAuthModal(() => cpDoResumeConfirmed());
+}
+function cpDoResumeConfirmed(){
+  const wasHeld = cpPhase === 'HELD';
+  const target = cpPauseReturnPhase || 'RUNNING';
+  cpTransition('RESUMING', target, 550, ()=>{
+    const from = wasHeld ? 'HELD' : 'PAUSED';
+    cpLogActivity(wasHeld ? 'Cleared by engineering — resumed' : 'Resumed production', `${CP_WO_CURRENT.wo}: ${from} → STARTING → RUNNING`);
+    cpPauseReason = null;
+  });
+}
+function cpDoAbort(){
+  cpTransition('ABORTING','ABORTED',600, ()=>{
+    cpLogActivity('Escalated to emergency abort', `${CP_WO_CURRENT.wo}: HELD → ABORTING → ABORTED`);
+  });
+}
+function cpEndOrder(outcome){
+  if(outcome === 'CANCEL' && cpEndHasProducedPieces) return;
+  cpEndOrderFlowOpen = false;
+  if(outcome === 'COMPLETE_START_NEXT'){
+    const sameSku = cpNextWo().sameSku;
+    cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN',600, ()=>{
+      cpLogActivity(`Completed — starting next confirmed WO`, `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Next: ${cpNextWo().wo}  ·  Equipment: PRODUCTION → ${sameSku?'CHANGEOVER (Batch Closeout)':'CHANGEOVER (Ramp Down)'}`);
+    });
+  } else if(outcome === 'CANCEL'){
+    cpTransition('STOPPING','STOPPED',600, ()=>{
+      cpLogActivity('Work Order cancelled', `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → CANCELLED  ·  Next WO not started`);
+    });
+  } else if(outcome === 'COMPLETE_ONLY'){
+    cpTransition('STOPPING','COMPLETE',600, ()=>{
+      cpLogActivity('Work Order completed', `${CP_WO_CURRENT.wo}: RUNNING → STOPPING → COMPLETE  ·  Equipment remains stopped · Next WO not started`);
+    });
+  }
+}
+function cpJumpTo(p){
+  cpPauseReturnPhase = 'RUNNING';
+  cpPhase = p;
+  cpRender();
+  cpSyncOuterHeader();
+  cpLogActivity('— jumped to state for demo —', `(manual demo shortcut) → ${p}`);
+}
+function cpResetDemo(){
+  cpPhase = 'RUNNING'; cpNextWoIndex = 0; cpPauseReason = null; cpLineClearanceRecorded = false; cpAutoResumeEnabled = true; cpLogCollapsed = true; cpEndOrderFlowOpen = false; cpNextWoConfirmed = true; cpEndHasProducedPieces = true; cpDhrChecked = [false,false,false];
+  cpActivity.length = 0;
+  cpActivity.push({t:'06:00 AM', text:'PWO started', isa:`${CP_WO_CURRENT.wo}: IDLE → STARTING → RUNNING`});
+  cpRender(); cpRenderActivity(); cpSyncOuterHeader();
+}
+
+let cpInitialized = false;
+function openControlPanel(){
+  document.getElementById('controlPanelModal').style.display = 'flex';
+  if(!cpInitialized){
+    cpRender();
+    cpRenderActivity();
+    cpSyncOuterHeader();
+    cpInitialized = true;
+  }else{
+    cpRenderLogPanel();
+  }
+}
+function closeControlPanel(){
+  document.getElementById('controlPanelModal').style.display = 'none';
+}
+
+const FLAG_CATEGORIES = [
+  { label:'Running', icon:'play', color:'var(--green)', soft:'rgba(22,163,74,.10)', subs:[['At Speed','trend'],['Reduced Speed','chart'],['Stable Run','checklist']] },
+  { label:'CILT Routine', icon:'checklist', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['Clean','spark'],['Inspect','eye'],['Lubricate','drop']] },
+  { label:'No Order', icon:'ban', color:'var(--text-muted)', soft:'rgba(0,0,0,.06)', subs:[['Queue Empty','ban'],['SAP Delay','clock']] },
+  { label:'Legal Holidays', icon:'calendar', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Plant Holiday','calendar'],['Site Closed','lock']] },
+  { label:'Planned Maintenance', icon:'tool', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['PM Service','tool'],['Calibration','gauge'],['Inspection','eye']] },
+  { label:'Ramp-up', icon:'trend', color:'var(--purple)', soft:'rgba(126,58,242,.10)', subs:[['Speed Ramp','trend'],['First Pieces','box'],['Stabilizing','gauge']] },
+  { label:'Consumable Replacement', icon:'box', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Material Roll','box'],['Label Stock','tag'],['Blade Change','tool']] },
+  { label:'Breakdown', icon:'alert', color:'var(--red)', soft:'rgba(220,38,38,.10)', subs:[['Mechanical','gear'],['Electrical','bolt'],['Controls','cpu']] },
+  { label:'Operational Losses', icon:'chart', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Waiting Labor','user'],['Material Search','search'],['Documentation','file']] }
+];
+let flagCategoryOpen = false;
+let activeFlagCategory = null;
+let activeFlagSubcategory = null;
+
+function flagCategoryIcon(type){
+  const icons = {
+    play:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 5v14l11-7-11-7z"/></svg>`,
+    checklist:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 11l2 2 4-5M7 5h10M7 19h10M5 9h.01M5 15h.01"/></svg>`,
+    ban:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="8"/><path stroke-linecap="round" d="M7 7l10 10"/></svg>`,
+    calendar:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="4" y="5" width="16" height="15" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M4 10h16"/></svg>`,
+    tool:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 015 5L11 20l-5-5 8.7-8.7z"/></svg>`,
+    switch:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10l-3-3M17 17H7l3 3"/></svg>`,
+    refresh:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 00-14-5l-2 2M4 4v4h4M4 13a8 8 0 0014 5l2-2M20 20v-4h-4"/></svg>`,
+    trend:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 17l5-5 4 4 7-9M15 7h5v5"/></svg>`,
+    box:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4 8-4V7M12 11v10"/></svg>`,
+    alert:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3l10 18H2L12 3z"/><path stroke-linecap="round" d="M12 9v5M12 17h.01"/></svg>`,
+    chart:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" d="M5 19V9M12 19V5M19 19v-7"/></svg>`,
+    spark:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3z"/></svg>`,
+    eye:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2"/></svg>`,
+    drop:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M12 3s6 6.5 6 11a6 6 0 11-12 0c0-4.5 6-11 6-11z"/></svg>`,
+    clock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="8"/><path stroke-linecap="round" d="M12 8v5l3 2"/></svg>`,
+    lock:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>`,
+    gauge:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" d="M5 16a7 7 0 1114 0M12 16l4-5"/><path d="M9 20h6"/></svg>`,
+    stop:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>`,
+    file:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M7 3h7l4 4v14H7V3zM14 3v5h5"/></svg>`,
+    tag:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M4 11V5h6l10 10-6 6L4 11z"/><circle cx="8" cy="8" r="1"/></svg>`,
+    gear:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>`,
+    bolt:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linejoin="round" d="M13 2L5 14h6l-1 8 9-13h-6l0-7z"/></svg>`,
+    cpu:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>`,
+    user:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 20a7 7 0 0114 0"/></svg>`,
+    search:`<svg class="ic" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="6"/><path stroke-linecap="round" d="M16 16l4 4"/></svg>`
+  };
+  return icons[type] || icons.chart;
+}
+
+function renderFlagCategories(){
+  const list = document.getElementById('flagCategoryList');
+  if(!list) return;
+  list.innerHTML = FLAG_CATEGORIES.map((c,i)=>`
+    <div class="flag-cat-wrap ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};">
+      <button class="flag-cat-btn" type="button">
+        <span style="color:${c.color};">${flagCategoryIcon(c.icon)}</span>
+        <span class="flag-cat-label">${c.label}</span>
+      </button>
+      <div class="flag-submenu">
+        ${c.subs.map(([subLabel, subIcon])=>`
+          <button class="flag-sub-btn ${activeFlagCategory===i && activeFlagSubcategory===subLabel ? 'selected' : ''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" type="button" onclick="selectFlagSubcategory(${i}, '${subLabel}')">
+            ${flagCategoryIcon(subIcon)}
+            <span>${subLabel}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function positionFlagCategoryRow(row){
+  const titlebar = document.querySelector('.page-titlebar');
+  if(titlebar) row.style.top = titlebar.getBoundingClientRect().bottom + 'px';
+}
+function toggleFlagCategories(){
+  flagCategoryOpen = !flagCategoryOpen;
+  const row = document.getElementById('flagCategoryRow');
+  if(!row) return;
+  if(flagCategoryOpen) positionFlagCategoryRow(row);
+  row.style.opacity = flagCategoryOpen ? '1' : '0';
+  row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
+  row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-4px)';
+}
+function selectFlagSubcategory(i, subcategory){
+  openBadgeAuthModal(() => cpDoSelectFlagSubcategory(i, subcategory));
+}
+function cpDoSelectFlagSubcategory(i, subcategory){
+  activeFlagCategory = i;
+  activeFlagSubcategory = subcategory;
+  renderFlagCategories();
+  const c = FLAG_CATEGORIES[i];
+  const pageCategory = document.getElementById('pageActiveCategory');
+  const pageCategoryLabel = document.getElementById('pageActiveCategoryLabel');
+  const pageCategorySub = document.getElementById('pageActiveCategorySub');
+  if(pageCategory){
+    pageCategory.style.setProperty('--cat-accent', cpResolveColor(c.color));
+    pageCategory.style.setProperty('--cat-bg', c.soft || 'rgba(37,99,235,.09)');
+  }
+  if(pageCategoryLabel) pageCategoryLabel.textContent = c.label;
+  if(pageCategorySub) pageCategorySub.textContent = subcategory;
+}
+document.addEventListener('click', (e) => {
+  if(!flagCategoryOpen) return;
+  if(e.target.closest('[title="Flag Category"]')) return;
+  const row = document.getElementById('flagCategoryRow');
+  if(row && !row.contains(e.target)) toggleFlagCategories();
+});
+renderFlagCategories();
+
+/* ---- badge authentication (generic on-success callback, no assignment-review coupling) ---- */
+const BADGE_AUTH_STATES = [
+  { key:'waiting', title:'Authentication Required', message:'Scan your badge or', sub:'Use another sign-in method to confirm this action.', role:'Production Supervisor', icon:'badge' },
+  { key:'reading', title:'Authentication Required', message:'Hold the badge near the reader.', sub:'Checking identity and role permissions for this action.', role:'Production Supervisor', icon:'scan' },
+  { key:'sso', title:'Authentication Required', message:'Badge sign-in is still available.', sub:'You can scan your badge instead of using SSO.', role:'Production Supervisor', icon:'badge' },
+  { key:'password', title:'Authentication Required', message:'Badge sign-in is still available.', sub:'You can scan your badge instead of entering credentials.', role:'Production Supervisor', icon:'badge' },
+  { key:'approved', title:'Authentication Required', message:'Badge accepted', sub:'Operator identity and required role were confirmed.', role:'Production Supervisor', icon:'check' },
+  { key:'rejected', title:'Authentication Required', message:"You don't have permission for this action", sub:'Ask a Production Supervisor to authenticate or cancel the action.', role:'Production Supervisor', icon:'x' }
+];
+let badgeAuthStateIndex = 0;
+function badgeAuthSvg(type){
+  const icons = {
+    badge:'<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path stroke-linecap="round" d="M9 9h6M9 13h6M10 17h4"/></svg>',
+    scan:'<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V5a1 1 0 011-1h2M17 4h2a1 1 0 011 1v2M20 17v2a1 1 0 01-1 1h-2M7 20H5a1 1 0 01-1-1v-2"/><path stroke-linecap="round" d="M7 12h10"/></svg>',
+    check:'<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/></svg>',
+    x:'<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12"/></svg>'
+  };
+  return icons[type] || icons.badge;
+}
+function renderBadgeAuthState(){
+  const modal = document.getElementById('badgeAuthModal');
+  const popup = modal ? modal.querySelector('.badge-auth-popup') : null;
+  if(!popup) return;
+  const state = BADGE_AUTH_STATES[badgeAuthStateIndex];
+  popup.className = `badge-auth-popup state-${state.key}`;
+  document.getElementById('badgeAuthTitle').textContent = state.title;
+  document.getElementById('badgeAuthMessage').textContent = state.message;
+  document.getElementById('badgeAuthSub').textContent = state.sub;
+  document.getElementById('badgeAuthRole').textContent = state.role;
+  document.getElementById('badgeAuthReaderIcon').innerHTML = badgeAuthSvg(state.icon);
+}
+function setBadgeAuthState(key){
+  const nextIndex = BADGE_AUTH_STATES.findIndex(state => state.key === key);
+  if(nextIndex >= 0){ badgeAuthStateIndex = nextIndex; renderBadgeAuthState(); }
+}
+function cycleBadgeAuthState(){
+  badgeAuthStateIndex = (badgeAuthStateIndex + 1) % BADGE_AUTH_STATES.length;
+  renderBadgeAuthState();
+}
+let badgeAuthOnSuccess = null;
+let badgeAuthOnCancel = null;
+let badgeAuthSucceeded = false;
+function openBadgeAuthModal(onSuccess, onCancel){
+  badgeAuthStateIndex = 0;
+  badgeAuthSucceeded = false;
+  badgeAuthOnSuccess = typeof onSuccess === 'function' ? onSuccess : null;
+  badgeAuthOnCancel = typeof onCancel === 'function' ? onCancel : null;
+  renderBadgeAuthState();
+  document.getElementById('badgeAuthModal').style.display = 'flex';
+}
+function closeBadgeAuthModal(){
+  document.getElementById('badgeAuthModal').style.display = 'none';
+  const cancelCb = badgeAuthOnCancel;
+  const wasSucceeded = badgeAuthSucceeded;
+  badgeAuthOnSuccess = null;
+  badgeAuthOnCancel = null;
+  if(!wasSucceeded && cancelCb) cancelCb();
+}
+function cpAuthSucceed(){
+  badgeAuthSucceeded = true;
+  const cb = badgeAuthOnSuccess;
+  closeBadgeAuthModal();
+  if(cb) cb();
+}
+window.addEventListener('smart-factory:open-badge-auth', () => openBadgeAuthModal());
+
+/* ---- Complete and Stop: major action -> authenticate -> confirm -> close PWO ---- */
+function cpRequestCompleteAndStop(){
+  openBadgeAuthModal(() => cpShowCompleteConfirm());
+}
+
+/* ---- Changeover: Tooling -> Manufacturing Start readiness is the major action ---- */
+function cpRequestToolingComplete(){
+  openBadgeAuthModal(() => cpDoToolingComplete(), () => cpDoCancelChangeover());
+}
+function cpShowCompleteConfirm(){
+  const area = document.getElementById('cp-dynamicArea');
+  if(!area) return;
+  const isNearComplete = cpPhase === 'RUNNING_NEAR' || cpPhase === 'RUNNING_CONFIRMED';
+  const progressActual = isNearComplete ? '99,200' : '82,450';
+  const progressPct = isNearComplete ? '99%' : '82%';
+  area.innerHTML = `
+    <div class="cp-confirm-step">
+      <div class="cp-confirm-title">Complete and Stop ${cpPwo(CP_WO_CURRENT.wo)}?</div>
+      <div class="end-next-section amber">
+        <div class="end-next-header">
+          <div class="end-next-heading">
+            <div class="end-next-title">Completing Work Order</div>
+          </div>
+        </div>
+        <div class="end-next-card">
+          <div class="end-next-grid">
+            <div class="end-next-field"><span>SKU</span><b>${CP_WO_CURRENT.sku}</b></div>
+            <div class="end-next-field"><span>PWO</span><b>${cpPwo(CP_WO_CURRENT.wo)}</b></div>
+            <div class="end-next-field"><span>Batch</span><b>1847</b></div>
+            <div class="end-next-field"><span>Planned Quantity</span><b>${cpFmtNum(CP_WO_CURRENT.planned)}</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="end-progress">
+        <div class="end-progress-row">
+          <span>Progress to Planned Quantity (${cpPwo(CP_WO_CURRENT.wo)})</span>
+          <span><span style="color:var(--accent);">${progressActual}</span> / ${cpFmtNum(CP_WO_CURRENT.planned)} pcs (${progressPct})</span>
+        </div>
+        <div class="end-progress-track"><div class="end-progress-fill" style="width:${progressPct};"></div></div>
+      </div>
+      <div class="cp-confirm-actions">
+        <button type="button" class="cp-confirm-cancel" onclick="cpCancelCompleteConfirm()">Cancel</button>
+        <button type="button" class="cp-confirm-confirm" onclick="cpConfirmCompleteAndStop()">Confirm</button>
+      </div>
+    </div>`;
+}
+function cpCancelCompleteConfirm(){
+  cpRenderDynamic();
+}
+function cpConfirmCompleteAndStop(){
+  cpEndOrder('COMPLETE_ONLY');
+}
+</script>
+<script>
+  const KPI_ICONS = {
+    speed:'<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>',
+    trendingDown:'<path d="M16 18l2.29-2.29-4.88-4.88-4 4L2 7.41 3.41 6l6 6 4-4 6.3 6.29L22 12v6z"/>',
+    delete:'<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>',
+    hash:'<path d="M9.05 21l.85-4.65H5.4l.3-1.7h4.5l.85-4.65H6.5l.3-1.7h4.5l.85-4.65h1.7l-.85 4.65h4.5l.85-4.65h1.7l-.85 4.65H23l-.3 1.7h-4.5l-.85 4.65H22l-.3 1.7h-4.5l-.85 4.65h-1.7l.85-4.65h-4.5l-.85 4.65H9.05Zm2.85-6.35h4.5l.85-4.65h-4.5l-.85 4.65Z"/>',
+    target:'<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>'
+  };
+
+  const ZONE_STATUS_CHIP = { Running:'success', Starving:'warn', Blocked:'critical' };
+
+  const ZONES = [
+    { name:'Zone 1', status:'Running', style:'left:390px;top:60px;', kpis:[
+      { icon:'speed', name:'Speed', actual:'76 PPM', target:'74 PPM', critical:false },
+      { icon:'trendingDown', name:'Downtime Duration', actual:'12 min', target:'15 min', critical:false },
+      { icon:'delete', name:'Zone Scrap', actual:'1.8%', target:'2.5%', critical:false },
+      { icon:'hash', name:'Fault Count', actual:'3', target:'5', critical:false },
+      { icon:'target', name:'Bottleneck Impact', actual:'4 min', target:'10 min', critical:false }
+    ]},
+    { name:'Zone 2', status:'Starving', style:'left:38px;top:70px;', kpis:[
+      { icon:'speed', name:'Speed', actual:'71 PPM', target:'74 PPM', critical:false },
+      { icon:'trendingDown', name:'Downtime Duration', actual:'1h 42min', target:'1h', critical:true },
+      { icon:'delete', name:'Zone Scrap', actual:'2.2%', target:'2.5%', critical:false },
+      { icon:'hash', name:'Fault Count', actual:'16', target:'10', critical:true },
+      { icon:'target', name:'Bottleneck Impact', actual:'28 min', target:'15 min', critical:true }
+    ]},
+    { name:'Zone 3', status:'Running', style:'right:32px;top:8px;', kpis:[
+      { icon:'speed', name:'Speed', actual:'75 PPM', target:'74 PPM', critical:false },
+      { icon:'trendingDown', name:'Downtime Duration', actual:'9 min', target:'15 min', critical:false },
+      { icon:'delete', name:'Zone Scrap', actual:'2.0%', target:'2.5%', critical:false },
+      { icon:'hash', name:'Fault Count', actual:'4', target:'5', critical:false },
+      { icon:'target', name:'Bottleneck Impact', actual:'6 min', target:'10 min', critical:false }
+    ]},
+    { name:'Zone 4', status:'Running', style:'left:70px;top:330px;', kpis:[
+      { icon:'speed', name:'Speed', actual:'77 PPM', target:'74 PPM', critical:false },
+      { icon:'trendingDown', name:'Downtime Duration', actual:'7 min', target:'15 min', critical:false },
+      { icon:'delete', name:'Zone Scrap', actual:'1.6%', target:'2.5%', critical:false },
+      { icon:'hash', name:'Fault Count', actual:'2', target:'5', critical:false },
+      { icon:'target', name:'Bottleneck Impact', actual:'3 min', target:'10 min', critical:false }
+    ]},
+    { name:'Zone 5', status:'Blocked', style:'right:32px;bottom:32px;', kpis:[
+      { icon:'speed', name:'Speed', actual:'78 PPM', target:'74 PPM', critical:true },
+      { icon:'trendingDown', name:'Downtime Duration', actual:'1h 48min', target:'1h', critical:true },
+      { icon:'delete', name:'Zone Scrap', actual:'3.1%', target:'2.7%', critical:true },
+      { icon:'hash', name:'Fault Count', actual:'16', target:'10', critical:true },
+      { icon:'target', name:'Bottleneck Impact', actual:'12 min', target:'10 min', critical:false }
+    ]}
+  ];
+
+  function renderZoneAccordion(zone){
+    const hasCritical = zone.kpis.some(k => k.critical);
+    const label = hasCritical ? 'ON TRACK' : 'ALL';
+    const rows = zone.kpis.map(k => `
+      <div class="kpi-row${k.critical ? '' : ' optional'}">
+        <div class="kpi-icon ${k.critical ? 'critical' : 'success'}"><svg viewBox="0 0 24 24" aria-hidden="true">${KPI_ICONS[k.icon]}</svg></div>
+        <div class="kpi-head">
+          <span class="kpi-name">${k.name}</span>
+          <span class="status-chip ${k.critical ? 'critical' : 'success'}">${k.critical ? 'Critical' : 'On Track'}</span>
+        </div>
+        <div class="kpi-sub">Actual: <b>${k.actual}</b>&nbsp;&nbsp;Target: <b>${k.target}</b></div>
+      </div>`).join('');
+    const toggleSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"/></svg>';
+    return `
+      <div class="zone-acc${hasCritical ? ' has-critical' : ''}" data-critical="${hasCritical}" style="${zone.style}">
+        <div class="zone-acc-head">
+          <div class="zone-acc-title">${zone.name}</div>
+          <span class="status-chip ${ZONE_STATUS_CHIP[zone.status]}">${zone.status}</span>
+          <button class="zone-acc-toggle zone-acc-toggle-inline" type="button" onclick="toggleZoneAcc(this)">
+            <span class="zone-acc-toggle-label">SHOW ${label}</span>${toggleSvg}
+          </button>
+        </div>
+        <div class="zone-acc-body">${rows}</div>
+        <button class="zone-acc-toggle zone-acc-toggle-footer" type="button" onclick="toggleZoneAcc(this)">
+          <span class="zone-acc-toggle-label">SHOW ${label}</span>${toggleSvg}
+        </button>
+      </div>`;
+  }
+
+  function toggleZoneAcc(btn){
+    const card = btn.closest('.zone-acc');
+    const open = card.classList.toggle('open');
+    const hasCritical = card.dataset.critical === 'true';
+    const label = hasCritical ? 'ON TRACK' : 'ALL';
+    const text = (open ? 'HIDE ' : 'SHOW ') + label;
+    card.querySelectorAll('.zone-acc-toggle-label').forEach(el => el.textContent = text);
+  }
+
+  document.getElementById('zoneAccRoot').innerHTML = ZONES.map(renderZoneAccordion).join('');
+  cpSyncOuterHeader();
+
+  function openProductionWithHeaderAction(action){
+    sessionStorage.setItem('smartFactoryPendingHeaderAction', action);
+    window.location.href = 'index.html';
+  }
+  window.addEventListener('smart-factory:open-control-panel', () => openControlPanel());
+  window.addEventListener('keydown', e => { if(e.key === 'Escape') closeControlPanel(); });
+  window.addEventListener('smart-factory:open-badge-auth', () => openProductionWithHeaderAction('badge-auth'));
+  window.addEventListener('smart-factory:toggle-flag-categories', () => toggleFlagCategories());
+</script>
+</body>
+</html>
+
+
+
+
+
+
