@@ -87,11 +87,19 @@
   .page-active-category:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat-accent,var(--accent));transition:background .15s ease;}
   .page-active-category-label{font-size:20px;font-weight:400;line-height:1.2;color:var(--cat-accent,var(--accent));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s ease;}
   .page-active-category-sub{font-size:10px;color:rgba(0,0,0,.72);line-height:1.2;}
+  .page-header-stepper{display:flex;align-items:flex-start;flex-shrink:0;align-self:center;}
+  .hdr-step{display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;flex-shrink:0;}
+  .hdr-step-circle{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff;flex-shrink:0;position:relative;}
+  .hdr-step-circle.active-pulse::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--ring-color,var(--orange));opacity:.5;animation:hdr-step-pulse 1.6s ease-in-out infinite;}
+  @keyframes hdr-step-pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.15;transform:scale(1.18);}}
+  .hdr-step-label{font-size:12px;font-weight:700;text-align:center;line-height:1.2;}
+  .hdr-step-line{height:2px;flex:1;margin-top:10px;background:var(--border-strong);min-width:20px;}
+  .hdr-step-line.done{background:var(--green);}
   .page-status-control{display:flex;flex-direction:column;justify-content:center;gap:6px;flex:0 0 auto;}
   .page-status-buttons{display:flex;align-items:center;gap:8px;}
   .page-header-action{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;background:#fff;color:var(--accent);box-shadow:none;outline:0;}
   .page-header-action.primary{background:var(--accent);color:#fff;}
-  .page-header-action.outline{border-color:rgba(37,99,235,.22);}
+  .page-header-action.outline{border-color:rgba(37,99,235,.4);}
   .page-header-action:hover{filter:brightness(.96);background:#e9f0fe;}
   .page-header-action.primary:hover{background:var(--accent);filter:brightness(.94);}
   .page-button-divider{width:1px;height:32px;background:var(--line);}
@@ -113,7 +121,7 @@
   .page-shell{background:transparent;border:0;border-radius:0;padding:0;margin:0;min-width:0;height:100%;min-height:0;display:flex;flex-direction:column;}
   .calc-icon{fill:#115dff;cursor:pointer;}
 
-  .dashboard{display:grid;grid-template-columns:minmax(0,7fr) minmax(360px,3fr);gap:24px;margin-top:0;align-items:stretch;min-height:0;flex:1;overflow:hidden;}
+  .dashboard{display:grid;grid-template-columns:minmax(0,1fr) 500px;gap:24px;margin-top:0;align-items:stretch;min-height:0;flex:1;overflow:hidden;}
   .map-card,.panel-card{border:1px solid var(--line);border-radius:8px;background:var(--surface);}
   .map-card{min-height:0;height:100%;position:relative;overflow:hidden;background:#FEFEFE url("img1.png") center center/cover no-repeat;}
   .zone-card{position:absolute;background:rgba(255,255,255,.96);border:1px solid rgba(70,100,150,.22);border-radius:8px;box-shadow:0 4px 18px rgba(29,49,86,.14);z-index:1;}
@@ -356,16 +364,17 @@
   .sku-alert:hover:after{opacity:1;transform:translateY(0);}
   .auto-resume-help:hover:after{opacity:1;transform:translateY(0);}
 
-  .flag-category-scroll{height:100%;overflow:visible;background:#f6f9fe;}
-  .flag-category-panel{height:100%;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0;background:#f6f9fe;overflow:visible;position:relative;z-index:80;min-width:max-content;}
+  .flag-category-scroll{height:100%;overflow:visible;background:transparent;}
+  .flag-category-panel{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:0;background:transparent;overflow:visible;position:relative;z-index:80;}
   .flag-cat-wrap{position:relative;width:80px;flex:0 0 80px;}
   .flag-cat-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:7px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;}
   .flag-cat-btn .ic{width:20px;height:20px;flex-shrink:0;}
   .flag-cat-label{font-size:9.5px;font-weight:800;line-height:1.12;color:var(--text-soft);text-align:center;max-width:68px;text-transform:uppercase;}
-  .flag-cat-wrap.hovered .flag-cat-btn,.flag-cat-wrap.selected .flag-cat-btn{border-color:var(--flag-color);background:var(--flag-soft);box-shadow:0 4px 12px -8px var(--flag-color);}
-  .flag-cat-wrap.hovered .flag-cat-label,.flag-cat-wrap.selected .flag-cat-label{color:var(--flag-color);}
-  .flag-submenu{display:none;position:absolute;top:88px;left:0;grid-template-columns:1fr;gap:6px;width:80px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;z-index:120;}
-  .flag-cat-wrap.hovered .flag-submenu{display:grid;}
+  .flag-cat-wrap:hover .flag-cat-btn,.flag-cat-wrap.selected .flag-cat-btn{border-color:var(--flag-color);background:var(--flag-soft);box-shadow:0 4px 12px -8px var(--flag-color);}
+  .flag-cat-wrap:hover .flag-cat-label,.flag-cat-wrap.selected .flag-cat-label{color:var(--flag-color);}
+  .flag-submenu{display:none;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-template-columns:1fr;gap:6px;width:92px;padding:12px 6px;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.07);z-index:120;}
+  .flag-submenu::before{content:'';position:absolute;top:-8px;left:0;right:0;height:8px;background:transparent;}
+  .flag-cat-wrap:hover .flag-submenu{display:grid;}
   .flag-sub-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-soft);font-size:9.5px;font-weight:800;line-height:1.12;text-align:center;text-transform:uppercase;cursor:pointer;transition:.12s;}
   .flag-sub-btn .ic{width:19px;height:19px;flex-shrink:0;}
   .flag-sub-btn:hover,.flag-sub-btn.selected{border-color:var(--flag-color);background:var(--flag-soft);color:var(--flag-color);}
@@ -497,9 +506,9 @@
 </head>
 <body>
   <smart-factory-header active-screen="monitoring"></smart-factory-header>
-  <div id="flagCategoryRow" style="position:absolute;top:64px;left:40px;right:40px;height:94px;z-index:80;background:#f6f9fe;border-bottom:0;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
+  <div id="flagCategoryRow" style="position:absolute;top:64px;right:40px;left:auto;width:max-content;height:auto;z-index:80;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;padding:12px 12px;box-shadow:0 4px 18px rgba(15,23,42,.07);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
     <div class="flag-category-scroll">
-      <div class="flag-category-panel" id="flagCategoryList" onmouseleave="clearFlagSubcategories()"></div>
+      <div class="flag-category-panel" id="flagCategoryList"></div>
     </div>
   </div>
 
@@ -529,11 +538,13 @@
           <div class="page-active-category-label" id="pageActiveCategoryLabel">Production</div>
           <div class="page-active-category-sub" id="pageActiveCategorySub">Active Category</div>
         </div>
+        <div id="headerChangeoverDivider" class="page-flow-divider" style="display:none;"></div>
+        <div id="headerChangeover" class="page-header-stepper" style="display:none;"></div>
         <div class="page-status-control">
           <span class="page-flow-copy">Status Control</span>
           <div class="page-status-buttons">
-            <button class="page-header-action primary" type="button" onclick="openProductionWithHeaderAction('badge-auth')" title="Assign & Run a Work Order" aria-label="Assign and run a Work Order"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button>
-            <button class="page-header-action outline" type="button" onclick="openControlPanel()" title="Open Work Order Control Panel" aria-label="Open Work Order Control Panel"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+            <button id="headerActionBtn" class="page-header-action outline" type="button" title="Next Step" aria-label="Next Step"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg></button>
+            <button class="page-header-action outline" type="button" onclick="openControlPanel()" title="Open Work Order Control Panel" aria-label="Open Work Order Control Panel"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
             <div class="page-button-divider"></div>
             <button class="page-header-action outline" type="button" onclick="toggleFlagCategories()" title="Flag Category" aria-label="Flag Category"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 4C20.33 4 21 4.67 21 5.5V18.5C21 19.33 20.33 20 19.5 20C18.67 20 18 19.33 18 18.5V5.5C18 4.67 18.67 4 19.5 4ZM4.5 13C5.33 13 6 13.67 6 14.5V18.5C6 19.33 5.33 20 4.5 20C3.67 20 3 19.33 3 18.5V14.5C3 13.67 3.67 13 4.5 13ZM15.5 4C16.33 4 17 4.67 17 5.5C17 6.33 16.33 7 15.5 7C14.67 7 14 6.33 14 5.5C14 4.67 14.67 4 15.5 4ZM11.5 5C12.33 5 13 5.67 13 6.5V7.5C13 8.33 12.33 9 11.5 9C10.67 9 10 8.33 10 7.5V6.5C10 5.67 10.67 5 11.5 5ZM8.5 10C9.33 10 10 10.67 10 11.5V12.5C10 13.33 9.33 14 8.5 14C7.67 14 7 13.33 7 12.5V11.5C7 10.67 7.67 10 8.5 10Z"/></svg></button>
           </div>
@@ -1392,6 +1403,8 @@ function cpSyncOuterHeader(){
   if(pageCategoryLabel) pageCategoryLabel.textContent = cat.label;
   const pageCategorySub = document.getElementById('pageActiveCategorySub');
   if(pageCategorySub) pageCategorySub.textContent = p.desc;
+  cpRenderHeaderStepper();
+  cpUpdateHeaderActionBtn();
   if(typeof UNITS !== 'undefined'){
     const currentUnit = UNITS.find(u=>u.name==='AFA10');
     if(currentUnit){
@@ -1400,6 +1413,87 @@ function cpSyncOuterHeader(){
       if(typeof renderUnitCards === 'function') renderUnitCards();
     }
   }
+}
+
+const HDR_BTN_ICONS = {
+  stop:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`,
+  play:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14l11-7-11-7z"/></svg>`,
+  forward:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l8 8-8 8V4z"/><path d="M13 4l8 8-8 8V4z"/></svg>`,
+  check:`<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>`
+};
+function cpUpdateHeaderActionBtn(){
+  const btn = document.getElementById('headerActionBtn');
+  if(!btn) return;
+  const running = ['RUNNING','RUNNING_NEAR','RUNNING_CONFIRMED','RAMP_UP'].includes(cpPhase);
+  const paused  = ['PAUSED','HELD'].includes(cpPhase);
+  const chg     = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase);
+  const idle    = ['IDLE','COMPLETE','STOPPED','ABORTED'].includes(cpPhase);
+
+  let icon, title, action, color;
+  if(running){
+    icon='stop'; title='End Order'; action='cpHeaderEndOrder()';
+    color='var(--red)';
+  } else if(paused){
+    icon='play'; title='Resume Production'; action='cpDoResume()';
+    color='var(--green)';
+  } else if(chg){
+    if(cpPhase==='CHG_READY' || cpPhase==='CHG_SAME'){
+      icon='play'; title='Manufacturing Start'; action='cpDoManufacturingStartChangeover()';
+      color='var(--green)';
+    } else {
+      icon='forward'; title='Next Stage';
+      if(cpPhase==='CHG_RAMPDOWN')      action='cpDoMarkLineCleared()';
+      else                               action='cpRequestToolingComplete()';
+      color='var(--orange)';
+    }
+  } else if(idle){
+    icon='check'; title='Assign Next PWO'; action="cpGoToAssignmentForResource('AFA10')";
+    color='var(--orange)';
+  } else {
+    btn.style.display='none'; return;
+  }
+  btn.style.display='';
+  btn.style.background = '#fff';
+  btn.style.borderColor = cpResolveColor(color);
+  btn.style.color = cpResolveColor(color);
+  btn.title = title;
+  btn.setAttribute('aria-label', title);
+  btn.onclick = new Function(action);
+  btn.innerHTML = HDR_BTN_ICONS[icon];
+}
+function cpHeaderEndOrder(){
+  openControlPanel();
+  cpOpenEndOrderFlow();
+}
+
+function cpRenderHeaderStepper(){
+  const stepper = document.getElementById('headerChangeover');
+  const divider = document.getElementById('headerChangeoverDivider');
+  const inChangeover = ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY'].includes(cpPhase);
+  if(!stepper) return;
+  if(!inChangeover){
+    stepper.style.display = 'none';
+    if(divider) divider.style.display = 'none';
+    return;
+  }
+  const activeIndex = cpPhase === 'CHG_RAMPDOWN' ? 0 : cpPhase === 'CHG_TOOLING' ? 1 : 2;
+  const steps = [
+    {label:'Ramp Down'},
+    {label:'Tooling'},
+    {label:'Mfg Start'}
+  ];
+  const bg = i => i < activeIndex ? cpResolveColor('var(--green)') : i === activeIndex ? cpResolveColor('var(--orange)') : cpResolveColor('var(--border-strong)');
+  const sub = i => i < activeIndex ? 'Done' : i === activeIndex ? 'Active' : '';
+  const textColor = i => i === activeIndex ? cpResolveColor('var(--orange)') : cpResolveColor('var(--text-soft)');
+  stepper.style.display = 'flex';
+  if(divider) divider.style.display = 'none';
+  stepper.innerHTML = steps.map((st, i) => `
+    ${i > 0 ? `<div class="hdr-step-line${i-1 < activeIndex ? ' done' : ''}"></div>` : ''}
+    <div class="hdr-step">
+      <div class="hdr-step-circle${i === activeIndex ? ' active-pulse' : ''}" style="background:${bg(i)};${i === activeIndex ? `--ring-color:${bg(i)};` : ''}">${i < activeIndex ? '✓' : i+1}</div>
+      <div class="hdr-step-label" style="color:${textColor(i)};">${st.label}</div>
+    </div>
+  `).join('');
 }
 
 function cpAutoResumeControl(){
@@ -1433,6 +1527,9 @@ function cpTransition(busyKey, toPhase, delay, after){
 }
 
 function cpDoManufacturingStartCold(){
+  openBadgeAuthModal(() => cpDoManufacturingStartColdConfirmed());
+}
+function cpDoManufacturingStartColdConfirmed(){
   cpTransition('STARTING','RAMP_UP',550, ()=>{
     cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, `Equipment: IDLE → STARTING → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING`);
   });
@@ -1447,6 +1544,9 @@ function cpSwitchNextWo(){
   cpGoToAssignmentForResource('AFA10');
 }
 function cpDoCompleteWO(){
+  openBadgeAuthModal(() => cpDoCompleteWOConfirmed());
+}
+function cpDoCompleteWOConfirmed(){
   const sameSku = cpNextWo().sameSku;
   cpDhrChecked = [false,false,false];
   cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN', 600, ()=>{
@@ -1471,6 +1571,9 @@ function cpDoToolingComplete(){
   });
 }
 function cpDoManufacturingStartChangeover(){
+  openBadgeAuthModal(() => cpDoManufacturingStartChangeoverConfirmed());
+}
+function cpDoManufacturingStartChangeoverConfirmed(){
   const wasSame = cpPhase === 'CHG_SAME';
   cpTransition('STARTING','RAMP_UP',550, ()=>{
     const co = wasSame
@@ -1563,8 +1666,6 @@ const FLAG_CATEGORIES = [
   { label:'No Order', icon:'ban', color:'var(--text-muted)', soft:'rgba(0,0,0,.06)', subs:[['Queue Empty','ban'],['SAP Delay','clock']] },
   { label:'Legal Holidays', icon:'calendar', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Plant Holiday','calendar'],['Site Closed','lock']] },
   { label:'Planned Maintenance', icon:'tool', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['PM Service','tool'],['Calibration','gauge'],['Inspection','eye']] },
-  { label:'Start And Stop', icon:'switch', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Start-up','play'],['Shutdown','stop'],['Restart','refresh']] },
-  { label:'Changeover', icon:'refresh', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Line Clearance','checklist'],['Tooling Swap','tool'],['Recipe Load','file']] },
   { label:'Ramp-up', icon:'trend', color:'var(--purple)', soft:'rgba(126,58,242,.10)', subs:[['Speed Ramp','trend'],['First Pieces','box'],['Stabilizing','gauge']] },
   { label:'Consumable Replacement', icon:'box', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Material Roll','box'],['Label Stock','tag'],['Blade Change','tool']] },
   { label:'Breakdown', icon:'alert', color:'var(--red)', soft:'rgba(220,38,38,.10)', subs:[['Mechanical','gear'],['Electrical','bolt'],['Controls','cpu']] },
@@ -1573,7 +1674,6 @@ const FLAG_CATEGORIES = [
 let flagCategoryOpen = false;
 let activeFlagCategory = null;
 let activeFlagSubcategory = null;
-let hoveredFlagCategory = null;
 
 function flagCategoryIcon(type){
   const icons = {
@@ -1610,7 +1710,7 @@ function renderFlagCategories(){
   const list = document.getElementById('flagCategoryList');
   if(!list) return;
   list.innerHTML = FLAG_CATEGORIES.map((c,i)=>`
-    <div class="flag-cat-wrap ${hoveredFlagCategory===i?'hovered':''} ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" onmouseenter="showFlagSubcategories(${i})">
+    <div class="flag-cat-wrap ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};">
       <button class="flag-cat-btn" type="button">
         <span style="color:${c.color};">${flagCategoryIcon(c.icon)}</span>
         <span class="flag-cat-label">${c.label}</span>
@@ -1626,14 +1726,6 @@ function renderFlagCategories(){
     </div>
   `).join('');
 }
-function showFlagSubcategories(i){
-  hoveredFlagCategory = i;
-  renderFlagCategories();
-}
-function clearFlagSubcategories(){
-  hoveredFlagCategory = null;
-  renderFlagCategories();
-}
 function positionFlagCategoryRow(row){
   const titlebar = document.querySelector('.page-titlebar');
   if(titlebar) row.style.top = titlebar.getBoundingClientRect().bottom + 'px';
@@ -1646,8 +1738,6 @@ function toggleFlagCategories(){
   row.style.opacity = flagCategoryOpen ? '1' : '0';
   row.style.visibility = flagCategoryOpen ? 'visible' : 'hidden';
   row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-4px)';
-  if(!flagCategoryOpen) hoveredFlagCategory = null;
-  renderFlagCategories();
 }
 function selectFlagSubcategory(i, subcategory){
   openBadgeAuthModal(() => cpDoSelectFlagSubcategory(i, subcategory));
