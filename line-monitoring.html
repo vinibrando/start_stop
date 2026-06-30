@@ -242,7 +242,7 @@
   .cp-inline-log-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
   .cp-panel-body{position:relative;display:block;}
   .cp-main-pane{border-right:0;padding:16px 24px 24px;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;}
-  #cp-dynamicArea{flex:1 1 auto;}
+  #cp-dynamicArea{flex:1 1 auto;min-height:0;overflow-y:auto;}
   #cp-statusHero,#cp-progressWrap{flex-shrink:0;}
   .cp-activity-pane{position:absolute;left:calc(100% + 14px);top:0;width:320px;height:100%;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 18px 42px rgba(10,16,32,.18);opacity:1;transform:translateX(0);transition:opacity .15s ease,transform .15s ease;}
   .cp-panel-body.log-collapsed .cp-activity-pane{opacity:0;pointer-events:none;transform:translateX(-8px);}
@@ -278,7 +278,7 @@
   .ckbox.done{background:var(--accent);border-color:var(--accent);}
   .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
   .task-row:last-child{border-bottom:none;}
-  .slide{margin-top:-12px;transition:max-height .25s ease, opacity .2s ease, margin-top .2s ease;overflow:hidden;}
+  .slide{margin-top:-12px;transition:max-height .25s ease, opacity .2s ease, margin-top .2s ease;overflow:hidden;flex-shrink:0;}
   .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;height:100%;}
   .end-order-head{display:none;}
   .end-order-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.25;}
@@ -571,7 +571,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6Z"/></svg>
         <span class="app-side-label">Shift Trends</span>
       </button>
-      <button class="app-side-btn" type="button" aria-label="Recontextualization" title="Recontextualization">
+      <button class="app-side-btn" type="button" aria-label="Recontextualization" title="Recontextualization" onclick="window.location.href='https://www.figma.com/proto/bMicViKyVWNnBwiWL1edOG/-BD--Smart-Factory-Hub?node-id=36769-195811&t=ch9VrxiC7EdjbPDf-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=36742%3A170334&page-id=32545%3A103361'">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5 0 .85-.22 1.65-.6 2.35l1.46 1.46C18.58 15.7 19 14.4 19 13c0-3.86-3.14-7-7-7Zm-5.86.19C5.42 7.3 5 8.6 5 10c0 3.86 3.14 7 7 7v3l4-4-4-4v3c-2.76 0-5-2.24-5-5 0-.85.22-1.65.6-2.35L6.14 6.19Z"/></svg>
         <span class="app-side-label">Recontextualization</span>
       </button>
