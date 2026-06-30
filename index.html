@@ -137,6 +137,7 @@
   .view-panel.active{display:block;}
   #workOrderAssignmentView.active{height:100%;min-height:0;display:flex;flex-direction:column;padding-top:8px!important;}
   #productionOverviewView{padding-top:8px!important;}
+  #productionOverviewView.active{height:100%;overflow-y:auto;overflow-x:hidden;}
 
   .wo-assignment-shell{height:100%;min-height:0;display:flex;flex-direction:column;border:0;border-radius:0;background:transparent;overflow:visible;flex:1;}
   .assignment-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px;flex-shrink:0;}
@@ -347,7 +348,7 @@
           <input id="badgeAuthEmail" type="email" placeholder="operator@bd.com">
           <label>Password</label>
           <input id="badgeAuthPassword" type="password" placeholder="Password">
-          <button class="badge-auth-submit" type="button" onclick="showPwoAuthReview()">SIGN IN</button>
+          <button class="badge-auth-submit" type="button" onclick="cpBadgeSubmit()">SIGN IN</button>
         </div>
         <button class="badge-auth-sso" type="button" onclick="setBadgeAuthState('sso')">CONTINUE WITH SSO</button>
       </div>
@@ -413,9 +414,9 @@
 
 <smart-factory-header active-screen="production"></smart-factory-header>
 <!-- Shared header extension: flag category picker used by Production Work Order -->
-<div id="flagCategoryRow" style="position:absolute;top:64px;left:40px;right:40px;height:94px;z-index:80;background:#f6f9fe;border-bottom:0;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
+<div id="flagCategoryRow" style="position:absolute;top:64px;right:40px;left:auto;width:max-content;height:auto;z-index:80;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;padding:12px 12px;box-shadow:0 4px 18px rgba(15,23,42,.07);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
   <div class="flag-category-scroll">
-    <div class="flag-category-panel" id="flagCategoryList" onmouseleave="clearFlagSubcategories()"></div>
+    <div class="flag-category-panel" id="flagCategoryList"></div>
   </div>
 </div>
 
@@ -692,7 +693,7 @@
 <style>
   /* ---- control panel modal styles (ported from Josh's prototype) ---- */
   .scrim{position:fixed;inset:0;background:rgba(10,16,32,.45);display:flex;align-items:center;justify-content:center;z-index:200;overflow-y:auto;padding:24px 0;}
-  .popup{position:relative;background:#fff;border-radius:16px;width:500px;height:492px;max-height:calc(100vh - 48px);overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
+  .popup{position:relative;background:#fff;border-radius:16px;width:500px;height:516px;max-height:calc(100vh - 48px);overflow:visible;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);display:flex;flex-direction:column;margin:auto;}
   .cp-modal-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.2;color:var(--text);}
   .cp-modal-close{width:32px;height:32px;border:0;border-radius:999px;background:transparent;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
   .cp-modal-close:hover{background:var(--blue-bg);color:var(--accent);}
@@ -745,7 +746,7 @@
   .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
   .task-row:last-child{border-bottom:none;}
   .slide{margin-top:-12px;transition:max-height .25s ease, opacity .2s ease, margin-top .2s ease;overflow:hidden;}
-  .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;}
+  .end-order-flow{display:flex;flex-direction:column;gap:24px;position:relative;height:100%;}
   .end-order-head{display:none;}
   .end-order-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.25;}
   .end-order-copy{font-size:12px;line-height:1.35;color:var(--text-muted);margin-top:1px;}
@@ -777,7 +778,7 @@
   .end-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#13c4d6);}
   .end-option.full{grid-column:1 / -1;}
   .end-option.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
-  .end-order-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:0;padding-top:0;}
+  .end-order-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:auto;padding-top:0;}
   .end-order-back{height:32px;border:1px solid rgba(37,99,235,.4);border-radius:12px;background:#fff;color:var(--accent);font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;padding:6px 16px;white-space:nowrap;text-transform:uppercase;transition:background .15s,border-color .15s;}
   .end-order-back:hover{background:var(--blue-bg);border-color:var(--accent);}
   .changeover-next-footer{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-top:auto;margin-bottom:24px;}
@@ -824,16 +825,17 @@
   .sku-alert:hover:after{opacity:1;transform:translateY(0);}
   .auto-resume-help:hover:after{opacity:1;transform:translateY(0);}
 
-  .flag-category-scroll{height:100%;overflow:visible;background:#f6f9fe;}
-  .flag-category-panel{height:100%;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0;background:#f6f9fe;overflow:visible;position:relative;z-index:80;min-width:max-content;}
+  .flag-category-scroll{height:100%;overflow:visible;background:transparent;}
+  .flag-category-panel{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:0;background:transparent;overflow:visible;position:relative;z-index:80;}
   .flag-cat-wrap{position:relative;width:80px;flex:0 0 80px;}
   .flag-cat-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:7px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;}
   .flag-cat-btn .ic{width:20px;height:20px;flex-shrink:0;}
   .flag-cat-label{font-size:9.5px;font-weight:800;line-height:1.12;color:var(--text-soft);text-align:center;max-width:68px;text-transform:uppercase;}
-  .flag-cat-wrap.hovered .flag-cat-btn,.flag-cat-wrap.selected .flag-cat-btn{border-color:var(--flag-color);background:var(--flag-soft);box-shadow:0 4px 12px -8px var(--flag-color);}
-  .flag-cat-wrap.hovered .flag-cat-label,.flag-cat-wrap.selected .flag-cat-label{color:var(--flag-color);}
-  .flag-submenu{display:none;position:absolute;top:88px;left:0;grid-template-columns:1fr;gap:6px;width:80px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;z-index:120;}
-  .flag-cat-wrap.hovered .flag-submenu{display:grid;}
+  .flag-cat-wrap:hover .flag-cat-btn,.flag-cat-wrap.selected .flag-cat-btn{border-color:var(--flag-color);background:var(--flag-soft);box-shadow:0 4px 12px -8px var(--flag-color);}
+  .flag-cat-wrap:hover .flag-cat-label,.flag-cat-wrap.selected .flag-cat-label{color:var(--flag-color);}
+  .flag-submenu{display:none;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-template-columns:1fr;gap:6px;width:92px;padding:12px 6px;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.07);z-index:120;}
+  .flag-submenu::before{content:'';position:absolute;top:-8px;left:0;right:0;height:8px;background:transparent;}
+  .flag-cat-wrap:hover .flag-submenu{display:grid;}
   .flag-sub-btn{width:80px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-soft);font-size:9.5px;font-weight:800;line-height:1.12;text-align:center;text-transform:uppercase;cursor:pointer;transition:.12s;}
   .flag-sub-btn .ic{width:19px;height:19px;flex-shrink:0;}
   .flag-sub-btn:hover,.flag-sub-btn.selected{border-color:var(--flag-color);background:var(--flag-soft);color:var(--flag-color);}
@@ -1383,7 +1385,7 @@ function cpRenderDynamic(){
       ${cpChangeoverProgressSection(1)}
       <div class="changeover-next-footer">
         <button type="button" class="changeover-cancel-btn" onclick="cpDoCancelChangeover()">Cancel Changeover</button>
-        <button type="button" class="changeover-next-btn" onclick="cpDoToolingComplete()">Next ${cpIcons.forward}</button>
+        <button type="button" class="changeover-next-btn" onclick="cpRequestToolingComplete()">Next ${cpIcons.forward}</button>
       </div>
     `;
   }
@@ -1465,7 +1467,6 @@ function cpSlidePanels(endOnly){
           <div class="reason-btn" onclick="cpConfirmPause('${r}')">${cpIcons.check}${r}</div>
         `).join('')}
       </div>
-      <button onclick="cpCancelSlide('reasonPanel')" class="mt-2 text-[11px] font-bold" style="color:var(--text-muted);">Cancel</button>
     </div>
   </div>
   ` : ''}`;
@@ -1603,6 +1604,9 @@ function cpTransition(busyKey, toPhase, delay, after){
 }
 
 function cpDoManufacturingStartCold(){
+  openBadgeAuthModal(() => cpDoManufacturingStartColdConfirmed());
+}
+function cpDoManufacturingStartColdConfirmed(){
   cpTransition('STARTING','RAMP_UP',550, ()=>{
     cpLogActivity(`Manufacturing Start — ${cpNextWo().wo}`, `Equipment: IDLE → STARTING → RUNNING  ·  ${cpNextWo().wo}: IDLE → STARTING → RUNNING`);
   });
@@ -1617,6 +1621,9 @@ function cpSwitchNextWo(){
   cpGoToAssignmentForResource('AFA10');
 }
 function cpDoCompleteWO(){
+  openBadgeAuthModal(() => cpDoCompleteWOConfirmed());
+}
+function cpDoCompleteWOConfirmed(){
   const sameSku = cpNextWo().sameSku;
   cpDhrChecked = [false,false,false];
   cpTransition('STOPPING', sameSku ? 'CHG_SAME' : 'CHG_RAMPDOWN', 600, ()=>{
@@ -1640,7 +1647,13 @@ function cpDoToolingComplete(){
     cpLogActivity(`Tooling changeover complete — recipe sent to PLC for ${cpNextWo().wo}`, `Equipment: CHANGEOVER (Tooling Changeover) → CHANGEOVER (Ready)  ·  to_sku=${cpNextWo().sku}`);
   });
 }
+function cpRequestToolingComplete(){
+  openBadgeAuthModal(() => cpDoToolingComplete(), () => cpDoCancelChangeover());
+}
 function cpDoManufacturingStartChangeover(){
+  openBadgeAuthModal(() => cpDoManufacturingStartChangeoverConfirmed());
+}
+function cpDoManufacturingStartChangeoverConfirmed(){
   const wasSame = cpPhase === 'CHG_SAME';
   cpTransition('STARTING','RAMP_UP',550, ()=>{
     const co = wasSame
@@ -1652,6 +1665,9 @@ function cpDoManufacturingStartChangeover(){
 }
 
 function cpConfirmPause(reason){
+  openBadgeAuthModal(() => cpDoConfirmPause(reason));
+}
+function cpDoConfirmPause(reason){
   cpPauseReason = reason;
   cpPauseReturnPhase = cpPhase;
   cpCancelSlide('reasonPanel');
@@ -1660,6 +1676,9 @@ function cpConfirmPause(reason){
   });
 }
 function cpDoResume(){
+  openBadgeAuthModal(() => cpDoResumeConfirmed());
+}
+function cpDoResumeConfirmed(){
   const wasHeld = cpPhase === 'HELD';
   const target = cpPauseReturnPhase || 'RUNNING';
   cpTransition('RESUMING', target, 550, ()=>{
@@ -1896,19 +1915,37 @@ function setBadgeAuthState(key){
   }
 }
 
-let badgeAuthOnClose = null;
-function openBadgeAuthModal(onClose){
+let badgeAuthOnSuccess = null;
+let badgeAuthOnCancel = null;
+let badgeAuthSucceeded = false;
+function openBadgeAuthModal(onSuccess, onCancel){
   badgeAuthStateIndex = 0;
-  badgeAuthOnClose = typeof onClose === 'function' ? onClose : null;
+  badgeAuthSucceeded = false;
+  badgeAuthOnSuccess = typeof onSuccess === 'function' ? onSuccess : null;
+  badgeAuthOnCancel = typeof onCancel === 'function' ? onCancel : null;
   renderBadgeAuthState();
   document.getElementById('badgeAuthModal').style.display = 'flex';
 }
 
 function closeBadgeAuthModal(){
   document.getElementById('badgeAuthModal').style.display = 'none';
-  const cb = badgeAuthOnClose;
-  badgeAuthOnClose = null;
+  const cancelCb = badgeAuthOnCancel;
+  const wasSucceeded = badgeAuthSucceeded;
+  badgeAuthOnSuccess = null;
+  badgeAuthOnCancel = null;
+  if(!wasSucceeded && cancelCb) cancelCb();
+}
+
+function cpAuthSucceed(){
+  badgeAuthSucceeded = true;
+  const cb = badgeAuthOnSuccess;
+  closeBadgeAuthModal();
   if(cb) cb();
+}
+
+function cpBadgeSubmit(){
+  if(badgeAuthOnSuccess){ cpAuthSucceed(); return; }
+  showPwoAuthReview();
 }
 
 function cycleBadgeAuthState(){
@@ -2293,8 +2330,6 @@ const FLAG_CATEGORIES = [
   { label:'No Order', icon:'ban', color:'var(--text-muted)', soft:'rgba(0,0,0,.06)', subs:[['Queue Empty','ban'],['SAP Delay','clock']] },
   { label:'Legal Holidays', icon:'calendar', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Plant Holiday','calendar'],['Site Closed','lock']] },
   { label:'Planned Maintenance', icon:'tool', color:'var(--blue)', soft:'rgba(37,99,235,.10)', subs:[['PM Service','tool'],['Calibration','gauge'],['Inspection','eye']] },
-  { label:'Start And Stop', icon:'switch', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Start-up','play'],['Shutdown','stop'],['Restart','refresh']] },
-  { label:'Changeover', icon:'refresh', color:'var(--orange)', soft:'rgba(234,88,12,.10)', subs:[['Line Clearance','checklist'],['Tooling Swap','tool'],['Recipe Load','file']] },
   { label:'Ramp-up', icon:'trend', color:'var(--purple)', soft:'rgba(126,58,242,.10)', subs:[['Speed Ramp','trend'],['First Pieces','box'],['Stabilizing','gauge']] },
   { label:'Consumable Replacement', icon:'box', color:'var(--amber)', soft:'rgba(217,119,6,.10)', subs:[['Material Roll','box'],['Label Stock','tag'],['Blade Change','tool']] },
   { label:'Breakdown', icon:'alert', color:'var(--red)', soft:'rgba(220,38,38,.10)', subs:[['Mechanical','gear'],['Electrical','bolt'],['Controls','cpu']] },
@@ -2303,7 +2338,6 @@ const FLAG_CATEGORIES = [
 let flagCategoryOpen = false;
 let activeFlagCategory = null;
 let activeFlagSubcategory = null;
-let hoveredFlagCategory = null;
 
 function flagCategoryIcon(type){
   const icons = {
@@ -2340,7 +2374,7 @@ function renderFlagCategories(){
   const list = document.getElementById('flagCategoryList');
   if(!list) return;
   list.innerHTML = FLAG_CATEGORIES.map((c,i)=>`
-    <div class="flag-cat-wrap ${hoveredFlagCategory===i?'hovered':''} ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};" onmouseenter="showFlagSubcategories(${i})">
+    <div class="flag-cat-wrap ${activeFlagCategory===i?'selected':''}" style="--flag-color:${c.color};--flag-soft:${c.soft || 'rgba(37,99,235,.09)'};">
       <button class="flag-cat-btn" type="button">
         <span style="color:${c.color};">${flagCategoryIcon(c.icon)}</span>
         <span class="flag-cat-label">${c.label}</span>
@@ -2356,14 +2390,6 @@ function renderFlagCategories(){
     </div>
   `).join('');
 }
-function showFlagSubcategories(i){
-  hoveredFlagCategory = i;
-  renderFlagCategories();
-}
-function clearFlagSubcategories(){
-  hoveredFlagCategory = null;
-  renderFlagCategories();
-}
 function positionFlagCategoryRow(row){
   const titlebar = document.querySelector('.page-titlebar');
   if(titlebar) row.style.top = titlebar.getBoundingClientRect().bottom + 'px';
@@ -2378,8 +2404,6 @@ function toggleFlagCategories(){
   row.style.transform = flagCategoryOpen ? 'translateY(0)' : 'translateY(-4px)';
   const legacyButton = document.getElementById('flagCategoryBtn');
   if(legacyButton) legacyButton.classList.toggle('active', flagCategoryOpen);
-  if(!flagCategoryOpen) hoveredFlagCategory = null;
-  renderFlagCategories();
 }
 document.addEventListener('click', (e) => {
   if(!flagCategoryOpen) return;
@@ -2388,6 +2412,9 @@ document.addEventListener('click', (e) => {
   if(row && !row.contains(e.target)) toggleFlagCategories();
 });
 function selectFlagSubcategory(i, subcategory){
+  openBadgeAuthModal(() => cpDoSelectFlagSubcategory(i, subcategory));
+}
+function cpDoSelectFlagSubcategory(i, subcategory){
   activeFlagCategory = i;
   activeFlagSubcategory = subcategory;
   renderFlagCategories();
@@ -2395,8 +2422,6 @@ function selectFlagSubcategory(i, subcategory){
 }
 
 window.toggleFlagCategories = toggleFlagCategories;
-window.showFlagSubcategories = showFlagSubcategories;
-window.clearFlagSubcategories = clearFlagSubcategories;
 window.selectFlagSubcategory = selectFlagSubcategory;
 window.addEventListener('smart-factory:toggle-flag-categories', toggleFlagCategories);
 
