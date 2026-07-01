@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0" rel="stylesheet">
 <style>
   :root{
     --navy:#0c1430;
@@ -52,7 +53,7 @@
   .page-titlegroup{display:flex;align-items:stretch;gap:86px;min-width:0;flex:1;}
   .page-title-copy{display:flex;flex-direction:column;justify-content:center;flex:0 0 auto;}
   .page-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.6;letter-spacing:.15px;color:var(--navy);}
-  .page-breadcrumb{display:flex;align-items:center;gap:4px;margin-top:1px;color:var(--text-muted);font-size:13px;line-height:18px;letter-spacing:.16px;}
+  .page-breadcrumb{position:relative;display:flex;align-items:center;gap:4px;margin-top:1px;color:var(--text-muted);font-size:13px;line-height:18px;letter-spacing:.16px;}
   .page-breadcrumb svg{width:16px;height:16px;color:var(--accent);flex-shrink:0;}
   .breadcrumb-line-list{position:relative;display:inline-flex;align-items:center;color:var(--text-muted);cursor:default;}
   .breadcrumb-line-list:after{content:attr(data-full);position:absolute;left:0;top:22px;min-width:max-content;max-width:420px;padding:5px 8px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text-muted);font-size:12px;line-height:16px;box-shadow:0 10px 24px rgba(15,23,42,.14);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .12s ease,transform .12s ease,visibility .12s ease;z-index:80;white-space:nowrap;pointer-events:none;}
@@ -75,7 +76,8 @@
   .page-header-action:hover{filter:brightness(.96);background:var(--blue-bg);}
   .page-header-action.primary:hover{background:var(--accent);filter:brightness(.94);}
   .page-button-divider{width:1px;height:32px;background:var(--border);}
-  .main-card-shell{margin:0 40px 40px;background:rgba(255,255,255,.64);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:56px minmax(0,1fr);padding:0;height:calc(100vh - 158px);position:relative;}
+  .main-card-shell{margin:0 40px 40px;background:rgba(255,255,255,.64);border:1px solid var(--border);border-radius:12px;overflow:visible;display:grid;grid-template-columns:56px minmax(0,1fr);padding:0;height:calc(100vh - 158px);position:relative;}
+  .app-side-nav{border-radius:12px 0 0 12px;}
   .app-side-nav{position:relative;z-index:25;width:56px;height:100%;background:linear-gradient(90deg,rgba(31,99,234,.08),rgba(31,99,234,.08)),#fff;border-right:1px solid var(--border);padding:8px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;overflow:hidden;transition:width .18s ease,box-shadow .18s ease;}
   .app-side-nav:hover,.app-side-nav:focus-within{width:272px;box-shadow:12px 0 28px rgba(15,23,42,.12);}
   .app-side-nav.is-collapsed{width:56px;box-shadow:none;}
@@ -91,7 +93,7 @@
   .app-side-label{font-family:Roboto,var(--ix-font);font-size:16px;font-weight:400;color:currentColor;opacity:0;transition:opacity .12s ease;}
   .app-side-nav:hover .app-side-label,.app-side-nav:focus-within .app-side-label{opacity:1;}
   .app-side-nav.is-collapsed:hover .app-side-label,.app-side-nav.is-collapsed:focus-within .app-side-label{opacity:0;}
-  .app-content{min-width:0;min-height:0;height:100%;padding:16px;background:var(--main-card);overflow:hidden;}
+  .app-content{min-width:0;min-height:0;height:100%;padding:16px;background:var(--main-card);overflow:visible;border-radius:0 12px 12px 0;}
   .hdr-action-btn{height:32px;min-width:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;border:1px solid transparent;}
   .hdr-action-btn.primary{background:var(--accent);color:#fff;}
   .hdr-action-btn.primary:hover{filter:brightness(.94);}
@@ -144,7 +146,9 @@
   .assignment-page-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
   .assignment-page-subtitle{font-size:11px;color:var(--text-muted);margin-top:2px;}
   .assignment-workbench{display:grid;grid-template-columns:minmax(300px,1fr) minmax(300px,1fr) 12px minmax(300px,.86fr);gap:0;min-height:0;height:100%;flex:1;overflow:visible;}
-  .assignment-column{display:flex;flex-direction:column;min-height:0;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .assignment-column{display:flex;flex-direction:column;min-height:0;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:visible;}
+  .assignment-column-head{border-radius:12px 12px 0 0;}
+  .assignment-list{border-radius:0 0 12px 12px;}
   .assignment-column:first-child{border-radius:12px 0 0 12px;border-right:0;}
   .assignment-column.resources{border-radius:0 12px 12px 0;}
   .assignment-column.resources{background:#fff;}
@@ -169,7 +173,7 @@
   .assignment-search-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .assignment-search-row .relative{flex:1;min-width:0;}
   .assignment-filter-wrap{position:relative;flex-shrink:0;}
-  .assignment-filter-panel{position:absolute;right:0;top:38px;width:306px;max-height:520px;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 44px rgba(15,23,42,.18);padding:12px;z-index:60;display:none;}
+  .assignment-filter-panel{position:absolute;right:0;top:38px;width:520px;max-height:520px;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 44px rgba(15,23,42,.18);padding:12px;z-index:60;display:none;}
   .assignment-filter-panel.open{display:block;}
   .filter-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
   .filter-panel-title{font-size:13px;font-weight:800;color:var(--text);}
@@ -179,12 +183,25 @@
   .filter-logic button.active{background:var(--blue-bg);border-color:var(--accent);color:var(--accent);}
   .filter-fieldset{border-top:1px solid var(--border);padding-top:9px;margin-top:9px;}
   .filter-fieldset:first-of-type{border-top:0;padding-top:0;margin-top:0;}
+  .filter-fieldset-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--border);padding-top:9px;margin-top:9px;}
+  .filter-fieldset-row:first-of-type{border-top:0;padding-top:0;margin-top:0;}
+  .filter-fieldset-row .filter-fieldset{border-top:0;padding-top:0;margin-top:0;}
   .filter-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:6px;}
   .filter-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;}
   .filter-check{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-soft);line-height:1.2;}
   .filter-check input{accent-color:var(--accent);}
   .filter-input-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
   .filter-input{height:30px;border:1px solid var(--border-strong);border-radius:8px;padding:0 8px;font-size:12px;color:var(--text);background:#fff;min-width:0;}
+  .combo-field{position:relative;border:1px solid var(--border-strong);border-radius:8px;padding:4px 6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:#fff;min-height:30px;}
+  .combo-field:focus-within{border-color:var(--accent);}
+  .combo-chip{display:inline-flex;align-items:center;gap:4px;background:var(--blue-bg);color:var(--accent);font-size:11px;font-weight:700;padding:3px 6px;border-radius:6px;white-space:nowrap;}
+  .combo-chip-remove{border:0;background:transparent;color:var(--accent);cursor:pointer;font-size:12px;line-height:1;padding:0;}
+  .combo-input{flex:1;min-width:70px;border:0;outline:0;font-size:12px;padding:3px 2px;background:transparent;color:var(--text);}
+  .combo-dropdown{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:180px;overflow-y:auto;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 28px -8px rgba(10,16,32,.22);z-index:70;display:none;}
+  .combo-dropdown.open{display:block;}
+  .combo-option{padding:7px 10px;font-size:12px;color:var(--text-soft);cursor:pointer;}
+  .combo-option:hover{background:var(--blue-bg);color:var(--accent);}
+  .combo-empty{padding:7px 10px;font-size:11.5px;color:var(--text-muted);}
   .filter-panel-actions{display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px;}
   .filter-panel-actions button{height:30px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;padding:0 11px;}
   .filter-clear{border:0;background:transparent;color:var(--accent);}
@@ -412,6 +429,28 @@
   </div>
 </div>
 
+<div id="hierarchyModal" class="hierarchy-overlay" style="display:none;">
+  <div class="hierarchy-head">
+    <div class="hierarchy-title">Hierarchy</div>
+    <button class="hierarchy-close" type="button" onclick="closeHierarchyModal()" aria-label="Close hierarchy modal">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="hierarchy-tabs">
+    <button class="hierarchy-tab active" type="button">ASSETS</button>
+    <button class="hierarchy-tab" type="button">TEAM</button>
+  </div>
+  <div class="hierarchy-search">
+    <span class="material-symbols-outlined">search</span>
+    <input id="hierarchySearchInput" type="text" placeholder="Search assets..." autocomplete="off" oninput="renderHierarchyTree()">
+  </div>
+  <div class="hierarchy-body" id="hierarchyBody"></div>
+  <div class="hierarchy-actions">
+    <button class="hierarchy-secondary" type="button" onclick="closeHierarchyModal()">CANCEL</button>
+    <button class="hierarchy-primary" type="button" onclick="applyHierarchySelection()">APPLY</button>
+  </div>
+</div>
+
 <smart-factory-header active-screen="production"></smart-factory-header>
 <!-- Shared header extension: flag category picker used by Production Work Order -->
 <div id="flagCategoryRow" style="position:absolute;top:64px;right:40px;left:auto;width:max-content;height:auto;z-index:80;background:#f6f9fe;border:1px solid var(--border);border-radius:14px;padding:12px 12px;box-shadow:0 4px 18px rgba(15,23,42,.07);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease, transform .16s ease, visibility .16s;">
@@ -424,7 +463,7 @@
   <div class="page-titlegroup">
     <div class="page-title-copy">
       <div class="page-title" id="pageTitle">Production Overview</div>
-      <div class="page-breadcrumb" id="pageBreadcrumb">
+      <div class="page-breadcrumb" id="pageBreadcrumb" role="button" tabindex="0" onclick="openHierarchyModal()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openHierarchyModal();}" style="cursor:pointer;">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h4v4H6zM14 4h4v4h-4zM14 14h4v4h-4zM10 8h2a2 2 0 012 2v4"/>
         </svg>
@@ -531,20 +570,39 @@
               <div id="woFilterPanel" class="assignment-filter-panel">
                 <div class="filter-panel-head"><div class="filter-panel-title">Production Work Order Filters</div><button class="filter-panel-close" type="button" onclick="toggleAssignmentFilter('wo', false)">×</button></div>
                 <div class="filter-logic"><button id="woLogicAnd" type="button" class="active" onclick="setAssignmentFilterLogic('wo','and')">Match all</button><button id="woLogicOr" type="button" onclick="setAssignmentFilterLogic('wo','or')">Match any</button></div>
-                <div class="filter-fieldset"><div class="filter-label">SKU</div><input class="filter-input" data-wo-filter="sku" placeholder="80-APX..." oninput="applyAssignmentFilters()"></div>
-                <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
-                  <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Released" onchange="applyAssignmentFilters()">Released</label>
-                  <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Created" onchange="applyAssignmentFilters()">Created</label>
-                </div></div>
-                <div class="filter-fieldset"><div class="filter-label">Type</div><div class="filter-check-grid">
-                  <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="standard" onchange="applyAssignmentFilters()">Standard</label>
-                  <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="custom" onchange="applyAssignmentFilters()">Custom</label>
-                </div></div>
-                <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
-                  <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
-                  <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
-                </div></div>
-                <div class="filter-fieldset"><div class="filter-label">Target Date</div><input class="filter-input" data-wo-filter="targetDate" placeholder="Shift / date" oninput="applyAssignmentFilters()"></div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">PWO #</div>
+                    <div class="combo-field" id="woPwoCombo">
+                      <div class="combo-chips" id="woPwoChips"></div>
+                      <input class="combo-input" id="woPwoInput" placeholder="Search PWO#..." autocomplete="off" oninput="renderCombo('wo','pwo')" onfocus="renderCombo('wo','pwo')">
+                      <div class="combo-dropdown" id="woPwoDropdown"></div>
+                    </div>
+                  </div>
+                  <div class="filter-fieldset"><div class="filter-label">SKU</div>
+                    <div class="combo-field" id="woSkuCombo">
+                      <div class="combo-chips" id="woSkuChips"></div>
+                      <input class="combo-input" id="woSkuInput" placeholder="Search SKU..." autocomplete="off" oninput="renderCombo('wo','sku')" onfocus="renderCombo('wo','sku')">
+                      <div class="combo-dropdown" id="woSkuDropdown"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Released" onchange="applyAssignmentFilters()">Released</label>
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Created" onchange="applyAssignmentFilters()">Created</label>
+                  </div></div>
+                  <div class="filter-fieldset"><div class="filter-label">Type</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="standard" onchange="applyAssignmentFilters()">Standard</label>
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="custom" onchange="applyAssignmentFilters()">Custom</label>
+                  </div></div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
+                  </div></div>
+                  <div class="filter-fieldset"><div class="filter-label">Target Date</div><input class="filter-input" data-wo-filter="targetDate" placeholder="Shift / date" oninput="applyAssignmentFilters()"></div>
+                </div>
                 <div class="filter-fieldset"><div class="filter-label">Planned Quantity</div><div class="filter-input-row"><input class="filter-input" data-wo-filter="plannedMin" type="number" placeholder="Min" oninput="applyAssignmentFilters()"><input class="filter-input" data-wo-filter="plannedMax" type="number" placeholder="Max" oninput="applyAssignmentFilters()"></div></div>
                 <div class="filter-panel-actions"><button class="filter-clear" type="button" onclick="clearAssignmentFilters('wo')">Clear</button><button class="filter-apply" type="button" onclick="toggleAssignmentFilter('wo', false)">Apply</button></div>
               </div>
@@ -574,22 +632,33 @@
               <div id="resFilterPanel" class="assignment-filter-panel">
                 <div class="filter-panel-head"><div class="filter-panel-title">Resource Filters</div><button class="filter-panel-close" type="button" onclick="toggleAssignmentFilter('res', false)">×</button></div>
                 <div class="filter-logic"><button id="resLogicAnd" type="button" class="active" onclick="setAssignmentFilterLogic('res','and')">Match all</button><button id="resLogicOr" type="button" onclick="setAssignmentFilterLogic('res','or')">Match any</button></div>
-                <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
-                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="production" onchange="applyAssignmentFilters()">Production</label>
-                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="starved" onchange="applyAssignmentFilters()">Starved</label>
-                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="blocked" onchange="applyAssignmentFilters()">Blocked</label>
-                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="down" onchange="applyAssignmentFilters()">Down</label>
-                  <label class="filter-check"><input type="checkbox" data-res-filter="state" value="stopped" onchange="applyAssignmentFilters()">Stopped</label>
-                </div></div>
-                <div class="filter-fieldset"><div class="filter-label">Quick Availability</div><div class="filter-check-grid">
-                  <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyCurrent" onchange="applyAssignmentFilters()">No current PWO</label>
-                  <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyNext" onchange="applyAssignmentFilters()">No next PWO</label>
-                </div></div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Resource</div>
+                    <div class="combo-field" id="resResourceCombo">
+                      <div class="combo-chips" id="resResourceChips"></div>
+                      <input class="combo-input" id="resResourceInput" placeholder="Search resource..." autocomplete="off" oninput="renderCombo('res','resource')" onfocus="renderCombo('res','resource')">
+                      <div class="combo-dropdown" id="resResourceDropdown"></div>
+                    </div>
+                  </div>
+                  <div class="filter-fieldset"><div class="filter-label">Location</div><input class="filter-input" data-res-filter="location" placeholder="Sandy / Unit..." oninput="applyAssignmentFilters()"></div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="production" onchange="applyAssignmentFilters()">Production</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="starved" onchange="applyAssignmentFilters()">Starved</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="blocked" onchange="applyAssignmentFilters()">Blocked</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="down" onchange="applyAssignmentFilters()">Down</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="stopped" onchange="applyAssignmentFilters()">Stopped</label>
+                  </div></div>
+                  <div class="filter-fieldset"><div class="filter-label">Quick Availability</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyCurrent" onchange="applyAssignmentFilters()">No current PWO</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyNext" onchange="applyAssignmentFilters()">No next PWO</label>
+                  </div></div>
+                </div>
                 <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
                   <label class="filter-check"><input type="checkbox" data-res-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
                   <label class="filter-check"><input type="checkbox" data-res-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
                 </div></div>
-                <div class="filter-fieldset"><div class="filter-label">Location</div><input class="filter-input" data-res-filter="location" placeholder="Sandy / Unit..." oninput="applyAssignmentFilters()"></div>
                 <div class="filter-panel-actions"><button class="filter-clear" type="button" onclick="clearAssignmentFilters('res')">Clear</button><button class="filter-apply" type="button" onclick="toggleAssignmentFilter('res', false)">Apply</button></div>
               </div>
             </div>
@@ -926,6 +995,40 @@
   .create-pwo-secondary{border:1px solid rgba(37,99,235,.38);background:#fff;color:var(--accent);}
   .create-pwo-primary{border:1px solid var(--accent);background:var(--accent);color:#fff;}
   .create-pwo-primary:hover{filter:brightness(.94);}
+
+  .material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;font-variation-settings:'FILL' 1;}
+
+  .hierarchy-overlay{position:fixed;width:350px;height:500px;background:#fff;border-radius:12px;box-shadow:0 18px 44px -8px rgba(10,16,32,.28);display:flex;flex-direction:column;z-index:260;overflow:hidden;}
+  .hierarchy-head{display:flex;align-items:center;justify-content:space-between;padding:16px 32px 0 32px;flex-shrink:0;}
+  .hierarchy-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
+  .hierarchy-close{border:0;background:transparent;color:var(--accent);cursor:pointer;padding:2px;display:flex;align-items:center;justify-content:center;}
+  .hierarchy-tabs{display:flex;align-items:center;gap:24px;padding:16px 32px 0 32px;}
+  .hierarchy-tab{border:0;background:transparent;padding:0 0 10px 0;font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--text-muted);cursor:pointer;position:relative;text-transform:uppercase;}
+  .hierarchy-tab.active{color:var(--accent);}
+  .hierarchy-tab.active:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);border-radius:2px 2px 0 0;}
+  .hierarchy-search{margin:16px 32px 0 32px;position:relative;display:flex;align-items:center;border:1px solid var(--border-strong);border-radius:12px;padding:0 12px;height:38px;gap:8px;}
+  .hierarchy-search .material-symbols-outlined{color:var(--accent);font-size:19px;}
+  .hierarchy-search input{flex:1;border:0;outline:0;font-size:13px;color:var(--text);background:transparent;}
+  .hierarchy-body{flex:1;overflow-y:auto;padding:16px 32px;display:flex;flex-direction:column;gap:0;}
+  .hierarchy-node{display:flex;flex-direction:column;}
+  .hierarchy-row{display:flex;align-items:center;gap:6px;min-height:28px;}
+  .hierarchy-toggle{width:20px;height:20px;border:0;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;}
+  .hierarchy-toggle .material-symbols-outlined{font-size:18px;transition:transform .12s ease;}
+  .hierarchy-toggle-leaf .material-symbols-outlined{font-size:16px;}
+  .hierarchy-toggle.is-open .material-symbols-outlined{transform:rotate(90deg);}
+  .hierarchy-toggle.is-spacer{visibility:hidden;pointer-events:none;}
+  .hierarchy-label{display:flex;align-items:center;gap:2px;font-size:16px;line-height:150%;letter-spacing:.15px;color:var(--text);cursor:pointer;opacity:.38;transition:opacity .12s ease;flex:1;}
+  .hierarchy-label:hover,.hierarchy-label:focus-visible{opacity:1;}
+  .hierarchy-label.is-selected{opacity:1;font-weight:700;}
+  .hierarchy-label .material-symbols-outlined{font-size:18px;color:var(--text-muted);}
+  .hierarchy-label-text{flex:1;}
+  .hierarchy-radio{width:14px;height:14px;accent-color:var(--accent);flex-shrink:0;cursor:pointer;margin-left:auto;}
+  .hierarchy-children{display:flex;flex-direction:column;gap:0;padding-left:26px;margin-top:0;}
+  .hierarchy-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:16px 32px;}
+  .hierarchy-actions button{height:auto;border-radius:12px;font-family:Roboto,var(--ix-font);font-size:14px;font-weight:500;cursor:pointer;padding:6px 15px;text-transform:uppercase;}
+  .hierarchy-secondary{border:0;background:transparent;color:var(--accent);}
+  .hierarchy-primary{border:0;background:var(--accent);color:#fff;}
+  .hierarchy-primary:hover{filter:brightness(.94);}
 
   /* ---- badge authentication modal (ported, generic on-success callback) ---- */
   .badge-auth-scrim{z-index:260;}
@@ -2163,8 +2266,8 @@ const WORK_ORDERS = [
 ];
 
 const RESOURCES = [
-  { id:'AFA10', name:'AFA10', workCenter:'AFA', state:'production', currentWo:'WO-4503288', nextAssignedWo:'WO-4503290', location:'Sandy USA / Unit 1', eta:'05/23/2026 - Shift B' },
-  { id:'AFA11', name:'AFA11', workCenter:'AFA', state:'down', currentWo:'WO-4503294', location:'Sandy USA / Unit 1', eta:'05/23/2026 - Shift C' },
+  { id:'AFA10', name:'AFA10', workCenter:'AFA', state:'production', currentWo:'WO-4503288', nextAssignedWo:'WO-4503290', location:'Sandy USA / Unit 1', eta:'05/23/2026 - Shift B', compatibleSkus:['80-APX-50000'] },
+  { id:'AFA11', name:'AFA11', workCenter:'AFA', state:'down', currentWo:'WO-4503294', location:'Sandy USA / Unit 1', eta:'05/23/2026 - Shift C', compatibleSkus:['ENG-STUDY-01'] },
   { id:'AFA12', name:'AFA12', workCenter:'AFA', state:'production', currentWo:'WO-4503301', location:'Sandy USA / Unit 1', eta:'05/24/2026 - Shift A' },
   { id:'AFA13', name:'AFA13', workCenter:'AFA', state:'production', currentWo:'WO-4503308', location:'Sandy USA / Unit 1', eta:'05/24/2026 - Shift B' },
   { id:'AFA14', name:'AFA14', workCenter:'AFA', state:'production', currentWo:'WO-4503316', nextAssignedWo:'WO-4503320', location:'Sandy USA / Unit 1', eta:'05/25/2026 - Shift A' },
@@ -2185,6 +2288,10 @@ let lastAssigned = null;
 const assignmentFilters = {
   wo: { logic:'and' },
   res: { logic:'and' }
+};
+const comboState = {
+  wo: { pwo:[], sku:[] },
+  res: { resource:[] }
 };
 let unitCarouselPage = 0;
 const UNIT_CARDS_PER_PAGE = 4;
@@ -2623,24 +2730,30 @@ function assignmentLineFamily(value){
   return String(value || '').trim().toUpperCase();
 }
 
+function resourceAcceptsWo(res, wo){
+  if(assignmentLineFamily(res.workCenter) !== assignmentLineFamily(wo.workCenter)) return false;
+  if(res.compatibleSkus && !res.compatibleSkus.includes(wo.sku)) return false;
+  return true;
+}
+
 function woEligibleForSelectedRes(wo){
   if(!selectedResources.length) return true;
-  return selectedResources.some(res => assignmentLineFamily(wo.workCenter) === assignmentLineFamily(res.workCenter));
+  return selectedResources.some(res => resourceAcceptsWo(res, wo));
 }
 
 function resEligibleForSelectedWo(res){
   if(!selectedWo) return true;
-  return assignmentLineFamily(res.workCenter) === assignmentLineFamily(selectedWo.workCenter);
+  return resourceAcceptsWo(res, selectedWo);
 }
 
 function eligibleResourcesForWo(wo){
   if(!wo) return [];
-  return RESOURCES.filter(r => assignmentLineFamily(r.workCenter) === assignmentLineFamily(wo.workCenter));
+  return RESOURCES.filter(r => resourceAcceptsWo(r, wo));
 }
 
 function eligibleWosForResource(res){
   if(!res) return [];
-  return WORK_ORDERS.filter(w => assignmentLineFamily(w.workCenter) === assignmentLineFamily(res.workCenter));
+  return WORK_ORDERS.filter(w => resourceAcceptsWo(res, w));
 }
 
 function isWoAssignable(wo, res){
@@ -2667,11 +2780,82 @@ function getFilterText(kind, name){
 }
 
 function hasAdvancedFilters(kind){
-  return [...document.querySelectorAll(`[data-${kind}-filter]`)].some(input => {
+  const domActive = [...document.querySelectorAll(`[data-${kind}-filter]`)].some(input => {
     if(input.type === 'checkbox') return input.checked;
     return input.value.trim() !== '';
   });
+  const comboActive = Object.values(comboState[kind] || {}).some(values => values.length);
+  return domActive || comboActive;
 }
+
+function comboFieldId(kind, field){
+  return `${kind}${field.charAt(0).toUpperCase()}${field.slice(1)}`;
+}
+
+function comboSourceValues(kind, field){
+  if(kind === 'wo' && field === 'pwo') return WORK_ORDERS.map(w => assignmentPwo(w.wo));
+  if(kind === 'wo' && field === 'sku') return [...new Set(WORK_ORDERS.map(w => w.sku))];
+  if(kind === 'res' && field === 'resource') return RESOURCES.map(r => r.name);
+  return [];
+}
+
+function renderCombo(kind, field){
+  const baseId = comboFieldId(kind, field);
+  const chipsEl = document.getElementById(`${baseId}Chips`);
+  const input = document.getElementById(`${baseId}Input`);
+  const dropdown = document.getElementById(`${baseId}Dropdown`);
+  if(!chipsEl || !input || !dropdown) return;
+  const selected = comboState[kind][field];
+
+  chipsEl.innerHTML = selected.map(value => `
+    <span class="combo-chip">${value}<button type="button" class="combo-chip-remove" aria-label="Remove ${value}" onclick="comboRemove('${kind}','${field}','${value.replace(/'/g,"\\'")}')">×</button></span>
+  `).join('');
+
+  const query = input.value.trim().toLowerCase();
+  if(!query){
+    dropdown.classList.remove('open');
+    dropdown.innerHTML = '';
+    return;
+  }
+  const options = comboSourceValues(kind, field).filter(value => !selected.includes(value) && value.toLowerCase().includes(query));
+  dropdown.innerHTML = options.length
+    ? options.map(value => `<div class="combo-option" onclick="comboAdd('${kind}','${field}','${value.replace(/'/g,"\\'")}')">${value}</div>`).join('')
+    : `<div class="combo-empty">No matches</div>`;
+  dropdown.classList.add('open');
+}
+
+function comboAdd(kind, field, value){
+  if(!comboState[kind][field].includes(value)) comboState[kind][field].push(value);
+  const input = document.getElementById(`${comboFieldId(kind, field)}Input`);
+  if(input) input.focus();
+  renderCombo(kind, field);
+  applyAssignmentFilters();
+}
+
+function comboRemove(kind, field, value){
+  comboState[kind][field] = comboState[kind][field].filter(v => v !== value);
+  renderCombo(kind, field);
+  applyAssignmentFilters();
+}
+
+function clearCombos(kind){
+  Object.keys(comboState[kind]).forEach(field => {
+    comboState[kind][field] = [];
+    const input = document.getElementById(`${comboFieldId(kind, field)}Input`);
+    if(input) input.value = '';
+    renderCombo(kind, field);
+  });
+}
+
+document.addEventListener('click', e => {
+  const path = typeof e.composedPath === 'function' ? e.composedPath() : [e.target];
+  document.querySelectorAll('.combo-field').forEach(field => {
+    if(!path.includes(field)){
+      const dropdown = field.querySelector('.combo-dropdown');
+      dropdown?.classList.remove('open');
+    }
+  });
+});
 
 function matchesFilterLogic(results, logic){
   const active = results.filter(Boolean);
@@ -2687,12 +2871,14 @@ function woMatchesAdvancedFilters(w){
   const statuses = getFilterValues('wo', 'status');
   const types = getFilterValues('wo', 'type');
   const workCenters = getFilterValues('wo', 'workCenter');
-  const sku = getFilterText('wo', 'sku');
+  const pwos = comboState.wo.pwo;
+  const skus = comboState.wo.sku;
   const targetDate = getFilterText('wo', 'targetDate');
   const plannedMin = getFilterText('wo', 'plannedMin');
   const plannedMax = getFilterText('wo', 'plannedMax');
   const results = [
-    filterResult(Boolean(sku), w.sku.toLowerCase().includes(sku)),
+    filterResult(pwos.length, pwos.includes(assignmentPwo(w.wo))),
+    filterResult(skus.length, skus.includes(w.sku)),
     filterResult(statuses.length, statuses.includes(w.status)),
     filterResult(types.length, types.includes(w.custom ? 'custom' : 'standard')),
     filterResult(workCenters.length, workCenters.includes(w.workCenter)),
@@ -2707,8 +2893,10 @@ function resourceMatchesAdvancedFilters(r){
   const states = getFilterValues('res', 'state');
   const quick = getFilterValues('res', 'quick');
   const workCenters = getFilterValues('res', 'workCenter');
+  const resources = comboState.res.resource;
   const location = getFilterText('res', 'location');
   const results = [
+    filterResult(resources.length, resources.includes(r.name)),
     filterResult(states.length, states.includes(r.state)),
     filterResult(quick.includes('emptyCurrent'), !r.currentWo),
     filterResult(quick.includes('emptyNext'), !r.nextAssignedWo),
@@ -2740,6 +2928,7 @@ function clearAssignmentFilters(kind){
     if(input.type === 'checkbox') input.checked = false;
     else input.value = '';
   });
+  clearCombos(kind);
   assignmentFilters[kind].logic = 'and';
   setAssignmentFilterLogic(kind, 'and');
 }
@@ -2834,6 +3023,7 @@ function renderWOs(){
   const filtered = WORK_ORDERS.filter(w=>{
     if(!woMatchesAdvancedFilters(w)) return false;
     if(q && !(`${assignmentPwo(w.wo)} ${w.wo} ${w.sku} ${w.batch} ${w.material} ${w.desc} ${w.status} ${w.workCenter}`.toLowerCase().includes(q))) return false;
+    if(selectedResources.length && !woEligibleForSelectedRes(w)) return false;
     return true;
   });
 
@@ -2850,7 +3040,6 @@ function renderWOs(){
     if(isSel) cls += ' selected';
     else if(suggested) cls += ' suggested';
     else if(selectedResources.length && eligible) cls += ' eligible';
-    else if(selectedResources.length && !eligible) cls += ' dimmed';
     return `
     <div class="${cls}" onclick="selectWo('${w.wo}')">
       <div class="flex items-start justify-between gap-2">
@@ -2885,6 +3074,7 @@ function renderResources(){
   const filtered = RESOURCES.filter(r=>{
     if(!resourceMatchesAdvancedFilters(r)) return false;
     if(q && !(`${r.id} ${r.name} ${r.workCenter} ${r.state} ${assignmentPwo(r.currentWo || '')} ${assignmentPwo(r.nextAssignedWo || '')} ${r.location}`.toLowerCase().includes(q))) return false;
+    if(selectedWo && !resEligibleForSelectedWo(r)) return false;
     return true;
   });
 
@@ -2899,7 +3089,6 @@ function renderResources(){
     let cls = 'res-card';
     if(isSel) cls += ' selected';
     else if(selectedWo && eligible) cls += ' eligible';
-    else if(selectedWo && !eligible) cls += ' dimmed';
     return `
     <div class="${cls}" onclick="selectRes('${r.id}')" style="${isSel?'border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;':''}">
       <div class="flex items-start justify-between gap-2">
@@ -2994,6 +3183,126 @@ function closeCreatePwoModal(){
   const modal = document.getElementById('createPwoModal');
   if(modal) modal.style.display = 'none';
 }
+
+const HIERARCHY_TREE = [
+  { id:'sandy-plant', name:'Sandy Plant', icon:'domain', children:[
+    { id:'unit-afa', name:'AFA', icon:'factory', children:[
+      { id:'afa1', name:'AFA 1', children:[] },
+      { id:'afa2', name:'AFA 2', children:[] },
+      { id:'afa3', name:'AFA 3', children:[] },
+      { id:'afa10', name:'AFA 10', children:[] },
+      { id:'afa11', name:'AFA 11', children:[] }
+    ] },
+    { id:'unit-pkg', name:'PKG', icon:'factory', children:[
+      { id:'pkg-straight', name:'PKG Straight', children:[] },
+      { id:'pkg-bulk', name:'PKG Bulk', children:[] },
+      { id:'pkg-wing', name:'PKG Wing', children:[] }
+    ] },
+    { id:'unit-nfa', name:'NFA', icon:'factory', children:[
+      { id:'nfa1', name:'NFA 1', children:[] },
+      { id:'nfa2', name:'NFA 2', children:[] },
+      { id:'nfa3', name:'NFA 3', children:[] }
+    ] }
+  ] }
+];
+
+const hierarchyState = {
+  selectedId: 'unit-afa',
+  expanded: new Set()
+};
+
+function hierarchyCollectExpandedByDefault(nodes, set){
+  nodes.forEach(node => {
+    if(node.children && node.children.length){
+      set.add(node.id);
+      hierarchyCollectExpandedByDefault(node.children, set);
+    }
+  });
+}
+
+function openHierarchyModal(){
+  const modal = document.getElementById('hierarchyModal');
+  const breadcrumb = document.getElementById('pageBreadcrumb');
+  if(!modal || !breadcrumb) return;
+  hierarchyState.expanded = new Set();
+  hierarchyCollectExpandedByDefault(HIERARCHY_TREE, hierarchyState.expanded);
+  const searchInput = document.getElementById('hierarchySearchInput');
+  if(searchInput) searchInput.value = '';
+  renderHierarchyTree();
+  const rect = breadcrumb.getBoundingClientRect();
+  modal.style.top = `${rect.bottom + 8}px`;
+  modal.style.left = `${rect.left}px`;
+  modal.style.display = 'flex';
+}
+
+function closeHierarchyModal(){
+  const modal = document.getElementById('hierarchyModal');
+  if(modal) modal.style.display = 'none';
+}
+
+function hierarchyToggle(id){
+  if(hierarchyState.expanded.has(id)) hierarchyState.expanded.delete(id);
+  else hierarchyState.expanded.add(id);
+  renderHierarchyTree();
+}
+
+function hierarchySelect(id){
+  hierarchyState.selectedId = id;
+  renderHierarchyTree();
+}
+
+function hierarchyNodeMatchesQuery(node, query){
+  if(node.name.toLowerCase().includes(query)) return true;
+  if(node.children) return node.children.some(child => hierarchyNodeMatchesQuery(child, query));
+  return false;
+}
+
+function renderHierarchyNodes(nodes, query){
+  return nodes.filter(node => !query || hierarchyNodeMatchesQuery(node, query)).map(node => {
+    const hasChildren = node.children && node.children.length > 0;
+    const isOpen = hierarchyState.expanded.has(node.id) || Boolean(query);
+    const isSelected = hierarchyState.selectedId === node.id;
+    const toggleHtml = hasChildren
+      ? `<button type="button" class="hierarchy-toggle${isOpen ? ' is-open' : ''}" onclick="hierarchyToggle('${node.id}')" aria-label="Toggle ${node.name}"><span class="material-symbols-outlined">chevron_right</span></button>`
+      : `<span class="hierarchy-toggle hierarchy-toggle-leaf"><span class="material-symbols-outlined">hdr_weak</span></span>`;
+    const iconHtml = node.icon ? `<span class="material-symbols-outlined">${node.icon}</span>` : '';
+    const childrenHtml = hasChildren && isOpen
+      ? `<div class="hierarchy-children">${renderHierarchyNodes(node.children, query)}</div>`
+      : '';
+    return `
+      <div class="hierarchy-node">
+        <div class="hierarchy-row">
+          ${toggleHtml}
+          <label class="hierarchy-label${isSelected ? ' is-selected' : ''}">
+            ${iconHtml}
+            <span class="hierarchy-label-text">${node.name}</span>
+            <input type="radio" name="hierarchySelection" class="hierarchy-radio" value="${node.id}" ${isSelected ? 'checked' : ''} onchange="hierarchySelect('${node.id}')">
+          </label>
+        </div>
+        ${childrenHtml}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderHierarchyTree(){
+  const body = document.getElementById('hierarchyBody');
+  if(!body) return;
+  const query = (document.getElementById('hierarchySearchInput')?.value || '').trim().toLowerCase();
+  body.innerHTML = renderHierarchyNodes(HIERARCHY_TREE, query) || '<div class="hierarchy-empty" style="font-size:12px;color:var(--text-muted);">No assets found.</div>';
+}
+
+function applyHierarchySelection(){
+  closeHierarchyModal();
+}
+
+document.addEventListener('click', e => {
+  const overlay = document.getElementById('hierarchyModal');
+  const breadcrumb = document.getElementById('pageBreadcrumb');
+  if(!overlay || overlay.style.display === 'none') return;
+  const path = typeof e.composedPath === 'function' ? e.composedPath() : [e.target];
+  if(!path.includes(overlay) && !path.includes(breadcrumb)) closeHierarchyModal();
+});
 
 function submitCreatePwoModal(){
   const woNumber = document.getElementById('createPwoNumber').value.trim();
