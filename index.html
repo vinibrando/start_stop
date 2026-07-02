@@ -138,6 +138,7 @@
   .view-panel{display:none;}
   .view-panel.active{display:block;}
   #workOrderAssignmentView.active{height:100%;min-height:0;display:flex;flex-direction:column;padding-top:8px!important;}
+  #assignmentV2View.active{height:100%;min-height:0;display:flex;flex-direction:column;padding-top:8px!important;}
   #productionOverviewView{padding-top:8px!important;}
   #productionOverviewView.active{height:100%;overflow-y:auto;overflow-x:hidden;}
 
@@ -149,8 +150,8 @@
   .assignment-column{display:flex;flex-direction:column;min-height:0;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:visible;}
   .assignment-column-head{border-radius:12px 12px 0 0;}
   .assignment-list{border-radius:0 0 12px 12px;}
-  .assignment-column:first-child{border-radius:12px 0 0 12px;border-right:0;}
-  .assignment-column.resources{border-radius:0 12px 12px 0;}
+  .assignment-column.resources{border-radius:12px 0 0 12px;border-right:0;order:-1;}
+  .assignment-column.wo{border-radius:0 12px 12px 0;}
   .assignment-column.resources{background:#fff;}
   .assignment-column.review{grid-column:4;}
   .assignment-column.review{background:#f8fafc;box-shadow:0 8px 18px rgba(10,16,32,.06);}
@@ -173,26 +174,28 @@
   .assignment-search-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .assignment-search-row .relative{flex:1;min-width:0;}
   .assignment-filter-wrap{position:relative;flex-shrink:0;}
-  .assignment-filter-panel{position:absolute;right:0;top:38px;width:520px;max-height:520px;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 44px rgba(15,23,42,.18);padding:12px;z-index:60;display:none;}
+  .assignment-filter-panel{position:absolute;right:0;top:38px;width:390px;max-height:520px;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 44px rgba(15,23,42,.18);padding:12px;z-index:60;display:none;}
   .assignment-filter-panel.open{display:block;}
   .filter-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
   .filter-panel-title{font-size:13px;font-weight:800;color:var(--text);}
-  .filter-panel-close{border:0;background:transparent;color:var(--accent);font-size:17px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
+  .filter-panel-close{border:0;background:transparent;color:var(--accent);font-size:26px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
   .filter-logic{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
   .filter-logic button{height:28px;border:1px solid var(--border-strong);border-radius:8px;background:#fff;color:var(--text-soft);font-size:11px;font-weight:800;cursor:pointer;}
   .filter-logic button.active{background:var(--blue-bg);border-color:var(--accent);color:var(--accent);}
-  .filter-fieldset{border-top:1px solid var(--border);padding-top:9px;margin-top:9px;}
+  .filter-fieldset{padding-top:11px;margin-top:11px;}
   .filter-fieldset:first-of-type{border-top:0;padding-top:0;margin-top:0;}
-  .filter-fieldset-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--border);padding-top:9px;margin-top:9px;}
+  .filter-fieldset-row{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;padding-top:11px;margin-top:11px;}
   .filter-fieldset-row:first-of-type{border-top:0;padding-top:0;margin-top:0;}
+  .filter-logic + .filter-fieldset-row{border-top:0;padding-top:0;}
   .filter-fieldset-row .filter-fieldset{border-top:0;padding-top:0;margin-top:0;}
   .filter-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:6px;}
-  .filter-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;}
-  .filter-check{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-soft);line-height:1.2;}
-  .filter-check input{accent-color:var(--accent);}
+  .filter-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 8px;}
+  .filter-check-grid.stack{grid-template-columns:1fr;}
+  .filter-check{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-soft);line-height:16px;min-height:18px;}
+  .filter-check input{accent-color:var(--accent);width:13px;height:13px;margin:0;flex:0 0 13px;transform:translateY(.5px);}
   .filter-input-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-  .filter-input{height:30px;border:1px solid var(--border-strong);border-radius:8px;padding:0 8px;font-size:12px;color:var(--text);background:#fff;min-width:0;}
-  .combo-field{position:relative;border:1px solid var(--border-strong);border-radius:8px;padding:4px 6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:#fff;min-height:30px;}
+  .filter-input{height:32px;border:1px solid var(--border-strong);border-radius:8px;padding:0 8px;font-size:12px;color:var(--text);background:#fff;min-width:0;}
+  .combo-field{position:relative;border:1px solid var(--border-strong);border-radius:8px;padding:5px 6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;background:#fff;min-height:32px;}
   .combo-field:focus-within{border-color:var(--accent);}
   .combo-chip{display:inline-flex;align-items:center;gap:4px;background:var(--blue-bg);color:var(--accent);font-size:11px;font-weight:700;padding:3px 6px;border-radius:6px;white-space:nowrap;}
   .combo-chip-remove{border:0;background:transparent;color:var(--accent);cursor:pointer;font-size:12px;line-height:1;padding:0;}
@@ -202,7 +205,7 @@
   .combo-option{padding:7px 10px;font-size:12px;color:var(--text-soft);cursor:pointer;}
   .combo-option:hover{background:var(--blue-bg);color:var(--accent);}
   .combo-empty{padding:7px 10px;font-size:11.5px;color:var(--text-muted);}
-  .filter-panel-actions{display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px;}
+  .filter-panel-actions{display:flex;justify-content:flex-end;gap:8px;padding-top:10px;margin-top:10px;}
   .filter-panel-actions button{height:30px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;padding:0 11px;}
   .filter-clear{border:0;background:transparent;color:var(--accent);}
   .filter-apply{border:1px solid var(--accent);background:var(--accent);color:#fff;}
@@ -226,8 +229,68 @@
   .filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff;}
   .search-input{font-size:12.5px;border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px 8px 32px;width:100%;background:var(--main-card);color:var(--text);}
   .search-input:focus{outline:none;border-color:var(--accent);}
-  .col-header{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);}
+  .col-header{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#000;}
   .review-body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden;flex:1;}
+
+  /* ============ Assignment v2 (drag & drop) ============ */
+  .assignment-v2-workbench{display:grid;grid-template-columns:minmax(280px,.86fr) minmax(320px,1.2fr) minmax(280px,.86fr);gap:16px;min-height:0;height:100%;flex:1;overflow:visible;}
+  .assignment-v2-workbench .assignment-column{border-radius:12px;order:0;}
+  .assignment-v2-workbench .assignment-column.wo{border-radius:12px;}
+  .assignment-v2-center{display:flex;flex-direction:column;min-height:0;}
+  .v2-dropzones{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,33%);gap:10px;flex-shrink:0;align-items:stretch;padding:10px 14px 0;background:#f8fafc;}
+  .v2-dropslot{position:relative;min-height:82px;border:1.5px dashed var(--border-strong);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;background:#fbfcfe;color:var(--text-muted);transition:.12s;}
+  .v2-dropslot.dragover{border-color:var(--accent);background:var(--blue-bg);color:var(--accent);}
+  .v2-dropslot.filled{border-style:solid;border-color:var(--border);background:#fff;padding:0;justify-content:stretch;align-items:stretch;box-shadow:0 1px 4px rgba(10,16,32,.06);border-radius:10px;overflow:hidden;}
+  .v2-dropslot.filled.is-clickable{cursor:pointer;transition:box-shadow .12s ease,transform .12s ease;}
+  .v2-dropslot.filled.is-clickable:hover{box-shadow:0 2px 7px rgba(10,16,32,.08);transform:translateY(-.5px);}
+  .v2-dropslot.filled.dragover{border-color:rgba(37,99,235,.45);box-shadow:0 0 0 2px rgba(37,99,235,.08);}
+  .v2-dropslot-icon{font-size:20px;color:var(--text-muted);}
+  .v2-dropslot-text{font-size:12px;font-weight:600;}
+  .v2-slot-filled{display:flex;flex-direction:column;width:100%;min-height:82px;border-radius:10px;overflow:hidden;}
+  .v2-slot-filled.resource{height:100%;}
+  .v2-slot-main{position:relative;display:flex;align-items:flex-start;gap:10px;padding:8px 44px 8px 12px;min-height:56px;flex:1;}
+  .v2-slot-header{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
+  .v2-slot-add{height:15%;min-height:22px;border-top:1px dashed var(--border);display:flex;align-items:center;justify-content:center;background:#f8fafc;color:var(--accent);font-size:18px;font-weight:700;cursor:default;}
+  .v2-slot-chip{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;}
+  .v2-slot-title-row{display:flex;align-items:center;gap:6px;min-width:0;}
+  .v2-slot-name{font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .v2-slot-inline-meta{font-size:10px;font-weight:700;color:var(--text-muted);white-space:nowrap;flex-shrink:0;}
+  .v2-slot-meta{font-size:10.5px;font-weight:500;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .v2-slot-detail-row{display:flex;align-items:center;gap:6px;min-width:0;font-size:10.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .v2-slot-detail-row b{font-weight:700;color:var(--text-soft);}
+  .v2-slot-chip-row{display:flex;flex-wrap:wrap;gap:4px;padding:0 12px 6px;background:#fff;}
+  .v2-resource-chip{display:inline-flex;align-items:center;height:16px;padding:0 6px;border-radius:999px;background:#F0F1F3;color:rgba(0,0,0,.78);font-size:9px;font-weight:600;line-height:1;white-space:nowrap;}
+  .v2-slot-count{flex-shrink:0;background:#F0F1F3;color:rgba(0,0,0,.8);font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px;}
+  .v2-slot-clear{position:absolute;right:8px;top:6px;flex-shrink:0;width:26px;height:26px;border-radius:50%;border:0;background:transparent;color:var(--accent);font-size:22px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+  .v2-slot-clear:hover{background:var(--blue-bg);color:var(--accent);}
+  .v2-slot-chevron{flex-shrink:0;font-size:18px;color:var(--text-muted);transition:transform .15s ease;}
+  .v2-slot-chevron.open{transform:rotate(180deg);}
+  .v2-slot-body{display:flex;flex-direction:column;gap:2px;padding:0 12px 10px;border-top:1px solid var(--border);}
+  .v2-slot-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 2px;font-size:12px;font-weight:600;color:var(--text);border-bottom:1px dashed var(--border);}
+  .v2-slot-item:last-child{border-bottom:0;}
+  .v2-slot-item button{flex-shrink:0;width:18px;height:18px;border-radius:50%;border:0;background:transparent;color:var(--text-muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .v2-slot-item button:hover{background:var(--red-bg);color:var(--red);}
+  .v2-review-wrap{flex:1;min-height:0;display:flex;flex-direction:column;background:#f8fafc;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 18px rgba(10,16,32,.06);overflow:hidden;}
+  .v2-review-wrap .review-body{background:#f8fafc;}
+  .v2-review-wrap .assignment-column-head{background:#f8fafc;}
+  .v2-resource-modal{width:720px;max-width:calc(100vw - 32px);max-height:calc(100vh - 48px);background:#fff;border-radius:16px;box-shadow:0 25px 60px -10px rgba(10,16,32,.35);position:relative;padding:16px;display:flex;flex-direction:column;gap:12px;margin:auto;}
+  .v2-resource-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .v2-resource-modal-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.2;}
+  .v2-resource-modal-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+  .v2-resource-modal-close{width:32px;height:32px;border:0;border-radius:999px;background:transparent;color:var(--accent);font-size:26px;font-weight:800;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .v2-resource-modal-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;overflow:auto;padding-right:2px;}
+  .v2-resource-detail-card{border:1px solid var(--border);border-radius:10px;background:#fff;padding:12px;box-shadow:0 1px 4px rgba(10,16,32,.05);}
+  .v2-resource-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
+  .v2-resource-detail-name{font-size:14px;font-weight:800;color:var(--text);}
+  .v2-resource-detail-grid{display:grid;grid-template-columns:1fr;gap:6px;font-size:11.5px;}
+  .v2-resource-detail-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;color:var(--text-muted);}
+  .v2-resource-detail-row b{color:var(--text);font-weight:700;text-align:right;}
+  .res-card[draggable="true"],.wo-card[draggable="true"]{cursor:grab;}
+  .res-card[draggable="true"]:active,.wo-card[draggable="true"]:active{cursor:grabbing;}
+  .res-card.drag-source,.wo-card.drag-source{opacity:.68;}
+  body.dragging-card{user-select:none;cursor:grabbing;}
+  body.dragging-card *{user-select:none!important;}
+  .drag-card-preview{position:fixed;top:0;left:0;width:320px;pointer-events:none;z-index:9999;will-change:transform;transform:translate3d(-1000px,-1000px,0) rotate(1deg);box-shadow:0 16px 38px rgba(15,23,42,.24);border-radius:12px;opacity:1;background:#fff!important;border-color:var(--border)!important;}
   .review-content{display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;flex:1;padding-right:2px;}
   .review-empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.45;padding:28px;}
   .review-section{border:1px solid var(--border);border-radius:12px;padding:9px;background:var(--main-card);}
@@ -237,11 +300,16 @@
   .review-row span:first-child{color:var(--text-muted);}
   .review-row b{color:var(--text);text-align:right;}
   .review-grid.compact{grid-template-columns:1fr 1fr;column-gap:12px;row-gap:5px;}
-  .review-resource-line{display:grid;grid-template-columns:minmax(48px,.55fr) minmax(42px,.45fr) minmax(82px,.7fr) minmax(88px,1fr) minmax(88px,1fr);align-items:center;gap:8px;font-size:12px;line-height:1.25;}
+  .review-resource-line{display:grid;grid-template-columns:minmax(48px,.55fr) minmax(42px,.45fr) minmax(82px,.7fr) minmax(96px,1fr) minmax(96px,1fr);align-items:center;gap:8px;font-size:12px;line-height:1.25;}
   .review-resource-line span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .review-resource-name{font-weight:700;color:var(--text);}
   .review-resource-muted{color:var(--text-muted);}
   .review-resource-strong{font-weight:700;color:var(--text);text-align:right;}
+  .review-resource-wo{display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:0;}
+  .review-resource-wo-meta{font-weight:400;color:var(--text-muted);font-size:10.5px;}
+  .pwo-extra-badge{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;margin-left:4px;border-radius:999px;background:#F0F1F3;color:rgba(0,0,0,.8);font-size:10px;font-weight:400;line-height:1;cursor:help;vertical-align:middle;white-space:nowrap;}
+  .pwo-extra-badge:after{content:attr(data-tip);position:absolute;right:0;bottom:20px;width:220px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:11px;font-weight:500;text-align:left;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(4px);transition:.12s;z-index:30;white-space:normal;}
+  .pwo-extra-badge:hover:after{opacity:1;transform:translateY(0);}
   .review-combined-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
   .review-combined-title{font-size:13px;font-weight:800;color:var(--text);line-height:1.2;}
   .review-combined-sub{font-size:11px;color:var(--text-muted);line-height:1.25;margin-top:2px;}
@@ -429,6 +497,19 @@
   </div>
 </div>
 
+<div id="v2ResourceDetailsModal" class="scrim" style="display:none;">
+  <div class="v2-resource-modal">
+    <div class="v2-resource-modal-head">
+      <div>
+        <div class="v2-resource-modal-title">Selected Resources</div>
+        <div class="v2-resource-modal-sub" id="v2ResourceDetailsSub">Review selected lines before assignment.</div>
+      </div>
+      <button class="v2-resource-modal-close" type="button" onclick="closeV2ResourceDetailsModal()" aria-label="Close selected resources">×</button>
+    </div>
+    <div class="v2-resource-modal-list" id="v2ResourceDetailsList"></div>
+  </div>
+</div>
+
 <div id="hierarchyModal" class="hierarchy-overlay" style="display:none;">
   <div class="hierarchy-head">
     <div class="hierarchy-title">Hierarchy</div>
@@ -486,6 +567,12 @@
         <path d="M14.06 9.02 15 9.96l-5.6 5.6H8.46v-.94l5.6-5.6Zm3.69-.56c.33-.33.33-.86 0-1.19l-1.02-1.02a.84.84 0 0 0-1.19 0l-.8.8 2.21 2.21.8-.8ZM5 4h10c1.1 0 2 .9 2 2v.68l-2 2V6H5v12h12v-2.68l2-2V18c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Zm2 4h5v2H7V8Zm0 4h3v2H7v-2Z"/>
       </svg>
       <span class="app-side-label">PWO Assignment</span>
+    </button>
+    <button id="sideAssignmentV2" class="app-side-btn" type="button" onclick="switchMainTab('assignmentv2')" aria-label="Assignment v2" title="Assignment v2">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm11.5 1L21 17.5 15.5 21v-2.5H13v-2h2.5V14Z"/>
+      </svg>
+      <span class="app-side-label">Assignment v2</span>
     </button>
   </nav>
   <main class="app-content">
@@ -547,7 +634,7 @@
       </div>
     </div>
     <div class="assignment-workbench">
-      <div class="assignment-column">
+      <div class="assignment-column wo">
         <div class="assignment-column-head">
           <div class="assignment-title-row">
             <div>
@@ -587,17 +674,17 @@
                   </div>
                 </div>
                 <div class="filter-fieldset-row">
-                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid stack">
                     <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Released" onchange="applyAssignmentFilters()">Released</label>
                     <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Created" onchange="applyAssignmentFilters()">Created</label>
                   </div></div>
-                  <div class="filter-fieldset"><div class="filter-label">Type</div><div class="filter-check-grid">
+                  <div class="filter-fieldset"><div class="filter-label">Type</div><div class="filter-check-grid stack">
                     <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="standard" onchange="applyAssignmentFilters()">Standard</label>
                     <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="custom" onchange="applyAssignmentFilters()">Custom</label>
                   </div></div>
                 </div>
                 <div class="filter-fieldset-row">
-                  <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
+                  <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid stack">
                     <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
                     <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
                   </div></div>
@@ -609,7 +696,7 @@
             </div>
           </div>
         </div>
-        <div id="woList" class="assignment-list"></div>
+        <div id="woList" class="assignment-list" data-wo-list></div>
       </div>
 
       <div class="assignment-column resources">
@@ -643,14 +730,14 @@
                   <div class="filter-fieldset"><div class="filter-label">Location</div><input class="filter-input" data-res-filter="location" placeholder="Sandy / Unit..." oninput="applyAssignmentFilters()"></div>
                 </div>
                 <div class="filter-fieldset-row">
-                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid stack">
                     <label class="filter-check"><input type="checkbox" data-res-filter="state" value="production" onchange="applyAssignmentFilters()">Production</label>
                     <label class="filter-check"><input type="checkbox" data-res-filter="state" value="starved" onchange="applyAssignmentFilters()">Starved</label>
                     <label class="filter-check"><input type="checkbox" data-res-filter="state" value="blocked" onchange="applyAssignmentFilters()">Blocked</label>
                     <label class="filter-check"><input type="checkbox" data-res-filter="state" value="down" onchange="applyAssignmentFilters()">Down</label>
                     <label class="filter-check"><input type="checkbox" data-res-filter="state" value="stopped" onchange="applyAssignmentFilters()">Stopped</label>
                   </div></div>
-                  <div class="filter-fieldset"><div class="filter-label">Quick Availability</div><div class="filter-check-grid">
+                  <div class="filter-fieldset"><div class="filter-label">Quick Availability</div><div class="filter-check-grid stack">
                     <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyCurrent" onchange="applyAssignmentFilters()">No current PWO</label>
                     <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyNext" onchange="applyAssignmentFilters()">No next PWO</label>
                   </div></div>
@@ -664,7 +751,7 @@
             </div>
           </div>
         </div>
-        <div id="resList" class="assignment-list"></div>
+        <div id="resList" class="assignment-list" data-resource-list></div>
       </div>
 
       <div class="assignment-column review">
@@ -677,6 +764,138 @@
           </div>
         </div>
         <div id="reviewPanel" class="review-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ASSIGNMENT V2 (drag & drop usability test) ============ -->
+<div id="assignmentV2View" class="view-panel pt-5">
+  <div class="wo-assignment-shell">
+    <div class="assignment-page-head">
+      <div>
+        <div class="assignment-page-title">PWO Assignment v2</div>
+        <div class="assignment-page-subtitle">Drag a Resource and a Production Work Order into the center panel to build an assignment.</div>
+      </div>
+    </div>
+    <div class="assignment-v2-workbench">
+      <div class="assignment-column">
+        <div class="assignment-column-head">
+          <div class="assignment-title-row">
+            <div>
+              <div class="col-header">Resources</div>
+              <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Drag a card into the Resource slot.</div>
+            </div>
+          </div>
+          <div class="assignment-search-row">
+            <div class="relative">
+              <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
+              <input class="search-input" placeholder="Search resource, PWO, work center..." oninput="filterResources(this.value)">
+            </div>
+            <div class="assignment-filter-wrap">
+              <button class="assignment-filter-btn" data-filter-button="res" type="button" aria-label="Filter Resources" title="Filter Resources" onclick="toggleAssignmentFilter('res', undefined, 'v2ResFilterPanel')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </button>
+              <div id="v2ResFilterPanel" class="assignment-filter-panel">
+                <div class="filter-panel-head"><div class="filter-panel-title">Resource Filters</div><button class="filter-panel-close" type="button" onclick="toggleAssignmentFilter('res', false, 'v2ResFilterPanel')">×</button></div>
+                <div class="filter-logic"><button data-filter-logic="res-and" type="button" class="active" onclick="setAssignmentFilterLogic('res','and')">Match all</button><button data-filter-logic="res-or" type="button" onclick="setAssignmentFilterLogic('res','or')">Match any</button></div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Resource</div><input class="filter-input" data-res-filter="resourceText" placeholder="AFA10..." oninput="applyAssignmentFilters()"></div>
+                  <div class="filter-fieldset"><div class="filter-label">Location</div><input class="filter-input" data-res-filter="location" placeholder="Sandy / Unit..." oninput="applyAssignmentFilters()"></div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-res-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
+                  </div></div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="production" onchange="applyAssignmentFilters()">Production</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="starved" onchange="applyAssignmentFilters()">Starved</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="blocked" onchange="applyAssignmentFilters()">Blocked</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="down" onchange="applyAssignmentFilters()">Down</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="state" value="stopped" onchange="applyAssignmentFilters()">Stopped</label>
+                  </div></div>
+                  <div class="filter-fieldset"><div class="filter-label">Quick Availability</div><div class="filter-check-grid stack">
+                    <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyCurrent" onchange="applyAssignmentFilters()">No current PWO</label>
+                    <label class="filter-check"><input type="checkbox" data-res-filter="quick" value="emptyNext" onchange="applyAssignmentFilters()">No next PWO</label>
+                  </div></div>
+                </div>
+                <div class="filter-panel-actions"><button class="filter-clear" type="button" onclick="clearAssignmentFilters('res')">Clear</button><button class="filter-apply" type="button" onclick="toggleAssignmentFilter('res', false, 'v2ResFilterPanel')">Apply</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="assignment-list" data-resource-list></div>
+      </div>
+
+      <div class="assignment-v2-center">
+        <div class="v2-review-wrap">
+          <div class="assignment-column-head">
+            <div class="assignment-title-row">
+              <div>
+                <div class="col-header">Assign and Review</div>
+                <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Final actions appear here once the assignment is valid to review.</div>
+              </div>
+            </div>
+          </div>
+          <div class="v2-dropzones">
+            <div class="v2-dropslot" id="v2ResSlot" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'res')"></div>
+            <div class="v2-dropslot" id="v2WoSlot" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'wo')"></div>
+          </div>
+          <div class="review-body"></div>
+        </div>
+      </div>
+
+      <div class="assignment-column wo">
+        <div class="assignment-column-head">
+          <div class="assignment-title-row">
+            <div>
+              <div class="col-header">Production Work Order</div>
+              <div class="text-[11px] mt-0.5" style="color:var(--text-muted);">Drag a card into the PWO slot.</div>
+            </div>
+          </div>
+          <div class="assignment-search-row">
+            <div class="relative">
+              <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style="color:var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M21 21l-4.3-4.3"/></svg>
+              <input class="search-input" placeholder="Search PWO, SKU, batch, material..." oninput="filterWOs(this.value)">
+            </div>
+            <div class="assignment-filter-wrap">
+              <button class="assignment-filter-btn" data-filter-button="wo" type="button" aria-label="Filter Production Work Orders" title="Filter Production Work Orders" onclick="toggleAssignmentFilter('wo', undefined, 'v2WoFilterPanel')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </button>
+              <div id="v2WoFilterPanel" class="assignment-filter-panel">
+                <div class="filter-panel-head"><div class="filter-panel-title">Production Work Order Filters</div><button class="filter-panel-close" type="button" onclick="toggleAssignmentFilter('wo', false, 'v2WoFilterPanel')">×</button></div>
+                <div class="filter-logic"><button data-filter-logic="wo-and" type="button" class="active" onclick="setAssignmentFilterLogic('wo','and')">Match all</button><button data-filter-logic="wo-or" type="button" onclick="setAssignmentFilterLogic('wo','or')">Match any</button></div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">PWO #</div><input class="filter-input" data-wo-filter="pwoText" placeholder="WO-450..." oninput="applyAssignmentFilters()"></div>
+                  <div class="filter-fieldset"><div class="filter-label">SKU</div><input class="filter-input" data-wo-filter="skuText" placeholder="80-APX..." oninput="applyAssignmentFilters()"></div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Status</div><div class="filter-check-grid">
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Released" onchange="applyAssignmentFilters()">Released</label>
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="status" value="Created" onchange="applyAssignmentFilters()">Created</label>
+                  </div></div>
+                  <div class="filter-fieldset"><div class="filter-label">Type</div><div class="filter-check-grid stack">
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="standard" onchange="applyAssignmentFilters()">Standard</label>
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="type" value="custom" onchange="applyAssignmentFilters()">Custom</label>
+                  </div></div>
+                </div>
+                <div class="filter-fieldset-row">
+                  <div class="filter-fieldset"><div class="filter-label">Work Center</div><div class="filter-check-grid stack">
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="AFA" onchange="applyAssignmentFilters()">AFA</label>
+                    <label class="filter-check"><input type="checkbox" data-wo-filter="workCenter" value="PKG" onchange="applyAssignmentFilters()">PKG</label>
+                  </div></div>
+                  <div class="filter-fieldset"><div class="filter-label">Target Date</div><input class="filter-input" data-wo-filter="targetDate" placeholder="Shift / date" oninput="applyAssignmentFilters()"></div>
+                </div>
+                <div class="filter-fieldset"><div class="filter-label">Planned Quantity</div><div class="filter-input-row"><input class="filter-input" data-wo-filter="plannedMin" type="number" placeholder="Min" oninput="applyAssignmentFilters()"><input class="filter-input" data-wo-filter="plannedMax" type="number" placeholder="Max" oninput="applyAssignmentFilters()"></div></div>
+                <div class="filter-panel-actions"><button class="filter-clear" type="button" onclick="clearAssignmentFilters('wo')">Clear</button><button class="filter-apply" type="button" onclick="toggleAssignmentFilter('wo', false, 'v2WoFilterPanel')">Apply</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="assignment-list" data-wo-list></div>
       </div>
     </div>
   </div>
@@ -731,10 +950,6 @@
         </div>
 
         <div id="cp-dynamicArea" class="flex flex-col gap-3"></div>
-
-        <div id="cp-scheduleNote" class="flex items-center justify-between text-[11px] pt-0 mt-auto border-t" style="border-color:var(--border);color:var(--text-muted);">
-          <span class="cp-schedule-text">⏱ Next scheduled break: 12:00 PM (10 min) <span class="cp-schedule-help" data-tip="This PWO will auto-pause when the scheduled break starts.">i</span></span>
-        </div>
       </div>
 
       <!-- RIGHT: ACTIVITY / STATE LOG -->
@@ -767,10 +982,6 @@
   .cp-modal-title{font-family:Roboto,var(--ix-font);font-size:20px;font-weight:700;line-height:1.2;color:var(--text);}
   .cp-modal-close{width:32px;height:32px;border:0;border-radius:999px;background:transparent;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;cursor:pointer;padding:0;}
   .cp-modal-close:hover{background:var(--blue-bg);color:var(--accent);}
-  .cp-schedule-text{display:flex;align-items:center;gap:4px;min-width:0;}
-  .cp-schedule-help{position:relative;width:14px;height:14px;border-radius:50%;border:1px solid var(--border-strong);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--text-muted);cursor:help;flex-shrink:0;}
-  .cp-schedule-help:after{content:attr(data-tip);position:absolute;left:0;bottom:20px;width:210px;padding:8px 10px;border-radius:8px;background:#111827;color:#fff;font-size:11px;font-weight:500;line-height:1.35;box-shadow:0 10px 24px rgba(0,0,0,.24);opacity:0;pointer-events:none;transform:translateY(4px);transition:.12s;z-index:30;}
-  .cp-schedule-help:hover:after{opacity:1;transform:translateY(0);}
   .cp-debug-tools{position:absolute;right:0;bottom:-44px;display:flex;flex-direction:row;gap:8px;}
   .cp-debug-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);background:#fff;color:var(--text-muted);box-shadow:0 8px 18px rgba(10,16,32,.12);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;line-height:1;cursor:pointer;}
   .cp-debug-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.45);background:var(--blue-bg);}
@@ -779,7 +990,6 @@
   .cp-inline-log-btn:hover{background:var(--blue-bg);border-color:var(--accent);}
   .cp-panel-body{position:relative;display:block;}
   .cp-main-pane{border-right:0;padding:16px 24px 34px;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;}
-  #cp-scheduleNote{position:absolute;left:24px;right:24px;bottom:16px;}
   #cp-dynamicArea{flex:1 1 auto;min-height:0;overflow-y:auto;}
   #cp-statusHero,#cp-progressWrap{flex-shrink:0;}
   .cp-activity-pane{position:absolute;left:calc(100% + 14px);top:0;width:320px;height:100%;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 18px 42px rgba(10,16,32,.18);opacity:1;transform:translateX(0);transition:opacity .15s ease,transform .15s ease;}
@@ -1393,12 +1603,10 @@ function cpSetEndOrderLayout(open){
   const title = document.getElementById('cp-modalTitle');
   const statusHero = document.getElementById('cp-statusHero');
   const progressWrap = document.getElementById('cp-progressWrap');
-  const scheduleNote = document.getElementById('cp-scheduleNote');
   const debugToggle = document.getElementById('cpEndDebugToggle');
   if(title) title.textContent = open ? 'End PWO' : 'PWO Control Panel';
   if(statusHero) statusHero.style.display = open ? 'none' : '';
   if(progressWrap) progressWrap.style.display = (open || ['CHG_RAMPDOWN','CHG_TOOLING','CHG_READY','CHG_SAME'].includes(cpPhase)) ? 'none' : '';
-  if(scheduleNote) scheduleNote.style.display = '';
   if(debugToggle){
     debugToggle.style.display = open ? 'flex' : 'none';
     debugToggle.title = `Debug: ${cpEndHasProducedPieces ? 'Produced pieces' : 'No produced pieces'}`;
@@ -2079,8 +2287,8 @@ function renderPwoAuthReview(){
   badgeReviewResourceIndex = Math.max(0, Math.min(badgeReviewResourceIndex, selectedResources.length - 1));
   const activeResource = selectedResources[badgeReviewResourceIndex];
   const estimatedStart = activeResource.currentWo ? activeResource.eta : 'Now + 30 min';
-  const currentPwo = activeResource.currentWo ? assignmentPwo(activeResource.currentWo) : 'None';
-  const nextPwo = activeResource.nextAssignedWo ? assignmentPwo(activeResource.nextAssignedWo) : 'None';
+  const currentPwo = activeResource.currentWo ? pwoLineHtml(activeResource.currentWo) : 'None';
+  const nextPwo = (activeResource.nextAssignedWo ? pwoLineHtml(activeResource.nextAssignedWo) : 'None') + extraBadge(activeResource);
   review.innerHTML = `
     <div class="badge-review-card">
       <div class="badge-review-head">
@@ -2262,7 +2470,8 @@ const WORK_ORDERS = [
   { wo:'WO-4503305', sku:'80-BLD-22010', desc:'Blister Pack Assembly', batch:'2210', material:'PETG Blister Sheet', workCenter:'PKG', status:'Released', planned:45000, targetDate:'05/26/2026 - Shift A', custom:false },
   { wo:'WO-4503312', sku:'80-BLD-22011', desc:'Blister Pack - Sterile', batch:'2211', material:'PETG Blister Sheet', workCenter:'PKG', status:'Created', planned:38000, targetDate:'05/26/2026 - Shift C', custom:false },
   { wo:'MWO-1002', sku:'ENG-STUDY-01', desc:'Engineering Study - tip retention', batch:'-', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Created', planned:500, targetDate:'05/27/2026 - Shift A', custom:true },
-  { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Released', planned:60000, targetDate:'05/27/2026 - Shift B', custom:false }
+  { wo:'WO-4503320', sku:'80-APX-50000', desc:'20GA Catheter, lot retest', batch:'1855', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Released', planned:60000, targetDate:'05/27/2026 - Shift B', custom:false },
+  { wo:'WO-4503325', sku:'80-APX-60125', desc:'24GA Catheter (same SKU as AFA12)', batch:'1858', material:'PVC Catheter Shaft', workCenter:'AFA', status:'Created', planned:110000, targetDate:'05/27/2026 - Shift C', custom:false }
 ];
 
 const RESOURCES = [
@@ -2689,11 +2898,15 @@ window.addEventListener('smart-factory:toggle-flag-categories', toggleFlagCatego
 
 function switchMainTab(tab, options = {}){
   const isAssignment = tab === 'assignment';
-  document.getElementById('productionOverviewView').classList.toggle('active', !isAssignment);
+  const isAssignmentV2 = tab === 'assignmentv2';
+  const isProduction = !isAssignment && !isAssignmentV2;
+  document.getElementById('productionOverviewView').classList.toggle('active', isProduction);
   document.getElementById('workOrderAssignmentView').classList.toggle('active', isAssignment);
-  document.getElementById('sideProductionOverview')?.classList.toggle('active', !isAssignment);
+  document.getElementById('assignmentV2View')?.classList.toggle('active', isAssignmentV2);
+  document.getElementById('sideProductionOverview')?.classList.toggle('active', isProduction);
   document.getElementById('sideWorkOrderAssignment')?.classList.toggle('active', isAssignment);
-  document.getElementById('tabProductionOverview')?.classList.toggle('active', !isAssignment);
+  document.getElementById('sideAssignmentV2')?.classList.toggle('active', isAssignmentV2);
+  document.getElementById('tabProductionOverview')?.classList.toggle('active', isProduction);
   document.getElementById('tabWorkOrderAssignment')?.classList.toggle('active', isAssignment);
   const title = document.getElementById('pageTitle');
   const breadcrumb = document.getElementById('pageBreadcrumb');
@@ -2702,15 +2915,17 @@ function switchMainTab(tab, options = {}){
     breadcrumb.querySelector('span').innerHTML = 'Sandy USA &gt; Unit 1 &gt; <span class="breadcrumb-line-list" tabindex="0" data-full="AFA10, AFA11, AFA12, AFA13, AFA14">AFA10, AFA11 +3</span>';
   }
   if(!options.skipHistory){
-    const targetHash = isAssignment ? '#pwo-assignment' : '#overview';
+    const targetHash = isAssignment ? '#pwo-assignment' : isAssignmentV2 ? '#pwo-assignment-v2' : '#overview';
     if(window.location.hash !== targetHash) window.location.hash = targetHash;
   }
   document.getElementById('appSideNav')?.classList.add('is-collapsed');
-  if(isAssignment) renderAssignmentAll();
+  if(isAssignment || isAssignmentV2) renderAssignmentAll();
 }
 
 function routeFromLocation(){
-  const route = window.location.hash === '#pwo-assignment' ? 'assignment' : 'production';
+  const route = window.location.hash === '#pwo-assignment' ? 'assignment'
+    : window.location.hash === '#pwo-assignment-v2' ? 'assignmentv2'
+    : 'production';
   switchMainTab(route, { skipHistory:true });
 }
 
@@ -2724,6 +2939,17 @@ function assignmentResStatePill(state){
   };
   const [cls,label] = map[state] || map.stopped;
   return `<span class="pill ${cls}">${label}</span>`;
+}
+
+function assignmentResStateLabel(state){
+  const map = {
+    production: 'Production',
+    starved: 'Starved',
+    blocked: 'Blocked',
+    down: 'Down',
+    stopped: 'Stopped'
+  };
+  return map[state] || 'Stopped';
 }
 
 function assignmentLineFamily(value){
@@ -2766,6 +2992,72 @@ function assignmentPwo(id){
   return String(id).replace(/^WO-/, 'PWO-').replace(/^MWO-/, 'PWO-');
 }
 
+function woMeta(id){
+  if(!id) return '';
+  const wo = WORK_ORDERS.find(w => w.wo === id);
+  return wo ? `${wo.sku} · Batch ${wo.batch}` : '';
+}
+
+function woInfo(id){
+  if(!id) return null;
+  const wo = WORK_ORDERS.find(w => w.wo === id);
+  const unit = UNITS.find(u => u.wo === id);
+  return {
+    sku: wo ? wo.sku : (unit ? unit.sku : ''),
+    batch: wo ? wo.batch : '',
+    material: wo ? wo.material : '',
+    pwo: assignmentPwo(id)
+  };
+}
+
+// Consistent order everywhere this info is shown: SKU, Batch, PWO
+function pwoLineHtml(id){
+  if(!id) return '';
+  const info = woInfo(id);
+  if(!info) return '';
+  const parts = [];
+  if(info.sku) parts.push(info.sku);
+  if(info.batch) parts.push(`Batch ${info.batch}`);
+  parts.push(`<b>${info.pwo}</b>`);
+  return parts.join(' &middot; ');
+}
+
+function pwoLineText(id){
+  if(!id) return '';
+  const info = woInfo(id);
+  if(!info) return '';
+  const parts = [];
+  if(info.sku) parts.push(info.sku);
+  if(info.batch) parts.push(`Batch ${info.batch}`);
+  parts.push(info.pwo);
+  return parts.join(' · ');
+}
+
+function currentSkuFor(res){
+  const unit = UNITS.find(u => u.name === res.name);
+  if(unit && unit.sku) return unit.sku;
+  const wo = WORK_ORDERS.find(w => w.wo === res.currentWo);
+  return wo ? wo.sku : '';
+}
+
+function extraBadge(res){
+  if(!res.extraAssignedWos || !res.extraAssignedWos.length) return '';
+  const tip = res.extraAssignedWos.map(id => pwoLineText(id)).join(' | ');
+  return ` <span class="pwo-extra-badge" data-tip="${tip}">+${res.extraAssignedWos.length}</span>`;
+}
+
+function skuMatchChip(w){
+  if(!selectedResources.length) return '';
+  const skus = selectedResources.map(currentSkuFor).filter(Boolean);
+  if(!skus.length) return '';
+  const resourcesAgree = skus.every(sku => sku === skus[0]);
+  if(!resourcesAgree) return '';
+  const allSame = skus[0] === w.sku;
+  return allSame
+    ? `<span class="pill pill-blue">Same SKU</span>`
+    : `<span class="pill pill-amber">Different SKU</span>`;
+}
+
 function filterSelector(kind, name){
   return `[data-${kind}-filter="${name}"]`;
 }
@@ -2775,7 +3067,7 @@ function getFilterValues(kind, name){
 }
 
 function getFilterText(kind, name){
-  const input = document.querySelector(filterSelector(kind, name));
+  const input = [...document.querySelectorAll(filterSelector(kind, name))].find(el => el.value.trim() !== '');
   return input ? input.value.trim().toLowerCase() : '';
 }
 
@@ -2873,12 +3165,16 @@ function woMatchesAdvancedFilters(w){
   const workCenters = getFilterValues('wo', 'workCenter');
   const pwos = comboState.wo.pwo;
   const skus = comboState.wo.sku;
+  const pwoText = getFilterText('wo', 'pwoText');
+  const skuText = getFilterText('wo', 'skuText');
   const targetDate = getFilterText('wo', 'targetDate');
   const plannedMin = getFilterText('wo', 'plannedMin');
   const plannedMax = getFilterText('wo', 'plannedMax');
   const results = [
     filterResult(pwos.length, pwos.includes(assignmentPwo(w.wo))),
     filterResult(skus.length, skus.includes(w.sku)),
+    filterResult(Boolean(pwoText), assignmentPwo(w.wo).toLowerCase().includes(pwoText)),
+    filterResult(Boolean(skuText), w.sku.toLowerCase().includes(skuText)),
     filterResult(statuses.length, statuses.includes(w.status)),
     filterResult(types.length, types.includes(w.custom ? 'custom' : 'standard')),
     filterResult(workCenters.length, workCenters.includes(w.workCenter)),
@@ -2894,9 +3190,11 @@ function resourceMatchesAdvancedFilters(r){
   const quick = getFilterValues('res', 'quick');
   const workCenters = getFilterValues('res', 'workCenter');
   const resources = comboState.res.resource;
+  const resourceText = getFilterText('res', 'resourceText');
   const location = getFilterText('res', 'location');
   const results = [
     filterResult(resources.length, resources.includes(r.name)),
+    filterResult(Boolean(resourceText), r.name.toLowerCase().includes(resourceText)),
     filterResult(states.length, states.includes(r.state)),
     filterResult(quick.includes('emptyCurrent'), !r.currentWo),
     filterResult(quick.includes('emptyNext'), !r.nextAssignedWo),
@@ -2906,8 +3204,8 @@ function resourceMatchesAdvancedFilters(r){
   return matchesFilterLogic(results, assignmentFilters.res.logic);
 }
 
-function toggleAssignmentFilter(kind, forceOpen){
-  const panel = document.getElementById(`${kind}FilterPanel`);
+function toggleAssignmentFilter(kind, forceOpen, panelId){
+  const panel = document.getElementById(panelId || `${kind}FilterPanel`);
   if(!panel) return;
   const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
   document.querySelectorAll('.assignment-filter-panel').forEach(other => {
@@ -2920,6 +3218,8 @@ function setAssignmentFilterLogic(kind, logic){
   assignmentFilters[kind].logic = logic;
   document.getElementById(`${kind}LogicAnd`)?.classList.toggle('active', logic === 'and');
   document.getElementById(`${kind}LogicOr`)?.classList.toggle('active', logic === 'or');
+  document.querySelectorAll(`[data-filter-logic="${kind}-and"]`).forEach(btn => btn.classList.toggle('active', logic === 'and'));
+  document.querySelectorAll(`[data-filter-logic="${kind}-or"]`).forEach(btn => btn.classList.toggle('active', logic === 'or'));
   applyAssignmentFilters();
 }
 
@@ -2936,6 +3236,8 @@ function clearAssignmentFilters(kind){
 function updateAssignmentFilterButtons(){
   document.getElementById('woFilterButton')?.classList.toggle('active', hasAdvancedFilters('wo'));
   document.getElementById('resFilterButton')?.classList.toggle('active', hasAdvancedFilters('res'));
+  document.querySelectorAll('[data-filter-button="wo"]').forEach(btn => btn.classList.toggle('active', hasAdvancedFilters('wo')));
+  document.querySelectorAll('[data-filter-button="res"]').forEach(btn => btn.classList.toggle('active', hasAdvancedFilters('res')));
 }
 
 function applyAssignmentFilters(){
@@ -2948,6 +3250,12 @@ function assignmentValidation(){
   const invalidResources = selectedResources.filter(res => !resEligibleForSelectedWo(res));
   const selectedDownOrBlocked = selectedResources.filter(res => ['down','blocked'].includes(res.state));
   const selectedInUse = selectedResources.filter(res => Boolean(res.currentWo));
+  const skuMismatches = selectedResources.filter(res => {
+    const currentSku = currentSkuFor(res);
+    return currentSku && selectedWo && currentSku !== selectedWo.sku;
+  });
+  const skuKnown = selectedResources.some(res => currentSkuFor(res) && selectedWo);
+  const skuAllMatch = skuKnown && skuMismatches.length === 0;
   const blockers = [
     {
       label:'Work Center match',
@@ -2984,6 +3292,13 @@ function assignmentValidation(){
       text:selectedResources.length > 1
         ? `${selectedResources.length} resources selected. The system will create one assignment per resource.`
         : 'Single resource assignment.'
+    },
+    {
+      label:'SKU match',
+      ok:skuMismatches.length === 0,
+      text:skuMismatches.length
+        ? `${skuMismatches.map(r => r.name).join(', ')} ${skuMismatches.length > 1 ? 'are' : 'is'} running a different SKU. Tooling changes might be needed.`
+        : 'Selected resources match the target SKU.'
     }
   ];
   const passes = [
@@ -3001,6 +3316,11 @@ function assignmentValidation(){
       label:'Planned quantity available',
       ok:Boolean(selectedWo && selectedWo.planned),
       text:selectedWo?.planned ? `${selectedWo.planned.toLocaleString('en-US')} planned quantity available.` : 'Planned quantity is missing.'
+    },
+    {
+      label:'SKU match',
+      ok:skuAllMatch,
+      text:'Same SKU as current production — Paper Changeover.'
     }
   ];
   return {
@@ -3013,9 +3333,9 @@ function assignmentValidation(){
 }
 
 function renderWOs(){
-  const list = document.getElementById('woList');
+  const lists = document.querySelectorAll('[data-wo-list]');
   const scopeLabel = document.getElementById('woScopeLabel');
-  if(!list) return;
+  if(!lists.length) return;
   if(scopeLabel){
     scopeLabel.textContent = selectedResources.length ? `Showing PWOs compatible with selected resources.` : 'Select a PWO to filter eligible resources.';
   }
@@ -3028,11 +3348,11 @@ function renderWOs(){
   });
 
   if(filtered.length===0){
-    list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Production Work Orders match this filter.</div>`;
+    lists.forEach(list => list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Production Work Orders match this filter.</div>`);
     return;
   }
 
-  list.innerHTML = filtered.map(w=>{
+  const html = filtered.map(w=>{
     const isSel = selectedWo && selectedWo.wo === w.wo;
     const eligible = woEligibleForSelectedRes(w);
     const suggested = selectedResources.length === 1 && eligibleWosForResource(selectedResources[0]).length === 1 && eligible;
@@ -3041,7 +3361,7 @@ function renderWOs(){
     else if(suggested) cls += ' suggested';
     else if(selectedResources.length && eligible) cls += ' eligible';
     return `
-    <div class="${cls}" onclick="selectWo('${w.wo}')">
+    <div class="${cls}" onclick="handleCardClick(event, () => selectWo('${w.wo}'))" draggable="false" onpointerdown="startPointerDrag(event,'wo','${w.wo}')">
       <div class="flex items-start justify-between gap-2">
         <div>
           <div class="flex items-center gap-2">
@@ -3051,7 +3371,7 @@ function renderWOs(){
           </div>
           <div class="text-[11.5px] mt-0.5" style="color:var(--text-soft);">${w.desc}</div>
         </div>
-        <span class="pill pill-blue">${w.status}</span>
+        ${skuMatchChip(w)}
       </div>
       <div class="flex items-center gap-3 mt-2 text-[11px]" style="color:var(--text-muted);">
         <span>SKU <b style="color:var(--text-soft);">${w.sku}</b></span>
@@ -3062,13 +3382,16 @@ function renderWOs(){
       <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Target Date: <b style="color:var(--text-soft);">${w.targetDate}</b></div>
     </div>`;
   }).join('');
+  lists.forEach(list => list.innerHTML = html);
 }
 
 function renderResources(){
-  const list = document.getElementById('resList');
+  const lists = document.querySelectorAll('[data-resource-list]');
   const scopeLabel = document.getElementById('resScopeLabel');
-  if(!list || !scopeLabel) return;
-  scopeLabel.textContent = selectedWo ? `Showing resources compatible with ${assignmentPwo(selectedWo.wo)}.` : 'All resources';
+  if(!lists.length) return;
+  if(scopeLabel){
+    scopeLabel.textContent = selectedWo ? `Showing resources compatible with ${assignmentPwo(selectedWo.wo)}.` : 'All resources';
+  }
 
   const q = resSearch.toLowerCase();
   const filtered = RESOURCES.filter(r=>{
@@ -3079,18 +3402,18 @@ function renderResources(){
   });
 
   if(filtered.length===0){
-    list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Resources match this filter.</div>`;
+    lists.forEach(list => list.innerHTML = `<div class="text-[12px] text-center py-8" style="color:var(--text-muted);">No Resources match this filter.</div>`);
     return;
   }
 
-  list.innerHTML = filtered.map(r=>{
+  const html = filtered.map(r=>{
     const isSel = selectedResources.some(x => x.id === r.id);
     const eligible = resEligibleForSelectedWo(r);
     let cls = 'res-card';
     if(isSel) cls += ' selected';
     else if(selectedWo && eligible) cls += ' eligible';
     return `
-    <div class="${cls}" onclick="selectRes('${r.id}')" style="${isSel?'border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;':''}">
+    <div class="${cls}" onclick="handleCardClick(event, () => selectRes('${r.id}'))" draggable="false" onpointerdown="startPointerDrag(event,'res','${r.id}')" style="${isSel?'border-color:var(--accent);background:var(--blue-bg);box-shadow:0 0 0 1px var(--accent) inset;':''}">
       <div class="flex items-start justify-between gap-2">
         <div>
           <div class="font-bold text-[13px]">${r.name}</div>
@@ -3099,12 +3422,14 @@ function renderResources(){
         </div>
         ${assignmentResStatePill(r.state)}
       </div>
-      ${r.currentWo ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Current PWO: <span class="isa-tag">${assignmentPwo(r.currentWo)}</span></div>` : '<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Current PWO: <span class="isa-tag">None</span></div>'}
-      <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Next Assigned PWO: <span class="isa-tag">${r.nextAssignedWo ? assignmentPwo(r.nextAssignedWo) : 'None'}</span></div>
+      ${r.currentWo ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Current PWO: <span class="isa-tag">${pwoLineHtml(r.currentWo)}</span></div>` : '<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Current PWO: <span class="isa-tag">None</span></div>'}
+      ${woInfo(r.currentWo)?.material ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Material: <b style="color:var(--text-soft);">${woInfo(r.currentWo).material}</b></div>` : ''}
+      <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Next Assigned PWO: <span class="isa-tag">${r.nextAssignedWo ? pwoLineHtml(r.nextAssignedWo) : 'None'}</span>${extraBadge(r)}</div>
       ${r.assignmentStatus ? `<div class="mt-2 text-[11px]" style="color:var(--text-muted);">Assignment: <span class="isa-tag">${r.assignmentStatus}</span></div>` : ''}
       <div class="mt-2 text-[11px]" style="color:var(--text-muted);">Location: <b style="color:var(--text-soft);">${r.location}</b></div>
     </div>`;
   }).join('');
+  lists.forEach(list => list.innerHTML = html);
 }
 
 function selectWo(woId){
@@ -3340,7 +3665,8 @@ function submitCreatePwoModal(){
 }
 
 function renderReviewPanel(){
-  const panel = document.getElementById('reviewPanel');
+  const panels = document.querySelectorAll('.review-body');
+  const setPanels = html => panels.forEach(p => p.innerHTML = html);
   const summary = document.getElementById('assignSummary');
   const assignBtn = document.getElementById('assignBtn');
 
@@ -3376,10 +3702,10 @@ function renderReviewPanel(){
     }
   }
 
-  if(!panel) return;
+  if(!panels.length) return;
 
   if(lastAssigned){
-    panel.innerHTML = `
+    setPanels(`
       <div class="review-content">
         <div class="success-panel">
           <div class="success-title">${lastAssigned.count} assignment${lastAssigned.count > 1 ? 's' : ''} created for ${assignmentPwo(lastAssigned.wo)}.</div>
@@ -3389,7 +3715,7 @@ function renderReviewPanel(){
       <div class="review-actions">
         <button class="review-clear-btn" onclick="assignAnotherWorkOrder()">Assign Another PWO</button>
         <button class="review-primary-btn" onclick="goToControlPanelFromSuccess()">Go to Control Panel</button>
-      </div>`;
+      </div>`);
     return;
   }
 
@@ -3399,7 +3725,7 @@ function renderReviewPanel(){
       : selectedResources.length
         ? `Choose a compatible PWO for the selected Resource${selectedResources.length > 1 ? 's' : ''}.`
         : 'Select a PWO and a Resource to review the assignment.';
-    panel.innerHTML = `<div class="review-content"><div class="review-empty">${hint}</div></div>`;
+    setPanels(`<div class="review-content"><div class="review-empty">${hint}</div></div>`);
     return;
   }
 
@@ -3409,8 +3735,14 @@ function renderReviewPanel(){
       <span class="review-resource-name">${res.name}</span>
       <span class="review-resource-muted">${res.workCenter}</span>
       <span>${assignmentResStatePill(res.state)}</span>
-      <span class="review-resource-strong">${res.currentWo ? assignmentPwo(res.currentWo) : 'No current PWO'}</span>
-      <span class="review-resource-strong">${res.nextAssignedWo ? assignmentPwo(res.nextAssignedWo) : 'No next PWO'}</span>
+      <span class="review-resource-wo">
+        ${res.currentWo && woMeta(res.currentWo) ? `<span class="review-resource-wo-meta">${woMeta(res.currentWo)}</span>` : ''}
+        <span class="review-resource-strong">${res.currentWo ? assignmentPwo(res.currentWo) : 'No current PWO'}</span>
+      </span>
+      <span class="review-resource-wo">
+        ${res.nextAssignedWo && woMeta(res.nextAssignedWo) ? `<span class="review-resource-wo-meta">${woMeta(res.nextAssignedWo)}</span>` : ''}
+        <span class="review-resource-strong">${res.nextAssignedWo ? assignmentPwo(res.nextAssignedWo) : 'No next PWO'}${extraBadge(res)}</span>
+      </span>
     </div>
   `).join('');
   const renderValidationGroup = (label, cls, rows, emptyText) => `
@@ -3436,7 +3768,7 @@ function renderReviewPanel(){
     warningRows.length ? renderValidationGroup('Warning', 'warning', warningRows, '') : '',
     blockerRows.length ? renderValidationGroup('Blocker', 'blocker', blockerRows, '') : ''
   ].join('');
-  panel.innerHTML = `
+  setPanels(`
     <div class="review-content">
       <div class="review-section">
         <div class="review-combined-head">
@@ -3449,7 +3781,7 @@ function renderReviewPanel(){
         <div class="review-grid compact">
           <div class="review-row"><span>Material</span><b>${selectedWo.material}</b></div>
           <div class="review-row"><span>Planned quantity</span><b>${selectedWo.planned.toLocaleString('en-US')}</b></div>
-          <div class="review-row"><span>Target Date</span><b>${selectedWo.targetDate}</b></div>
+          <div class="review-row"><span>Scheduled Changeover Date</span><b>${selectedWo.targetDate}</b></div>
         </div>
         <div class="review-section-title" style="margin-top:9px;">Resource Assignment Summary</div>
         <div class="review-grid" style="gap:5px;">
@@ -3467,13 +3799,308 @@ function renderReviewPanel(){
       ${validation.valid
         ? `<button class="review-primary-btn" onclick="requestAssignmentBadgeAuth()">ASSIGN</button>`
         : `<button class="review-primary-btn" disabled>ASSIGN</button>`}
-    </div>`;
+    </div>`);
 }
 function renderAssignmentAll(){
   updateAssignmentFilterButtons();
   renderWOs();
   renderResources();
   renderReviewPanel();
+  renderV2Slots();
+}
+
+/* ============ Assignment v2 (drag & drop) ============ */
+let v2ResSlotOpen = false;
+let activeDragPreview = null;
+let activeDragSource = null;
+let transparentDragImage = null;
+let dragPreviewFrame = null;
+let dragPreviewPoint = null;
+let dragPreviewOffset = { x:0, y:0 };
+let pointerDrag = null;
+let suppressNextCardClick = false;
+
+function positionDragPreview(){
+  dragPreviewFrame = null;
+  if(!activeDragPreview || !dragPreviewPoint) return;
+  const x = dragPreviewPoint.x - dragPreviewOffset.x;
+  const y = dragPreviewPoint.y - dragPreviewOffset.y;
+  activeDragPreview.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(1deg)`;
+}
+
+function setDragPreviewPoint(x, y){
+  if(!activeDragPreview || !x || !y) return;
+  dragPreviewPoint = { x, y };
+  positionDragPreview();
+}
+
+function allowDocumentDrag(e){
+  e.preventDefault();
+  if(e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+  if(activeDragPreview) setDragPreviewPoint(e.clientX, e.clientY);
+}
+
+function handleDragStart(e, kind, id){
+  e.dataTransfer.setData('text/plain', id);
+  e.dataTransfer.setData('application/x-kind', kind);
+  e.dataTransfer.effectAllowed = 'copy';
+  const preview = e.currentTarget.cloneNode(true);
+  preview.classList.add('drag-card-preview');
+  const previewWidth = Math.min(e.currentTarget.offsetWidth, 360);
+  const previewHeight = e.currentTarget.offsetHeight;
+  preview.style.width = `${previewWidth}px`;
+  preview.style.borderColor = 'var(--border)';
+  preview.style.background = '#fff';
+  preview.style.boxShadow = '0 16px 38px rgba(15,23,42,.24)';
+  dragPreviewOffset = { x: previewWidth / 2, y: previewHeight / 2 };
+  preview.style.transform = `translate3d(${e.clientX - dragPreviewOffset.x}px, ${e.clientY - dragPreviewOffset.y}px, 0) rotate(1deg)`;
+  document.body.appendChild(preview);
+  activeDragPreview = preview;
+  activeDragSource = e.currentTarget;
+  activeDragSource.classList.add('drag-source');
+  setDragPreviewPoint(e.clientX, e.clientY);
+  if(!transparentDragImage){
+    transparentDragImage = new Image();
+    transparentDragImage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  }
+  e.dataTransfer.setDragImage(transparentDragImage, 0, 0);
+  document.addEventListener('dragover', allowDocumentDrag);
+  document.addEventListener('drop', handleDragEnd);
+}
+
+function handleDragMove(e){
+  if(!activeDragPreview || !e.clientX || !e.clientY) return;
+  setDragPreviewPoint(e.clientX, e.clientY);
+}
+
+function handleDragEnd(){
+  document.removeEventListener('dragover', allowDocumentDrag);
+  document.removeEventListener('drop', handleDragEnd);
+  if(dragPreviewFrame) cancelAnimationFrame(dragPreviewFrame);
+  dragPreviewFrame = null;
+  dragPreviewPoint = null;
+  activeDragPreview?.remove();
+  activeDragPreview = null;
+  activeDragSource?.classList.remove('drag-source');
+  activeDragSource = null;
+  document.body.classList.remove('dragging-card');
+  document.querySelectorAll('.v2-dropslot.dragover').forEach(slot => slot.classList.remove('dragover'));
+}
+
+function handleCardClick(e, action){
+  if(suppressNextCardClick){
+    e.preventDefault();
+    e.stopPropagation();
+    suppressNextCardClick = false;
+    return;
+  }
+  action();
+}
+
+function startPointerDrag(e, kind, id){
+  if(e.button !== 0) return;
+  e.preventDefault();
+  pointerDrag = {
+    kind,
+    id,
+    source:e.currentTarget,
+    startX:e.clientX,
+    startY:e.clientY,
+    dragging:false
+  };
+  document.body.classList.add('dragging-card');
+  document.addEventListener('pointermove', movePointerDrag);
+  document.addEventListener('pointerup', endPointerDrag, { once:true });
+  document.addEventListener('pointercancel', cancelPointerDrag, { once:true });
+}
+
+function beginPointerDrag(e){
+  if(!pointerDrag || pointerDrag.dragging) return;
+  pointerDrag.dragging = true;
+  activeDragSource = pointerDrag.source;
+  activeDragSource.classList.add('drag-source');
+  const preview = activeDragSource.cloneNode(true);
+  const previewWidth = Math.min(activeDragSource.offsetWidth, 360);
+  const previewHeight = activeDragSource.offsetHeight;
+  dragPreviewOffset = { x: previewWidth / 2, y: previewHeight / 2 };
+  preview.classList.add('drag-card-preview');
+  preview.style.width = `${previewWidth}px`;
+  preview.style.borderColor = 'var(--border)';
+  preview.style.background = '#fff';
+  preview.style.boxShadow = '0 16px 38px rgba(15,23,42,.24)';
+  preview.style.transform = `translate3d(${e.clientX - dragPreviewOffset.x}px, ${e.clientY - dragPreviewOffset.y}px, 0) rotate(1deg)`;
+  document.body.appendChild(preview);
+  activeDragPreview = preview;
+}
+
+function movePointerDrag(e){
+  if(!pointerDrag) return;
+  const distance = Math.hypot(e.clientX - pointerDrag.startX, e.clientY - pointerDrag.startY);
+  if(!pointerDrag.dragging && distance < 4) return;
+  e.preventDefault();
+  beginPointerDrag(e);
+  setDragPreviewPoint(e.clientX, e.clientY);
+  const slot = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('.v2-dropslot');
+  document.querySelectorAll('.v2-dropslot.dragover').forEach(item => {
+    if(item !== slot) item.classList.remove('dragover');
+  });
+  slot?.classList.add('dragover');
+}
+
+function endPointerDrag(e){
+  document.removeEventListener('pointermove', movePointerDrag);
+  document.removeEventListener('pointercancel', cancelPointerDrag);
+  if(!pointerDrag) return;
+  if(pointerDrag.dragging){
+    suppressNextCardClick = true;
+    const slot = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('.v2-dropslot');
+    if(slot?.id === 'v2ResSlot' && pointerDrag.kind === 'res') selectRes(pointerDrag.id);
+    if(slot?.id === 'v2WoSlot' && pointerDrag.kind === 'wo') selectWo(pointerDrag.id);
+  }
+  pointerDrag = null;
+  handleDragEnd();
+}
+
+function cancelPointerDrag(){
+  document.removeEventListener('pointermove', movePointerDrag);
+  pointerDrag = null;
+  handleDragEnd();
+}
+
+function handleDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  e.currentTarget.classList.add('dragover');
+}
+
+function handleDragLeave(e){
+  e.currentTarget.classList.remove('dragover');
+}
+
+function handleDrop(e, expectedKind){
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragover');
+  handleDragEnd();
+  const kind = e.dataTransfer.getData('application/x-kind');
+  const id = e.dataTransfer.getData('text/plain');
+  if(!id || kind !== expectedKind) return;
+  if(kind === 'res') selectRes(id);
+  else if(kind === 'wo') selectWo(id);
+}
+
+function renderV2Slots(){
+  const resSlot = document.getElementById('v2ResSlot');
+  const woSlot = document.getElementById('v2WoSlot');
+  if(resSlot){
+    if(!selectedResources.length){
+      resSlot.classList.remove('filled');
+      resSlot.classList.remove('is-clickable');
+      resSlot.onclick = null;
+      resSlot.innerHTML = `
+        <span class="material-symbols-outlined v2-dropslot-icon">move_selection_up</span>
+        <span class="v2-dropslot-text">Drag a Resource here</span>`;
+    }else{
+      resSlot.classList.add('filled');
+      resSlot.classList.add('is-clickable');
+      resSlot.onclick = openV2ResourceDetailsModal;
+      const last = selectedResources[selectedResources.length - 1];
+      const currentInfo = woInfo(last.currentWo);
+      const currentSku = currentInfo?.sku || currentSkuFor(last) || 'No SKU';
+      resSlot.innerHTML = `
+        <div class="v2-slot-filled resource">
+          <div class="v2-slot-main">
+            <div class="v2-slot-header">
+              <div class="v2-slot-chip">
+                <span class="v2-slot-title-row">
+                  <span class="v2-slot-name">${last.name}</span>
+                  <span class="v2-slot-inline-meta">${last.workCenter}</span>
+                </span>
+                <span class="v2-slot-detail-row">Current <b>${last.currentWo ? `${currentSku} · ${assignmentPwo(last.currentWo)}` : 'No current PWO'}</b></span>
+              </div>
+            </div>
+            ${assignmentResStatePill(last.state)}
+            <button class="v2-slot-clear" type="button" onclick="event.stopPropagation();clearSelectedResources();" aria-label="Clear resources" title="Clear resources">×</button>
+          </div>
+          <div class="v2-slot-chip-row">
+            ${selectedResources.map(r => `<span class="v2-resource-chip">${r.id}</span>`).join('')}
+          </div>
+          <div class="v2-slot-add" onclick="event.stopPropagation()" title="Drop another Resource here">+</div>
+        </div>`;
+    }
+  }
+  if(woSlot){
+    if(!selectedWo){
+      woSlot.classList.remove('filled');
+      woSlot.classList.remove('is-clickable');
+      woSlot.innerHTML = `
+        <span class="material-symbols-outlined v2-dropslot-icon">move_selection_up</span>
+        <span class="v2-dropslot-text">Drag a PWO here</span>`;
+    }else{
+      woSlot.classList.add('filled');
+      woSlot.classList.remove('is-clickable');
+      woSlot.innerHTML = `
+        <div class="v2-slot-filled">
+          <div class="v2-slot-main">
+            <div class="v2-slot-header">
+              <div class="v2-slot-chip">
+                <span class="v2-slot-title-row">
+                  <span class="v2-slot-name">${assignmentPwo(selectedWo.wo)}</span>
+                  <span class="v2-slot-inline-meta">${selectedWo.workCenter}</span>
+                </span>
+                <span class="v2-slot-meta">${selectedWo.sku} &middot; Batch ${selectedWo.batch}</span>
+                <span class="v2-slot-detail-row">Target Date <b>${selectedWo.targetDate}</b></span>
+              </div>
+            </div>
+            <button class="v2-slot-clear" type="button" onclick="event.stopPropagation();selectWo('${selectedWo.wo}')" aria-label="Clear PWO" title="Clear PWO">×</button>
+          </div>
+        </div>`;
+    }
+  }
+}
+
+function resourceDetailCardHtml(res){
+  const current = woInfo(res.currentWo);
+  const next = woInfo(res.nextAssignedWo);
+  return `
+    <div class="v2-resource-detail-card">
+      <div class="v2-resource-detail-head">
+        <div>
+          <div class="v2-resource-detail-name">${res.name}</div>
+          <div class="v2-slot-meta">Resource ID ${res.id}</div>
+        </div>
+        ${assignmentResStatePill(res.state)}
+      </div>
+      <div class="v2-resource-detail-grid">
+        <div class="v2-resource-detail-row"><span>Work Center</span><b>${res.workCenter}</b></div>
+        <div class="v2-resource-detail-row"><span>Location</span><b>${res.location}</b></div>
+        <div class="v2-resource-detail-row"><span>Current SKU</span><b>${current?.sku || currentSkuFor(res) || 'No SKU'}</b></div>
+        <div class="v2-resource-detail-row"><span>Current PWO</span><b>${res.currentWo ? assignmentPwo(res.currentWo) : 'No current PWO'}</b></div>
+        <div class="v2-resource-detail-row"><span>Next Assigned PWO</span><b>${res.nextAssignedWo ? assignmentPwo(res.nextAssignedWo) : 'No next PWO'}</b></div>
+        <div class="v2-resource-detail-row"><span>Next SKU</span><b>${next?.sku || 'No SKU'}</b></div>
+        <div class="v2-resource-detail-row"><span>ETA</span><b>${res.eta || '-'}</b></div>
+      </div>
+    </div>`;
+}
+
+function openV2ResourceDetailsModal(){
+  if(!selectedResources.length) return;
+  const modal = document.getElementById('v2ResourceDetailsModal');
+  const list = document.getElementById('v2ResourceDetailsList');
+  const sub = document.getElementById('v2ResourceDetailsSub');
+  if(sub) sub.textContent = `${selectedResources.length} selected resource${selectedResources.length > 1 ? 's' : ''}`;
+  if(list) list.innerHTML = selectedResources.map(resourceDetailCardHtml).join('');
+  if(modal) modal.style.display = 'flex';
+}
+
+function closeV2ResourceDetailsModal(){
+  const modal = document.getElementById('v2ResourceDetailsModal');
+  if(modal) modal.style.display = 'none';
+}
+
+function clearSelectedResources(){
+  selectedResources = [];
+  v2ResSlotOpen = false;
+  renderAssignmentAll();
 }
 
 function showToast(msg){
@@ -3505,7 +4132,12 @@ function confirmAssignment(){
   selectedResources.forEach((res, index) => {
     res.assignmentStatus = index === 0 ? 'Assigned' : 'Assigned';
     res.assignedWo = assignedWo;
-    res.nextAssignedWo = assignedWo;
+    if(!res.nextAssignedWo){
+      res.nextAssignedWo = assignedWo;
+    }else if(res.nextAssignedWo !== assignedWo){
+      res.extraAssignedWos = res.extraAssignedWos || [];
+      if(!res.extraAssignedWos.includes(assignedWo)) res.extraAssignedWos.push(assignedWo);
+    }
   });
   lastAssigned = { wo: assignedWo, batch: selectedWo.batch, count: selectedResources.length };
   selectedWo = null;
@@ -3558,14 +4190,3 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-

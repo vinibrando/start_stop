@@ -65,10 +65,85 @@
   .app-content{min-width:0;min-height:0;height:100%;padding:24px;background:var(--main-card);overflow:visible;border-radius:0 12px 12px 0;}
 
   .plant-card{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;}
+  .view-panel{display:none;height:100%;min-height:0;}
+  .view-panel.active{display:block;}
 
   /* ---- Plant overview ---- */
   .plant-layout{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 25%;gap:16px;}
   .plant-scroll{min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:20px;}
+  .unit-detail-shell{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 25%;gap:16px;}
+  .unit-detail-main{min-height:0;background:transparent;border:0;border-radius:0;overflow:visible;display:flex;flex-direction:column;}
+  .unit-detail-scroll{min-height:0;overflow-y:auto;padding:0;display:flex;flex-direction:column;gap:14px;}
+  .unit-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:2px 0 0;}
+  .unit-detail-title{font-size:18px;font-weight:800;color:var(--text);line-height:1.15;}
+  .unit-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .unit-detail-sub{font-size:12px;color:var(--text-muted);margin-top:4px;}
+  .unit-detail-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .context-chip{display:inline-flex;align-items:center;height:22px;border-radius:999px;background:#F0F1F3;color:rgba(0,0,0,.72);font-size:10.5px;font-weight:700;padding:0 8px;white-space:nowrap;}
+  .context-chip.success{background:var(--green-bg);color:var(--green);}
+  .unit-filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .unit-filter{height:30px;border:1px solid var(--border-strong);border-radius:8px;background:#fff;color:var(--text-soft);font-size:12px;font-weight:700;padding:0 9px;}
+  .unit-report-btn{height:30px;border:1px solid rgba(37,99,235,.4);border-radius:8px;background:#fff;color:var(--accent);font-size:12px;font-weight:800;padding:0 11px;cursor:pointer;}
+  .unit-kpi-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+  .diagnosis-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .unit-kpi-card{position:relative;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 10px 9px 14px;overflow:hidden;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 0 6px rgba(0,31,155,.12),0 0 2px rgba(0,31,155,.14),0 0 2px -2px rgba(0,31,155,.20);}
+  .unit-kpi-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--border-strong);}
+  .unit-kpi-card.good:before{background:var(--green);}
+  .unit-kpi-card.warn:before{background:var(--amber);}
+  .unit-kpi-card.critical:before{background:var(--red);}
+  .unit-kpi-name{font-family:Roboto,var(--ix-font);font-size:11px;font-weight:400;line-height:10px;color:rgba(0,0,0,.87);margin-top:4px;}
+  .unit-kpi-value{font-size:20px;font-weight:400;line-height:1;color:#000;}
+  .unit-grid-two{display:grid;grid-template-columns:1fr;gap:12px;align-items:stretch;min-height:calc((100vh - 158px - 24px) * .65);}
+  .unit-panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;min-width:0;}
+  .production-panel{padding:24px;}
+  .unit-summary-panel{background:transparent;border:0;border-radius:0;padding:0;}
+  .unit-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+  .unit-panel-title{font-size:15px;font-weight:800;color:var(--text);}
+  .segmented{display:inline-flex;gap:8px;background:transparent;}
+  .segmented button{border:1px solid var(--accent);border-radius:999px;background:transparent;color:var(--accent);font-family:Roboto,var(--ix-font);font-size:13px;font-weight:400;line-height:18px;padding:4px 10px;cursor:pointer;}
+  .segmented button.active{background:var(--accent);color:#fff;}
+  .production-panel{display:flex;flex-direction:column;min-height:0;}
+  .shift-chart{height:100%;min-height:0;flex:1;display:flex;align-items:flex-end;gap:10px;border:0;border-radius:0;background:transparent;padding:56px 18px 26px 48px;position:relative;overflow:visible;}
+  .chart-y-axis{position:absolute;left:8px;top:56px;bottom:26px;width:34px;color:var(--text-muted);font-size:10px;cursor:ns-resize;user-select:none;padding-right:5px;z-index:3;}
+  .chart-y-axis span:not(.axis-move){position:absolute;right:5px;transform:translateY(-50%);line-height:1;}
+  .chart-y-axis:after{content:'';position:absolute;right:-7px;top:0;bottom:0;border-right:1px solid rgba(0,0,0,.12);}
+  .chart-y-axis .axis-move{position:absolute;right:-17px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--accent);opacity:0;transition:opacity .12s ease;pointer-events:none;}
+  .chart-y-axis:hover .axis-move{opacity:1;}
+  .chart-plot{position:absolute;left:48px;right:18px;top:56px;bottom:26px;}
+  .chart-gridline{position:absolute;left:0;right:0;border-top:1px solid rgba(0,0,0,.08);pointer-events:none;}
+  .target-line{position:absolute;left:0;right:0;border-top:2px solid var(--accent);pointer-events:none;z-index:2;}
+  .target-label{position:absolute;right:0;bottom:4px;font-size:10px;font-weight:800;color:var(--accent);background:#fff;padding:0 5px;text-transform:uppercase;line-height:1;}
+  .target-line-svg{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:2;}
+  .target-line-svg polyline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+  .target-cumulative-label{position:absolute;right:0;font-size:10px;font-weight:800;color:var(--accent);background:#fff;padding:0 5px;text-transform:uppercase;line-height:1;z-index:3;pointer-events:none;}
+  .chart-bars{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:flex-end;gap:10px;}
+  .hour-bar-wrap{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative;}
+  .hour-bar-wrap:hover:before{content:'';position:absolute;top:0;bottom:-22px;left:50%;border-left:2px solid rgba(107,114,128,.38);z-index:4;pointer-events:none;}
+  .hour-bar-wrap:hover .chart-tooltip{opacity:1;visibility:visible;}
+  .hour-bar{width:100%;max-width:68px;border-radius:6px 6px 2px 2px;background:var(--green);min-height:4px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding:0 3px 6px;}
+  .hour-bar.below{background:var(--red);}
+  .hour-bar.current{background:var(--amber);}
+  .hour-bar.future{background:#e5e7eb;border:1px dashed rgba(0,0,0,.18);}
+  .hour-projection{position:absolute;left:0;right:0;bottom:100%;background:rgba(217,119,6,.22);border:1px dashed rgba(217,119,6,.7);border-bottom:0;border-radius:6px 6px 0 0;}
+  .bar-data-label{font-size:10px;font-weight:700;color:#fff;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,.25);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hour-bar.future .bar-data-label{display:none;}
+  .hour-label{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);font-size:10px;color:var(--text-muted);white-space:nowrap;}
+  .chart-tooltip{position:fixed;left:var(--tooltip-left,0);top:var(--tooltip-top,0);min-width:178px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;line-height:1.35;box-shadow:0 12px 28px rgba(15,23,42,.16);opacity:0;visibility:hidden;transition:opacity .12s ease;z-index:1000;pointer-events:none;text-align:left;}
+  .chart-tooltip-title{font-weight:800;margin-bottom:4px;color:var(--text);}
+  .chart-tooltip-row{display:flex;justify-content:space-between;gap:12px;}
+  .chart-x-axis{position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(0,0,0,.14);pointer-events:none;}
+  .chart-annotation{position:absolute;right:16px;top:86px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:8px;color:#7a1d1d;font-size:11px;font-weight:700;padding:6px 8px;}
+  .diagnosis-list{display:flex;flex-direction:column;gap:8px;}
+  .diagnosis-item{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--border);border-radius:9px;background:#fff;padding:9px;font-size:12px;line-height:1.35;color:var(--text-soft);}
+  .diagnosis-item .material-symbols-outlined{font-size:17px;color:var(--accent);flex-shrink:0;}
+  .line-table{width:100%;border-collapse:separate;border-spacing:0 6px;}
+  .line-table th{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);text-align:left;padding:0 8px 2px;}
+  .line-table td{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-size:12px;color:var(--text-soft);padding:9px 8px;vertical-align:middle;}
+  .line-table td:first-child{border-left:1px solid var(--border);border-radius:9px 0 0 9px;}
+  .line-table td:last-child{border-right:1px solid var(--border);border-radius:0 9px 9px 0;}
+  .line-name-cell{font-weight:800;color:var(--text);}
+  .line-table tbody tr{cursor:pointer;}
+  .line-table tbody tr:hover td{border-color:rgba(37,99,235,.35);background:#fbfdff;}
 
   .plant-summary{display:flex;flex-direction:column;gap:12px;}
   .plant-summary-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
@@ -139,6 +214,10 @@
   .unit-line-count,.unit-issue{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .unit-name-row{display:flex;align-items:center;gap:8px;}
   .unit-name{font-size:15px;font-weight:700;color:var(--text);}
+  .unit-link{width:18px;height:18px;border:0;background:transparent;color:var(--accent);display:inline-flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;cursor:pointer;padding:0;border-radius:5px;transition:opacity .12s ease,background .12s ease;}
+  .unit-name-row:hover .unit-link,.unit-link:focus-visible{opacity:1;pointer-events:auto;}
+  .unit-link:hover{background:var(--blue-bg);}
+  .unit-link .material-symbols-outlined{font-size:16px;}
   .unit-line-count{font-size:11.5px;color:var(--text-muted);}
   .unit-issue{font-size:11.5px;color:var(--red);display:flex;align-items:center;gap:4px;}
   .unit-issue .material-symbols-outlined{font-size:14px;}
@@ -258,7 +337,7 @@
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h4v4H6zM14 4h4v4h-4zM14 14h4v4h-4zM10 8h2a2 2 0 012 2v4"/>
           </svg>
-          <span>Sandy Plant</span>
+          <span id="breadcrumbText">Sandy Plant</span>
         </div>
       </div>
     </div>
@@ -266,7 +345,7 @@
 
   <div class="main-card-shell">
     <nav class="app-side-nav" id="appSideNav" aria-label="Plant navigation" onmouseenter="this.classList.remove('is-collapsed')" onmouseleave="this.classList.remove('is-collapsed')">
-      <button id="sidePlantOverview" class="app-side-btn active" type="button" aria-label="Overview" title="Overview">
+      <button id="sidePlantOverview" class="app-side-btn active" type="button" aria-label="Overview" title="Overview" onclick="showPlantOverview()">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 9.2c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v8.6c0 .66-.54 1.2-1.2 1.2H6.2c-.66 0-1.2-.54-1.2-1.2V9.2Zm5-4c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v12.6c0 .66-.54 1.2-1.2 1.2h-1.6c-.66 0-1.2-.54-1.2-1.2V5.2Zm5 7c0-.66.54-1.2 1.2-1.2h1.6c.66 0 1.2.54 1.2 1.2v5.6c0 .66-.54 1.2-1.2 1.2h-1.6c-.66 0-1.2-.54-1.2-1.2v-5.6Z"/>
         </svg>
@@ -281,6 +360,7 @@
     </nav>
     <main class="app-content">
       <div class="plant-card">
+        <div id="plantOverviewView" class="view-panel active">
         <div class="plant-layout">
           <div class="plant-scroll" id="plantScroll">
             <div class="plant-summary">
@@ -291,6 +371,13 @@
             <div class="unit-list" id="unitList"></div>
           </div>
           <aside class="plant-sidebar" id="plantSidebar"></aside>
+        </div>
+        </div>
+        <div id="unitDetailView" class="view-panel">
+          <div class="unit-detail-shell">
+            <section class="unit-detail-main" id="unitDetailMain"></section>
+            <aside class="plant-sidebar" id="unitDetailSidebar"></aside>
+          </div>
         </div>
       </div>
     </main>
@@ -420,6 +507,14 @@ function applyHierarchySelection(){
   const id = hierarchyState.selectedId;
   closeHierarchyModal();
   const node = findHierarchyNode(HIERARCHY_TREE, id);
+  if(id === 'sandy-plant'){
+    showPlantOverview();
+    return;
+  }
+  if(id === 'unit-afa'){
+    openUnitDetail('unit-afa');
+    return;
+  }
   if(node && (!node.children || node.children.length === 0)){
     window.location.href = 'line-monitoring.html';
   }
@@ -432,6 +527,34 @@ document.addEventListener('click', e => {
   const path = typeof e.composedPath === 'function' ? e.composedPath() : [e.target];
   if(!path.includes(overlay) && !path.includes(breadcrumb)) closeHierarchyModal();
 });
+
+function setActivePlantView(view, breadcrumbText){
+  document.getElementById('plantOverviewView')?.classList.toggle('active', view === 'plant');
+  document.getElementById('unitDetailView')?.classList.toggle('active', view === 'unit');
+  document.getElementById('sidePlantOverview')?.classList.toggle('active', view === 'plant');
+  document.getElementById('sidePlantSecondary')?.classList.toggle('active', view === 'unit');
+  const breadcrumb = document.getElementById('breadcrumbText');
+  if(breadcrumb) breadcrumb.textContent = breadcrumbText;
+}
+
+function showPlantOverview(){
+  hierarchyState.selectedId = 'sandy-plant';
+  if(window.location.hash !== '#overview') history.replaceState(null, '', '#overview');
+  setActivePlantView('plant', 'Sandy Plant');
+}
+
+function openUnitDetail(id){
+  if(id !== 'unit-afa') return;
+  hierarchyState.selectedId = 'unit-afa';
+  renderUnitDetail();
+  if(window.location.hash !== '#afa') history.replaceState(null, '', '#afa');
+  setActivePlantView('unit', 'Sandy Plant > AFA');
+}
+
+function routeFromLocation(){
+  if(window.location.hash === '#afa') openUnitDetail('unit-afa');
+  else showPlantOverview();
+}
 
 /* ---- Unit / Line performance data ---- */
 const PLANT_UNITS = [
@@ -472,6 +595,54 @@ const CAUSAL_CODES = {
   'nfa1': { code:'Z5.C30.S2', desc:'Track 3 Consecutive Covers Missing', type:'startstop' }
 };
 
+const AFA_UNIT_DETAIL = {
+  unit:'AFA',
+  plant:'Sandy Plant',
+  area:'Assembly & Packaging',
+  shift:'Shift B',
+  status:'In Progress',
+  updated:'Last updated 2 min ago',
+  linesRunning:'4 / 5 Lines Running',
+  kpis:[
+    { label:'OEE', value:'67%', targetLabel:'Target', target:'75%', cls:'critical' },
+    { label:'Good quantity', value:'14,522', targetLabel:'Target', target:'21,000', cls:'warn' },
+    { label:'Scrap', value:'2.9%', targetLabel:'Limit', target:'3.0%', cls:'warn' },
+    { label:'Unplanned downtime', value:'60 min', targetLabel:'Limit', target:'45 min', cls:'critical' }
+  ],
+  hours:[
+    { time:'6AM', actual:1710, target:1750, impact:'AFA1', reason:'Slight startup loss' },
+    { time:'7AM', actual:1785, target:1750, impact:'AFA2', reason:'Recovered above hourly target' },
+    { time:'8AM', actual:1705, target:1750, impact:'AFA2', reason:'Material feed instability' },
+    { time:'9AM', actual:1340, target:1750, impact:'AFA2', reason:'Waiting for Material' },
+    { time:'10AM', actual:1865, target:1750, impact:'AFA3', reason:'Recovered output' },
+    { time:'11AM', actual:1880, target:1750, impact:'AFA11', reason:'Stable production' },
+    { time:'12PM', actual:1875, target:1750, impact:'AFA10', reason:'Stable production' },
+    { time:'1PM', actual:1700, target:1750, impact:'AFA2', reason:'Material constraint recurring' },
+    { time:'2PM', actual:630, projected:1720, target:1750, current:true, impact:'AFA2', reason:'Current hour projection below target' },
+    { time:'3PM', future:true, target:1750 },
+    { time:'4PM', future:true, target:1750 },
+    { time:'5PM', future:true, target:1750 }
+  ],
+  lines:[
+    { id:'afa2', name:'AFA2', status:'Idle', oee:17, gq:836, target:3800, scrap:2.7, downtime:60, issue:'Waiting for Material' },
+    { id:'afa1', name:'AFA1', status:'Running', oee:76, gq:3686, target:3800, scrap:2.3, downtime:4, issue:'No active issues' },
+    { id:'afa10', name:'AFA10', status:'Running', oee:78, gq:3800, target:3800, scrap:2.5, downtime:2, issue:'No active issues' },
+    { id:'afa3', name:'AFA3', status:'Running', oee:81, gq:3952, target:3800, scrap:2.5, downtime:0, issue:'No active issues' },
+    { id:'afa11', name:'AFA11', status:'Running', oee:80, gq:3914, target:3800, scrap:2.4, downtime:1, issue:'No active issues' }
+  ],
+  diagnosis:[
+    { icon:'warning', text:'AFA is currently 1,240 units behind expected shift progress.' },
+    { icon:'schedule', text:'The largest loss happened between 9AM and 10AM.' },
+    { icon:'precision_manufacturing', text:'AFA2 is the main contributor to the production loss.' },
+    { icon:'inventory_2', text:'Primary issue: Waiting for Material.' },
+    { icon:'timer_off', text:'Unplanned downtime is 15 min above the shift limit.' }
+  ]
+};
+
+let unitChartMode = 'hourly';
+const unitChartCeiling = { hourly:2300, cumulative:22000 };
+let yAxisDragState = null;
+
 function lineIsCritical(line){ return line.status === 'idle' || line.status === 'blocked' || (line.oeeTarget - line.oee) >= 20; }
 function lineCriticalityScore(line){
   if(line.status === 'idle' || line.status === 'blocked') return 3;
@@ -497,10 +668,11 @@ function kpiCard(name, value, unitLabel, target, cls){
         <div class="kpi-value-row"><span class="kpi-value">${value}</span><span class="kpi-unit">${unitLabel}</span></div>
         <span class="kpi-name">${name}</span>
       </div>
+      ${target ? `
       <div class="kpi-target">
         <span class="kpi-target-label">Target</span>
         <span class="kpi-target-chip">${target}</span>
-      </div>
+      </div>` : ''}
     </div>`;
 }
 function miniMetric(name, value, unitLabel, target, cls){
@@ -515,6 +687,323 @@ function miniMetric(name, value, unitLabel, target, cls){
         <span class="kpi-target-chip">${target}</span>
       </div>
     </div>`;
+}
+
+function unitStatusPill(status){
+  const normalized = String(status || '').toLowerCase();
+  const cls = normalized === 'idle' || normalized === 'blocked' ? 'pill-red' : 'pill-green';
+  return `<span class="pill ${cls}">${status}</span>`;
+}
+
+function renderUnitChart(){
+  const cumulativeHourlyTarget = 21000 / AFA_UNIT_DETAIL.hours.length;
+  const cumulative = AFA_UNIT_DETAIL.hours.reduce((acc, h, index) => {
+    const cumulativeTarget = Math.round(cumulativeHourlyTarget * (index + 1));
+    if(h.future) acc.rows.push({...h, cumulative:null, cumulativeTarget});
+    else {
+      const cumulativeBeforeHour = acc.actual;
+      acc.actual += h.actual || 0;
+      const cumulativeProjected = h.current && h.projected ? cumulativeBeforeHour + h.projected : null;
+      acc.rows.push({...h, cumulative:acc.actual, cumulativeProjected, cumulativeTarget});
+    }
+    return acc;
+  }, { actual:0, rows:[] }).rows;
+  const axisHtml = (max, step = 500) => {
+    const top = Math.ceil(max / step) * step;
+    const values = [];
+    for(let v = top; v >= 0; v -= step) values.push(v);
+    return `<div class="chart-y-axis" title="Drag to adjust chart ceiling" onpointerdown="startYAxisDrag(event)">
+      ${values.map(v => `<span style="top:${100 - (v / top * 100)}%">${v.toLocaleString('en-US')}</span>`).join('')}
+      <span class="material-symbols-outlined axis-move">unfold_more</span>
+    </div>`;
+  };
+  const gridHtml = (max, step = 250, ceilingStep = 500) => {
+    const top = Math.ceil(max / ceilingStep) * ceilingStep;
+    const lines = [];
+    for(let v = step; v < top; v += step){
+      lines.push(`<div class="chart-gridline" style="top:${100 - (v / top * 100)}%;"></div>`);
+    }
+    return lines.join('');
+  };
+  const targetLineHtml = (target, max) => {
+    const top = Math.ceil(max / 500) * 500;
+    const topPct = Math.max(0, Math.min(100, 100 - (target / top * 100)));
+    return `<div class="target-line" style="top:${topPct}%"><span class="target-label">TARGET ${target.toLocaleString('en-US')}</span></div>`;
+  };
+  const cumulativeTargetLineHtml = (rows, max) => {
+    const top = Math.ceil(max / 2000) * 2000;
+    const pointCount = rows.length;
+    const points = rows.map((h, index) => {
+      const x = ((index + .5) / pointCount) * 100;
+      const y = Math.max(0, Math.min(100, 100 - (h.cumulativeTarget / top * 100)));
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    }).join(' ');
+    const finalTarget = rows[rows.length - 1]?.cumulativeTarget || 21000;
+    const labelY = Math.max(4, Math.min(96, 100 - (finalTarget / top * 100) - 1.5));
+    return `<svg class="target-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="${points}"></polyline>
+    </svg>
+    <span class="target-cumulative-label" style="top:${labelY}%">TARGET ${finalTarget.toLocaleString('en-US')}</span>`;
+  };
+
+  if(unitChartMode === 'cumulative'){
+    const maxCum = unitChartCeiling.cumulative;
+    return `
+      <div class="shift-chart">
+        ${axisHtml(maxCum, 2000)}
+        <div class="chart-plot">
+          ${gridHtml(maxCum, 2000, 2000)}
+          <div class="chart-x-axis"></div>
+          ${cumulativeTargetLineHtml(cumulative, maxCum)}
+          <div class="chart-bars">
+          ${cumulative.map(h => {
+            const value = h.cumulative || 0;
+            const target = h.cumulativeTarget || 0;
+            const top = Math.ceil(maxCum / 2000) * 2000;
+            const height = h.future ? '7px' : `${Math.max(4, Math.min(100, value / top * 100))}%`;
+            const projectionHeight = h.current && h.cumulativeProjected ? `${Math.max(0, (h.cumulativeProjected - value) / top * 100)}%` : '0%';
+            const cls = h.future ? 'future' : value >= target ? '' : 'below';
+            return `
+              <div class="hour-bar-wrap" onmousemove="moveChartTooltip(event)">
+                <div class="chart-tooltip">
+                  <div class="chart-tooltip-title">${h.time}</div>
+                  <div class="chart-tooltip-row"><span>Cumulative</span><b>${h.future ? 'Future' : value.toLocaleString('en-US')}</b></div>
+                  ${h.current && h.cumulativeProjected ? `<div class="chart-tooltip-row"><span>Projected</span><b>${h.cumulativeProjected.toLocaleString('en-US')}</b></div>` : ''}
+                  <div class="chart-tooltip-row"><span>Target</span><b>${target.toLocaleString('en-US')}</b></div>
+                </div>
+                <div class="hour-bar ${cls}${h.current ? ' current' : ''}" style="height:${height};">
+                  ${h.current ? `<div class="hour-projection" style="height:${projectionHeight};"></div>` : ''}
+                  <span class="bar-data-label">${h.future ? '' : value.toLocaleString('en-US')}</span>
+                </div>
+                <span class="hour-label">${h.time}</span>
+              </div>`;
+          }).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const max = unitChartCeiling.hourly;
+  return `
+    <div class="shift-chart">
+      ${axisHtml(max)}
+      <div class="chart-plot">
+        ${gridHtml(max)}
+        <div class="chart-x-axis"></div>
+        ${targetLineHtml(1750, max)}
+        <div class="chart-bars">
+        ${AFA_UNIT_DETAIL.hours.map(h => {
+          const actual = h.actual || 0;
+          const projected = h.projected || 0;
+          const top = Math.ceil(max / 500) * 500;
+          const height = h.future ? '7px' : `${Math.max(4, Math.min(100, actual / top * 100))}%`;
+          const projectionHeight = h.current ? `${Math.max(0, (projected - actual) / top * 100)}%` : '0%';
+          const cls = h.future ? 'future' : h.current ? 'current' : actual >= h.target ? '' : 'below';
+          return `
+            <div class="hour-bar-wrap" onmousemove="moveChartTooltip(event)">
+              <div class="chart-tooltip">
+                <div class="chart-tooltip-title">${h.time}</div>
+                <div class="chart-tooltip-row"><span>Good quantity</span><b>${h.future ? 'Future' : actual.toLocaleString('en-US')}</b></div>
+                <div class="chart-tooltip-row"><span>Target</span><b>${h.target ? h.target.toLocaleString('en-US') : '-'}</b></div>
+              </div>
+              <div class="hour-bar ${cls}" style="height:${height};">
+                ${h.current ? `<div class="hour-projection" style="height:${projectionHeight};"></div>` : ''}
+                <span class="bar-data-label">${h.future ? '' : actual.toLocaleString('en-US')}</span>
+              </div>
+              <span class="hour-label">${h.time}</span>
+            </div>`;
+        }).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+function setUnitChartMode(mode){
+  unitChartMode = mode;
+  renderUnitDetail();
+}
+
+function moveChartTooltip(event){
+  const tooltip = event.currentTarget.querySelector('.chart-tooltip');
+  if(!tooltip) return;
+  const margin = 12;
+  const offset = 14;
+  const width = tooltip.offsetWidth || 178;
+  const height = tooltip.offsetHeight || 58;
+  let left = event.clientX + offset;
+  let top = event.clientY - height - offset;
+  if(left + width + margin > window.innerWidth) left = event.clientX - width - offset;
+  if(top < margin) top = event.clientY + offset;
+  left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+  top = Math.max(margin, Math.min(top, window.innerHeight - height - margin));
+  tooltip.style.setProperty('--tooltip-left', `${left}px`);
+  tooltip.style.setProperty('--tooltip-top', `${top}px`);
+}
+
+function startYAxisDrag(event){
+  event.preventDefault();
+  event.stopPropagation();
+  const mode = unitChartMode;
+  yAxisDragState = {
+    mode,
+    startY:event.clientY,
+    startCeiling:unitChartCeiling[mode]
+  };
+  document.body.style.cursor = 'ns-resize';
+  window.addEventListener('pointermove', moveYAxisDrag);
+  window.addEventListener('pointerup', endYAxisDrag, { once:true });
+  window.addEventListener('pointercancel', endYAxisDrag, { once:true });
+}
+
+function moveYAxisDrag(event){
+  if(!yAxisDragState) return;
+  event.preventDefault();
+  const { mode, startY, startCeiling } = yAxisDragState;
+  const delta = event.clientY - startY;
+  const step = mode === 'hourly' ? 14 : 140;
+  const min = mode === 'hourly' ? 2000 : 22000;
+  const max = mode === 'hourly' ? 3200 : 30000;
+  const snap = mode === 'hourly' ? 250 : 2000;
+  const nextCeiling = Math.max(min, Math.min(max, Math.round((startCeiling - delta * step) / snap) * snap));
+  if(nextCeiling === unitChartCeiling[mode]) return;
+  unitChartCeiling[mode] = nextCeiling;
+  renderUnitDetail();
+}
+
+function endYAxisDrag(){
+  window.removeEventListener('pointermove', moveYAxisDrag);
+  window.removeEventListener('pointercancel', endYAxisDrag);
+  document.body.style.cursor = '';
+  yAxisDragState = null;
+}
+
+function renderUnitSidebar(){
+  const problem = AFA_UNIT_DETAIL.lines[0];
+  const insights = [
+    { type:'critical', icon:'error', html:'<b>AFA2</b> is the main production loss driver this shift.' },
+    { type:'critical', icon:'timer_off', html:'Unplanned downtime is <b>60 min</b>, 15 min above the shift limit.' },
+    { type:'warn', icon:'inventory_2', html:'Material replenishment delay is causing the largest loss to target.' },
+    { type:'info', icon:'trending_up', html:'AFA3 and AFA11 are compensating part of the loss, but not enough to recover plan.' }
+  ];
+  const sidebar = document.getElementById('unitDetailSidebar');
+  if(!sidebar) return;
+  sidebar.innerHTML = `
+    <div class="plant-sidebar-header">
+      <span class="needs-attention-title">AFA Diagnosis</span>
+    </div>
+    <div class="plant-sidebar-body">
+      <div class="diagnosis-kpi-grid">
+        ${AFA_UNIT_DETAIL.kpis.map(k => `
+          <div class="unit-kpi-card ${k.cls}">
+            <div>
+              <div class="unit-kpi-value">${k.value}</div>
+              <div class="unit-kpi-name">${k.label}</div>
+            </div>
+            <div class="kpi-target">
+              <span class="kpi-target-label">${k.targetLabel}</span>
+              <span class="kpi-target-chip">${k.target}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="needs-attention-card">
+        <div class="needs-attention-head">
+          <span class="needs-attention-title">Needs Attention (1)</span>
+        </div>
+        <div class="needs-attention-body">
+          <div class="attention-line-card" onclick="openLine('${problem.id}')">
+            <div class="attention-line-top">
+              <span class="attention-line-name">${problem.name} <span>&middot; ${AFA_UNIT_DETAIL.unit}</span></span>
+              ${unitStatusPill(problem.status)}
+            </div>
+            <div class="causal-code startstop"><span class="causal-code-id">Z2.C14.S1</span><span class="causal-code-desc">Line 2 awaiting material replenishment</span></div>
+            <div class="attention-mini-metrics">
+              ${miniMetric('OEE', problem.oee, '%', '75%', 'critical')}
+              <div class="attention-metric-divider"></div>
+              ${miniMetric('GQ', problem.gq.toLocaleString('en-US'), '', problem.target.toLocaleString('en-US'), 'critical')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="atlas-card">
+        <div class="atlas-card-title"><span class="material-symbols-outlined">auto_awesome</span>ATLAS Insights</div>
+        <div class="plant-insights">
+          ${insights.map(i => `
+            <div class="plant-insight ${i.type}">
+              <span class="material-symbols-outlined">${i.icon}</span>
+              <span>${i.html}</span>
+              <span class="material-symbols-outlined plant-insight-expand">open_in_full</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderUnitDetail(){
+  const main = document.getElementById('unitDetailMain');
+  if(!main) return;
+  const sortedLines = [...AFA_UNIT_DETAIL.lines].sort((a,b) => {
+    if(a.id === 'afa10') return -1;
+    if(b.id === 'afa10') return 1;
+    return a.status === 'Idle' ? -1 : b.status === 'Idle' ? 1 : b.downtime - a.downtime;
+  });
+  main.innerHTML = `
+    <div class="unit-detail-scroll">
+      <div class="unit-detail-head">
+        <div>
+          <div class="unit-title-row">
+            <div class="unit-detail-title">AFA Unit Performance</div>
+            <span class="context-chip">Assembly &amp; Packaging</span>
+          </div>
+        </div>
+        <div class="unit-filter-row">
+          <span class="context-chip success">${AFA_UNIT_DETAIL.linesRunning}</span>
+        </div>
+      </div>
+
+      <div class="unit-grid-two">
+        <div class="unit-panel production-panel">
+          <div class="unit-panel-head">
+            <div class="unit-panel-title">Shift Production - Good Quantity</div>
+            <div class="segmented">
+              <button type="button" class="${unitChartMode === 'hourly' ? 'active' : ''}" onclick="setUnitChartMode('hourly')">Hourly</button>
+              <button type="button" class="${unitChartMode === 'cumulative' ? 'active' : ''}" onclick="setUnitChartMode('cumulative')">Cumulative</button>
+            </div>
+          </div>
+          ${renderUnitChart()}
+        </div>
+      </div>
+
+      <div class="unit-panel">
+        <div class="unit-panel-head">
+          <div class="unit-panel-title">Line Contribution</div>
+          <span class="plant-summary-meta">Sorted by negative impact to shift target</span>
+        </div>
+        <table class="line-table">
+          <thead>
+            <tr>
+              <th>Line</th><th>Status</th><th>OEE</th><th>Good Quantity</th><th>Scrap</th><th>Downtime</th><th>Primary Issue</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${sortedLines.map(line => {
+              return `
+                <tr onclick="openLine('${line.id}')">
+                  <td class="line-name-cell">${line.name}</td>
+                  <td>${unitStatusPill(line.status)}</td>
+                  <td>${line.oee}%</td>
+                  <td>${line.gq.toLocaleString('en-US')} / ${line.target.toLocaleString('en-US')}</td>
+                  <td>${line.scrap}%</td>
+                  <td>${line.downtime} min</td>
+                  <td>${line.issue}</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  renderUnitSidebar();
 }
 
 function renderPlantOverview(){
@@ -538,8 +1027,7 @@ function renderPlantOverview(){
   insights.push({ type:'info', icon:'lightbulb', html:`AFA is running ${PLANT_UNITS[0].util}% utilization with spare OEE headroom &mdash; a good candidate for the next changeover.` });
   insights.push({ type:'info', icon:'insights', html:`NFA's GQ Day is 120% of target &mdash; consider shifting slack capacity to units below target.` });
 
-  const sidebar = document.getElementById('plantSidebar');
-  sidebar.innerHTML = `
+  const sidebarHtml = `
     <div class="plant-sidebar-header">
       <span class="needs-attention-title">Plant Overview</span>
     </div>
@@ -550,7 +1038,7 @@ function renderPlantOverview(){
         </div>
         <div class="needs-attention-body">
           ${attentionLines.map(line => {
-            const lineStatus = line.status === 'idle' ? 'critical' : line.status === 'blocked' ? 'critical' : 'success';
+            const pillCls = line.status === 'idle' ? 'pill-red' : line.status === 'blocked' ? 'pill-red' : 'pill-green';
             const lineStatusLabel = line.status === 'idle' ? 'Idle' : line.status === 'blocked' ? 'Blocked' : 'Running';
             const hasIssue = Boolean(line.issue);
             const causal = CAUSAL_CODES[line.id];
@@ -558,7 +1046,7 @@ function renderPlantOverview(){
             <div class="attention-line-card" onclick="openLine('${line.id}')">
               <div class="attention-line-top">
                 <span class="attention-line-name">${line.name} <span>&middot; ${line.unit}</span></span>
-                <span class="status-chip ${lineStatus}">${lineStatusLabel}</span>
+                <span class="pill ${pillCls}">${lineStatusLabel}</span>
               </div>
               ${causal ? `<div class="causal-code ${causal.type}"><span class="causal-code-id">${causal.code}</span><span class="causal-code-desc">${causal.desc}</span></div>` : ''}
               <div class="attention-mini-metrics">
@@ -585,6 +1073,9 @@ function renderPlantOverview(){
       </div>
     </div>
   `;
+  document.getElementById('plantSidebar').innerHTML = sidebarHtml;
+  const unitDetailSidebar = document.getElementById('unitDetailSidebar');
+  if(unitDetailSidebar) unitDetailSidebar.innerHTML = sidebarHtml;
 
   const sortedUnits = [...PLANT_UNITS].sort((a,b) => {
     const rank = { critical:0, attention:1, healthy:2 };
@@ -600,7 +1091,7 @@ function renderPlantOverview(){
       if(b.id === 'afa10') return 1;
       return lineCriticalityScore(b) - lineCriticalityScore(a);
     });
-    const statusChip = `<span class="status-chip ${status === 'critical' ? 'critical' : status === 'attention' ? 'warn' : 'success'}">${status === 'critical' ? 'Critical' : status === 'attention' ? 'Attention' : 'Healthy'}</span>`;
+    const statusChip = status === 'critical' ? '' : `<span class="status-chip ${status === 'attention' ? 'warn' : 'success'}">${status === 'attention' ? 'Attention' : 'Healthy'}</span>`;
 
     const legacyHead = `
         <div class="unit-head" onclick="toggleUnit('${unit.id}')">
@@ -608,16 +1099,17 @@ function renderPlantOverview(){
           <div class="unit-name-block">
             <div class="unit-name-row">
               <span class="unit-name">${unit.name}</span>
+              ${unit.id === 'unit-afa' ? `<button class="unit-link" type="button" onclick="event.stopPropagation();openUnitDetail('unit-afa')" aria-label="Open AFA unit detail" title="Open AFA"><span class="material-symbols-outlined">open_in_new</span></button>` : ''}
               ${statusChip}
             </div>
             <span class="unit-line-count">${unit.lines.length} lines${criticalCount ? ` &middot; ${criticalCount} need attention` : ''}</span>
           </div>
           <div class="unit-kpi-row">
             ${kpiCard('OEE', unit.oee, '%', `${unit.oeeTarget}%`, metricClass(unit.oee, unit.oeeTarget))}
-            ${kpiCard('Utilization', unit.util, '%', '65%', metricClass(unit.util, 65))}
             ${kpiCard('GQ Day', unit.gqDay, '%', '100%', metricClass(unit.gqDay, 100))}
             ${kpiCard('GQ MTD', unit.gqMtd, '%', '100%', metricClass(unit.gqMtd, 100))}
             ${kpiCard('Scrap', unit.scrap, '%', '2.5%', metricClass(unit.scrap, 2.5, true))}
+            ${kpiCard('Utilization', unit.util, '%', null, 'neutral')}
           </div>
         </div>`;
 
@@ -682,10 +1174,12 @@ function toggleUnit(id){
   }
 }
 function openLine(id){
-  window.location.href = 'line-monitoring.html';
+  if(id === 'afa10') window.location.href = 'line-monitoring.html';
 }
 
 renderPlantOverview();
+routeFromLocation();
+window.addEventListener('hashchange', routeFromLocation);
 </script>
 </body>
 </html>
